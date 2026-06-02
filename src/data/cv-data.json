@@ -1,0 +1,90 @@
+{
+  "profile": {
+    "name": "Arditya Adjie Rosandi",
+    "title": "Full-Stack Developer & UI/UX Designer",
+    "email": "ardityaadjierosandi18@gmail.com",
+    "phone": "+62 812-3456-7890",
+    "location": "Jakarta, Indonesia",
+    "about": "Mahasiswa Teknik Informatika Universitas Esa Unggul yang antusias terhadap pengembangan web modern, arsitektur backend, dan desain antarmuka interaktif. Berpengalaman membangun aplikasi skala menengah, integrasi API real-time, dan sistem e-commerce.",
+    "linkedin": "https://linkedin.com/in/gammaura",
+    "github": "https://github.com/Gammaura"
+  },
+  "skills": [
+    { "name": "React / Next.js", "category": "Frontend", "level": "Expert" },
+    { "name": "Laravel / PHP", "category": "Backend", "level": "Expert" },
+    { "name": "Node.js / Express", "category": "Backend", "level": "Advanced" },
+    { "name": "PostgreSQL / MySQL", "category": "Database", "level": "Advanced" },
+    { "name": "Tailwind CSS & SCSS", "category": "Frontend", "level": "Expert" },
+    { "name": "Framer Motion / GSAP", "category": "Animation", "level": "Advanced" },
+    { "name": "Git & Git Flow", "category": "Tools", "level": "Advanced" },
+    { "name": "UI/UX Design & Figma", "category": "Design", "level": "Advanced" }
+  ],
+  "organizations": [
+    {
+      "role": "Lead Web Developer",
+      "organization": "Himpunan Mahasiswa Informatika (HMIF)",
+      "period": "Okt 2024 - Sekarang",
+      "location": "Jakarta",
+      "bulletPoints": [
+        "Memimpin tim beranggotakan 5 developer untuk merancang dan memelihara website resmi HMIF.",
+        "Meningkatkan performa website hingga 40% dengan bermigrasi ke arsitektur SSR.",
+        "Mengadakan workshop pemrograman web gratis bagi 150+ mahasiswa baru."
+      ]
+    },
+    {
+      "role": "Staff Hubungan Masyarakat",
+      "organization": "Badan Eksekutif Mahasiswa (BEM)",
+      "period": "Mar 2024 - Des 2024",
+      "location": "Jakarta",
+      "bulletPoints": [
+        "Mengelola media sosial resmi BEM dan merancang infografis publikasi acara kampus.",
+        "Membangun hubungan kolaboratif dengan 10+ organisasi mahasiswa eksternal.",
+        "Menjadi koordinator publikasi IT Event dengan total audiens 800+ mahasiswa."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "Solaria App",
+      "role": "Full-Stack Developer",
+      "period": "Des 2025",
+      "techStack": ["Next.js", "Tailwind CSS", "PostgreSQL", "Neon DB", "Vercel"],
+      "shortDescription": "Sistem e-commerce dan manajemen restoran terintegrasi dengan pemesanan real-time.",
+      "bulletPoints": [
+        "Mengembangkan dashboard administrasi lengkap menggunakan Next.js App Router.",
+        "Mengintegrasikan PostgreSQL (Neon DB) untuk memproses data menu, transaksi, dan akun pengguna.",
+        "Mengimplementasikan skema migrasi database otomatis untuk sinkronisasi lokal ke produksi."
+      ],
+      "github": "https://github.com/Gammaura/Solaria",
+      "demo": "https://solaria-app.vercel.app"
+    },
+    {
+      "title": "Fotosphere Kiosk",
+      "role": "Front-End & Creative Engineer",
+      "period": "Okt 2025",
+      "techStack": ["React", "CSS Modules", "Framer Motion", "Electron"],
+      "shortDescription": "Aplikasi self-service kiosk cetak foto otomatis dengan UI interaktif.",
+      "bulletPoints": [
+        "Mendesain UI/UX bergaya glassmorphism modern dengan mikro-animasi premium menggunakan Framer Motion.",
+        "Mengintegrasikan hardware kamera DSLR dan printer foto untuk proses cetak otomatis.",
+        "Mengoptimalkan performa rendering gambar beresolusi tinggi di sisi klien."
+      ],
+      "github": "https://github.com/Gammaura/Fotosphere",
+      "demo": ""
+    },
+    {
+      "title": "Esa Corner Information Kiosk",
+      "role": "Lead Full-Stack Developer",
+      "period": "Mei 2025",
+      "techStack": ["Laravel", "MySQL", "Tailwind CSS", "Livewire"],
+      "shortDescription": "Platform kiosk informasi akademik dan sistem antrean terintegrasi di Universitas Esa Unggul.",
+      "bulletPoints": [
+        "Membangun sistem antrean akademik terdistribusi dengan response time di bawah 100ms.",
+        "Membuat modul manajemen interaksi mahasiswa yang mudah dikonfigurasi oleh staf admin.",
+        "Meningkatkan efisiensi layanan administrasi mahasiswa hingga 45% di pusat layanan Esa Corner."
+      ],
+      "github": "https://github.com/Gammaura/Compro",
+      "demo": ""
+    }
+  ]
+}
