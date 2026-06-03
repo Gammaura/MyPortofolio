@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Sparkles } from "lucide-react";
+import { ExternalLink, Sparkles, ArrowRight, Folder } from "lucide-react";
+import Link from "next/link";
 
 const Github = ({ className }) => (
   <svg
@@ -21,55 +22,33 @@ const Github = ({ className }) => (
 );
 
 export default function ProjectsSection({ projects }) {
-  // Collect all unique technologies for filtering
-  const allTechs = ["All", ...new Set(projects.flatMap((p) => p.techStack))];
-  const [selectedTech, setSelectedTech] = useState("All");
-
-  const filteredProjects =
-    selectedTech === "All"
-      ? projects
-      : projects.filter((p) => p.techStack.includes(selectedTech));
+  // Only display the first 2 projects as featured projects on homepage
+  const featuredProjects = projects.slice(0, 2);
 
   return (
     <section id="projects" className="py-20 relative max-w-5xl mx-auto px-6">
       <div className="text-center mb-12">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-bold text-indigo-300 mb-4 uppercase tracking-wider">
+          <Sparkles className="w-3 h-3" />
+          Karya Pilihan
+        </div>
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Showcase <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Project</span>
+          Featured <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Projects</span>
         </h2>
         <p className="text-zinc-400 text-sm md:text-base max-w-lg mx-auto">
-          Beberapa aplikasi, sistem, dan alat yang telah saya rancang dan kembangkan baru-baru ini.
+          Highlight beberapa aplikasi utama yang telah saya rancang dan kembangkan baru-baru ini.
         </p>
       </div>
 
-      {/* Tech Filter */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-        {allTechs.map((tech) => (
-          <button
-            key={tech}
-            onClick={() => setSelectedTech(tech)}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-              selectedTech === tech
-                ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20 scale-105"
-                : "bg-zinc-900/60 border-white/5 text-zinc-400 hover:text-white hover:bg-zinc-800"
-            }`}
-          >
-            {tech}
-          </button>
-        ))}
-      </div>
-
       {/* Projects Grid */}
-      <motion.div
-        layout
-        className="grid grid-cols-1 md:grid-cols-2 gap-8"
-      >
-        {filteredProjects.map((project, idx) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {featuredProjects.map((project, idx) => (
           <motion.div
-            layout
             key={project.title}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4 }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: idx * 0.1 }}
             whileHover={{ y: -6 }}
             className="glass-panel glass-panel-hover rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden"
           >
@@ -86,7 +65,8 @@ export default function ProjectsSection({ projects }) {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+              <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                <Folder className="w-4 h-4 text-indigo-400" />
                 {project.title}
               </h3>
 
@@ -112,7 +92,7 @@ export default function ProjectsSection({ projects }) {
                 {project.techStack.map((tech) => (
                   <span
                     key={tech}
-                    className="text-[10px] font-medium bg-zinc-900 border border-white/5 text-zinc-400 px-2 py-0.5 rounded-md"
+                    className="text-[10px] font-medium bg-zinc-950 border border-white/5 text-zinc-400 px-2 py-0.5 rounded-md"
                   >
                     {tech}
                   </span>
@@ -147,7 +127,18 @@ export default function ProjectsSection({ projects }) {
             </div>
           </motion.div>
         ))}
-      </motion.div>
+      </div>
+
+      {/* CTA Button to All Projects */}
+      <div className="flex justify-center">
+        <Link
+          href="/projects"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-indigo-500/30 text-sm font-bold text-white rounded-xl shadow-lg transition-all hover:scale-105 cursor-pointer"
+        >
+          Lihat Semua Project
+          <ArrowRight className="w-4 h-4 text-indigo-400" />
+        </Link>
+      </div>
     </section>
   );
 }

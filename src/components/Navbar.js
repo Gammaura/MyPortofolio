@@ -35,21 +35,21 @@ export default function Navbar() {
 
         {/* Navigation links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-          <a href="#about" className="hover:text-white transition-colors flex items-center gap-1.5">
+          <Link href="/#about" className="hover:text-white transition-colors flex items-center gap-1.5">
             <User className="w-3.5 h-3.5" /> Tentang
-          </a>
-          <a href="#skills" className="hover:text-white transition-colors flex items-center gap-1.5">
+          </Link>
+          <Link href="/#skills" className="hover:text-white transition-colors flex items-center gap-1.5">
             <Code className="w-3.5 h-3.5" /> Keahlian
-          </a>
-          <a href="#projects" className="hover:text-white transition-colors flex items-center gap-1.5">
+          </Link>
+          <Link href="/projects" className="hover:text-white transition-colors flex items-center gap-1.5">
             <Code className="w-3.5 h-3.5" /> Project
-          </a>
-          <a href="#organizations" className="hover:text-white transition-colors flex items-center gap-1.5">
+          </Link>
+          <Link href="/#organizations" className="hover:text-white transition-colors flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5" /> Organisasi
-          </a>
-          <a href="#contact" className="hover:text-white transition-colors flex items-center gap-1.5">
+          </Link>
+          <Link href="/#contact" className="hover:text-white transition-colors flex items-center gap-1.5">
             <Send className="w-3.5 h-3.5" /> Kontak
-          </a>
+          </Link>
         </div>
 
         {/* Admin Link */}
