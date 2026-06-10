@@ -21,8 +21,8 @@ export default async function SkillsPage() {
     <div className="min-h-screen grid-bg relative flex flex-col">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-radial from-indigo-500/10 via-transparent to-transparent pointer-events-none z-0" />
       <Navbar />
-      <main className="flex-grow relative z-10 pt-28">
-        <SkillsSection skills={data.skills} />
+      <main className="flex-grow relative z-10 pt-20">
+        <SkillsSection certificates={data.certificates} />
       </main>
       <Footer name={data.profile.name} />
     </div>

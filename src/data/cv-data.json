@@ -1,45 +1,77 @@
 {
   "profile": {
     "name": "Arditya Adjie Rosandi",
-    "title": "Full-Stack Developer & UI/UX Designer",
-    "email": "ardityaadjierosandi18@gmail.com",
-    "phone": "+62 812-3456-7890",
-    "location": "Jakarta, Indonesia",
-    "about": "Mahasiswa Teknik Informatika Universitas Esa Unggul yang antusias terhadap pengembangan web modern, arsitektur backend, dan desain antarmuka interaktif. Berpengalaman membangun aplikasi skala menengah, integrasi API real-time, dan sistem e-commerce.",
-    "linkedin": "https://linkedin.com/in/gammaura",
+    "title": "Full-Stack Developer & IT Project Manager",
+    "email": "ardityaa.id@gmail.com",
+    "phone": "+62 877-1795-6553",
+    "location": "Tangerang, Banten",
+    "about": "Mahasiswa Teknik Informatika Universitas Esa Unggul (angkatan 2023) dengan IPK 3.84. Antusias dalam pengembangan web modern, arsitektur backend, dan desain antarmuka interaktif. Berpengalaman membangun aplikasi skala menengah, integrasi API real-time, dan sistem e-commerce.",
+    "linkedin": "https://www.linkedin.com/in/ardityaadjierosandi",
     "github": "https://github.com/Gammaura"
   },
   "skills": [
-    { "name": "React / Next.js", "category": "Frontend", "level": "Expert" },
-    { "name": "Laravel / PHP", "category": "Backend", "level": "Expert" },
-    { "name": "Node.js / Express", "category": "Backend", "level": "Advanced" },
-    { "name": "PostgreSQL / MySQL", "category": "Database", "level": "Advanced" },
-    { "name": "Tailwind CSS & SCSS", "category": "Frontend", "level": "Expert" },
-    { "name": "Framer Motion / GSAP", "category": "Animation", "level": "Advanced" },
-    { "name": "Git & Git Flow", "category": "Tools", "level": "Advanced" },
-    { "name": "UI/UX Design & Figma", "category": "Design", "level": "Advanced" }
+    { "name": "C++", "category": "Programming", "level": "Advanced" },
+    { "name": "Python", "category": "Programming", "level": "Advanced" },
+    { "name": "Java", "category": "Programming", "level": "Intermediate" },
+    { "name": "PHP", "category": "Programming", "level": "Advanced" },
+    { "name": "HTML", "category": "Web Development", "level": "Expert" },
+    { "name": "CSS", "category": "Web Development", "level": "Expert" },
+    { "name": "Streamlit", "category": "Web Development", "level": "Advanced" },
+    { "name": "Flask", "category": "Web Development", "level": "Intermediate" },
+    { "name": "MySQL", "category": "Database", "level": "Advanced" },
+    { "name": "MariaDB", "category": "Database", "level": "Intermediate" },
+    { "name": "Random Forest", "category": "Machine Learning", "level": "Intermediate" },
+    { "name": "Naive Bayes", "category": "Machine Learning", "level": "Intermediate" },
+    { "name": "Git", "category": "Tools", "level": "Advanced" },
+    { "name": "GitHub", "category": "Tools", "level": "Advanced" },
+    { "name": "Figma", "category": "Tools", "level": "Intermediate" },
+    { "name": "Microsoft Word", "category": "Others", "level": "Expert" },
+    { "name": "Excel", "category": "Others", "level": "Advanced" },
+    { "name": "Google Sheets", "category": "Others", "level": "Advanced" }
   ],
+  "certificates": [],
   "organizations": [
     {
-      "role": "Lead Web Developer",
-      "organization": "Himpunan Mahasiswa Informatika (HMIF)",
-      "period": "Okt 2024 - Sekarang",
-      "location": "Jakarta",
+      "role": "CHAIRMAN",
+      "organization": "CodeHub Esa Unggul",
+      "period": "Juni 2025 – Januari 2026",
+      "location": "Tangerang",
       "bulletPoints": [
-        "Memimpin tim beranggotakan 5 developer untuk merancang dan memelihara website resmi HMIF.",
-        "Meningkatkan performa website hingga 40% dengan bermigrasi ke arsitektur SSR.",
-        "Mengadakan workshop pemrograman web gratis bagi 150+ mahasiswa baru."
+        "Memimpin seluruh board member di Kampus Tangerang",
+        "Mengelola seminar, pelatihan, dan program fakultas",
+        "Menyusun dan mengeksekusi timeline program kerja satu periode penuh",
+        "Meningkatkan partisipasi mahasiswa per event secara signifikan"
       ]
     },
     {
-      "role": "Staff Hubungan Masyarakat",
-      "organization": "Badan Eksekutif Mahasiswa (BEM)",
-      "period": "Mar 2024 - Des 2024",
-      "location": "Jakarta",
+      "role": "BRANCH HEAD",
+      "organization": "BEM Fakultas Ilmu Komputer UEU",
+      "period": "April 2025 – Januari 2026",
+      "location": "Tangerang",
       "bulletPoints": [
-        "Mengelola media sosial resmi BEM dan merancang infografis publikasi acara kampus.",
-        "Membangun hubungan kolaboratif dengan 10+ organisasi mahasiswa eksternal.",
-        "Menjadi koordinator publikasi IT Event dengan total audiens 800+ mahasiswa."
+        "Mengkoordinasi seluruh kegiatan mahasiswa Kampus Tangerang",
+        "Kolaborasi dengan stakeholder fakultas",
+        "Meningkatkan partisipasi mahasiswa >30% per event"
+      ]
+    },
+    {
+      "role": "CHAIRPERSON",
+      "organization": "Inaugurasi UKM Band 2025",
+      "period": "Februari 2026",
+      "location": "Tangerang",
+      "bulletPoints": [
+        "Memimpin tim eksekusi acara inaugurasi resmi UKM Band",
+        "Mengelola perencanaan, logistik, timeline, dan eksekusi on-site"
+      ]
+    },
+    {
+      "role": "FACULTY MENTOR COORDINATOR",
+      "organization": "PKKMB 2025",
+      "period": "Agustus 2025",
+      "location": "Tangerang",
+      "bulletPoints": [
+        "Mengkoordinasi mentor fakultas untuk orientasi mahasiswa baru",
+        "Memfasilitasi transisi mahasiswa baru melalui sesi bimbingan terstruktur"
       ]
     }
   ],
@@ -55,6 +87,7 @@
         "Mengintegrasikan sistem pembayaran paket langganan menggunakan Midtrans Snap Token.",
         "Mengoptimalkan pembuatan PDF (DomPDF) dan pengiriman email massal secara asinkron menggunakan Laravel Queue."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/Certify",
       "demo": ""
     },
@@ -69,6 +102,7 @@
         "Membuat kontrol toleransi warna (tolerance) dan kelembutan tepian (edge softness) secara real-time.",
         "Menyediakan fitur zoom-in, zoom-out, dan fit-to-screen untuk presisi manipulasi gambar."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/FrameCut",
       "demo": ""
     },
@@ -83,6 +117,7 @@
         "Membangun antarmuka chat responsif dan modern dengan retensi konteks percakapan.",
         "Mengimplementasikan mekanisme persistensi API key lokal demi keamanan akses pengguna."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/HealthCare",
       "demo": ""
     },
@@ -97,6 +132,7 @@
         "Mengintegrasikan PostgreSQL (Neon DB) untuk memproses data menu, transaksi, dan akun pengguna.",
         "Mengimplementasikan skema migrasi database otomatis untuk sinkronisasi lokal ke produksi."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/Solaria",
       "demo": "https://solaria-app.vercel.app"
     },
@@ -111,6 +147,7 @@
         "Menggunakan random salt (16-byte) dan nonce (12-byte) acak untuk menjamin keamanan setiap file terenkripsi.",
         "Mendesain antarmuka modern yang memproses seluruh file di memori lokal tanpa penyimpanan server."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/LockMe",
       "demo": ""
     },
@@ -125,6 +162,7 @@
         "Mengintegrasikan hardware kamera DSLR dan printer foto untuk proses cetak otomatis.",
         "Mengoptimalkan performa rendering gambar beresolusi tinggi di sisi klien."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/Fotosphere",
       "demo": ""
     },
@@ -139,6 +177,7 @@
         "Menyediakan kontrol kualitas kompresi dinamis dan penyesuaian resolusi lebar maksimum.",
         "Mengintegrasikan fitur pengunduhan paket ZIP otomatis untuk hasil pemrosesan batch gambar."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/NanoPic",
       "demo": ""
     },
@@ -153,6 +192,7 @@
         "Membuat dashboard statistik bagi admin untuk memantau pendapatan, jumlah transaksi, dan aktivitas pengguna.",
         "Mengimplementasikan fitur kelola status pemesanan (pending, confirmed, completed, cancelled) beserta alasan pembatalan."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/SmashZone",
       "demo": ""
     },
@@ -167,6 +207,7 @@
         "Mengintegrasikan QR code generator dinamis yang menghasilkan tiket unik sekali pakai setelah checkout.",
         "Menyediakan modul scanner untuk memvalidasi tiket masuk (check-in) baik secara manual maupun menggunakan kamera."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/StagePass",
       "demo": ""
     },
@@ -181,8 +222,19 @@
         "Membuat modul manajemen interaksi mahasiswa yang mudah dikonfigurasi oleh staf admin.",
         "Meningkatkan efisiensi layanan administrasi mahasiswa hingga 45% di pusat layanan Esa Corner."
       ],
+      "image": "",
       "github": "https://github.com/Gammaura/Compro",
       "demo": ""
     }
+  ],
+  "timeline": [
+    { "year": "2023", "month": "September", "title": "Memulai Perjalanan", "subtitle": "Teknik Informatika — Universitas Esa Unggul", "description": "Memulai studi di Teknik Informatika dengan IPK 3.84. Dari sini semuanya dimulai — coding, organisasi, dan mimpi besar.", "type": "start" },
+    { "year": "2025", "month": "April", "title": "Branch Head", "subtitle": "BEM Fakultas Ilmu Komputer UEU", "description": "Mengkoordinasi kegiatan mahasiswa Kampus Tangerang, kolaborasi stakeholder fakultas, meningkatkan partisipasi >30% per event.", "type": "milestone" },
+    { "year": "2025", "month": "Juni", "title": "Chairman", "subtitle": "CodeHub Esa Unggul", "description": "Memimpin seluruh board member, mengelola seminar & pelatihan, menyusun program kerja satu periode penuh.", "type": "milestone" },
+    { "year": "2025", "month": "Agustus", "title": "Faculty Mentor Coordinator", "subtitle": "PKKMB 2025", "description": "Mengkoordinasi mentor fakultas dan memfasilitasi transisi mahasiswa baru melalui sesi bimbingan terstruktur.", "type": "milestone" },
+    { "year": "2025", "month": "Okt–Des", "title": "Project Marathon", "subtitle": "Academic Projects", "description": "Mengerjakan 3 proyek besar: Green Survival (Game 2D, Team Lead), UEU Academy (Business Analyst), HealthCare Chatbot AI (Akurasi 98%).", "type": "work" },
+    { "year": "2026", "month": "Februari", "title": "Chairperson", "subtitle": "Inaugurasi UKM Band 2025", "description": "Memimpin tim eksekusi acara inaugurasi resmi UKM Band — perencanaan, logistik, timeline, dan eksekusi on-site.", "type": "milestone" },
+    { "year": "2026", "month": "Maret", "title": "Full-Stack Developer", "subtitle": "Fotosphere & Projek Lainnya", "description": "Mengembangkan aplikasi produksi: Fotosphere Self Photo Studio, Certify Platform, dan berbagai proyek full-stack lainnya.", "type": "work" },
+    { "year": "Sekarang", "month": "→ Masa Depan", "title": "Target Selanjutnya", "subtitle": "Magang & Kolaborasi", "description": "Mencari peluang magang di IT Project Management atau Full-Stack Web Development. Ingin berkontribusi di tim cepat.", "type": "future" }
   ]
 }

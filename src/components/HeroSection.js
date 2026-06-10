@@ -21,7 +21,7 @@ const Linkedin = ({ className }) => (
 
 const FloatingParticle = ({ style }) => (
   <motion.div
-    className="absolute rounded-full bg-indigo-400/40 pointer-events-none"
+    className="absolute rounded-full hero-particle pointer-events-none"
     style={style}
     animate={{ y: [-20, 20, -20], x: [-10, 10, -10], opacity: [0.3, 0.8, 0.3] }}
     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -29,21 +29,6 @@ const FloatingParticle = ({ style }) => (
 );
 
 export default function HeroSection({ profile, allData }) {
-  const [mounted, setMounted] = React.useState(false);
-  
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const theme = typeof window !== "undefined" ? document.documentElement.getAttribute("data-theme") : "dark";
-  const isDark = !mounted || theme !== "light";
-
-  const bgImage = isDark
-    ? "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')"
-    : "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80&fit=crop&sat=-100')";
-  
-  const overlayOpacity = isDark ? "bg-black/40" : "bg-black/20";
-  const gradientFrom = isDark ? "from-zinc-950" : "from-white";
   const particles = [
     { top: "15%", left: "8%", width: 8, height: 8 },
     { top: "70%", left: "5%", width: 6, height: 6 },
@@ -57,27 +42,28 @@ export default function HeroSection({ profile, allData }) {
     <section
       id="about"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{
-        backgroundImage: bgImage,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
     >
-      <div className={`absolute inset-0 ${overlayOpacity}`} />
-      <div className={`absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t ${gradientFrom} to-transparent`} />
+      <div
+        className="absolute inset-0 hero-bg-image"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')",
+        }}
+      />
+      <div className="hero-scrim-base absolute inset-0 pointer-events-none" />
+      <div className="hero-scrim-fade absolute inset-x-0 bottom-0 pointer-events-none" />
 
       {particles.map((style, i) => (
         <FloatingParticle key={i} style={style} />
       ))}
 
-      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center hero-content">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-xs font-semibold text-white mb-8"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full hero-glass text-xs font-semibold hero-text-heading mb-8"
         >
-          <Sparkles className="w-3.5 h-3.5 text-cyan-300" />
+          <Sparkles className="w-3.5 h-3.5 text-primary" />
           Tersedia Untuk Magang & Project
         </motion.div>
 
@@ -85,19 +71,16 @@ export default function HeroSection({ profile, allData }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-4 drop-shadow-lg"
+          className="text-5xl md:text-7xl font-extrabold tracking-tight hero-text-heading mb-4 hero-title"
         >
-          Halo, Saya{" "}
-          <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
-            {profile.name}
-          </span>
+          Halo, Saya {profile.name}
         </motion.h1>
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg md:text-2xl font-semibold text-white/80 mb-6 drop-shadow"
+          className="text-lg md:text-2xl font-semibold hero-text-body mb-6 hero-subtitle"
         >
           {profile.title}
         </motion.h2>
@@ -106,7 +89,7 @@ export default function HeroSection({ profile, allData }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-white/70 text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-8"
+          className="hero-text-muted text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-8"
         >
           {profile.about}
         </motion.p>
@@ -115,14 +98,14 @@ export default function HeroSection({ profile, allData }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-3 text-xs text-white/80 mb-10"
+          className="flex flex-wrap items-center justify-center gap-3 text-xs hero-text-body mb-10"
         >
-          <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1.5 rounded-full">
-            <MapPin className="w-3.5 h-3.5 text-cyan-300" />
+          <span className="flex items-center gap-1.5 hero-glass px-3 py-1.5 rounded-full">
+            <MapPin className="w-3.5 h-3.5 text-primary" />
             {profile.location}
           </span>
-          <span className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1.5 rounded-full">
-            <Mail className="w-3.5 h-3.5 text-cyan-300" />
+          <span className="flex items-center gap-1.5 hero-glass px-3 py-1.5 rounded-full">
+            <Mail className="w-3.5 h-3.5 text-primary" />
             {profile.email}
           </span>
         </motion.div>
@@ -133,14 +116,14 @@ export default function HeroSection({ profile, allData }) {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <PDFDownloadButton data={allData} />
+          <PDFDownloadButton variant="hero" />
 
           <div className="flex items-center gap-3">
             <a
               href={profile.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-11 h-11 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full text-white transition-all hover:scale-105"
+              className="flex items-center justify-center w-11 h-11 hero-glass rounded-full hero-text-body hover:text-white transition-all hover:scale-105"
               aria-label="GitHub Profile"
             >
               <Github className="w-5 h-5" />
@@ -149,7 +132,7 @@ export default function HeroSection({ profile, allData }) {
               href={profile.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-11 h-11 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full text-white transition-all hover:scale-105"
+              className="flex items-center justify-center w-11 h-11 hero-glass rounded-full hero-text-body hover:text-white transition-all hover:scale-105"
               aria-label="LinkedIn Profile"
             >
               <Linkedin className="w-5 h-5" />

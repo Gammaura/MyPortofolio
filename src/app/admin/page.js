@@ -17,7 +17,12 @@ import {
   XCircle,
   HelpCircle,
   LogOut,
+  MapPin,
+  Award,
+  Upload,
+  FileText,
 } from "lucide-react";
+import { getCertificateFile, getCertificateType } from "@/components/CertificatePreview";
 
 export default function AdminPanel() {
   const [data, setData] = useState(null);
@@ -29,6 +34,7 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState("profile");
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState({ show: false, success: false, message: "" });
+  const [uploadingCertIndex, setUploadingCertIndex] = useState(null);
 
   // Load initial data
   useEffect(() => {
@@ -115,6 +121,79 @@ export default function AdminPanel() {
     }));
   };
 
+  // Certificates helpers
+  const handleAddCertificate = () => {
+    setData((prev) => ({
+      ...prev,
+      certificates: [
+        ...(prev.certificates || []),
+        {
+          title: "Sertifikat Baru",
+          issuer: "Penerbit",
+          date: "2026",
+          file: "",
+          fileType: "",
+          credentialUrl: "",
+        },
+      ],
+    }));
+  };
+
+  const handleCertificateChange = (index, field, value) => {
+    setData((prev) => {
+      const updated = [...(prev.certificates || [])];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, certificates: updated };
+    });
+  };
+
+  const handleRemoveCertificate = (index) => {
+    setData((prev) => ({
+      ...prev,
+      certificates: (prev.certificates || []).filter((_, idx) => idx !== index),
+    }));
+  };
+
+  const handleCertificateUpload = async (index, file) => {
+    if (!file) return;
+
+    setUploadingCertIndex(index);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload-certificate", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || "Gagal mengunggah file.");
+
+      setData((prev) => {
+        const updated = [...(prev.certificates || [])];
+        updated[index] = {
+          ...updated[index],
+          file: result.url,
+          fileType: result.type,
+          image: "",
+        };
+        return { ...prev, certificates: updated };
+      });
+    } catch (err) {
+      setSaveStatus({
+        show: true,
+        success: false,
+        message: err.message || "Gagal mengunggah file sertifikat.",
+      });
+      setTimeout(() => {
+        setSaveStatus((prev) => ({ ...prev, show: false }));
+      }, 5000);
+    } finally {
+      setUploadingCertIndex(null);
+    }
+  };
+
   // Projects helpers
   const handleAddProject = () => {
     setData((prev) => ({
@@ -128,6 +207,7 @@ export default function AdminPanel() {
           techStack: ["React"],
           shortDescription: "Deskripsi singkat project...",
           bulletPoints: ["Detail pencapaian/pekerjaan 1"],
+          image: "",
           github: "",
           demo: "",
         },
@@ -366,7 +446,9 @@ export default function AdminPanel() {
           {[
             { id: "profile", label: "Profil Saya", icon: <User className="w-4 h-4" /> },
             { id: "skills", label: "Keahlian (Skills)", icon: <Code className="w-4 h-4" /> },
+            { id: "certificates", label: "Sertifikat", icon: <Award className="w-4 h-4" /> },
             { id: "projects", label: "Riwayat Project", icon: <FolderOpen className="w-4 h-4" /> },
+            { id: "timeline", label: "Timeline Journey", icon: <MapPin className="w-4 h-4" /> },
             { id: "organizations", label: "Riwayat Organisasi", icon: <Users className="w-4 h-4" /> },
           ].map((tab) => (
             <button
@@ -569,6 +651,210 @@ export default function AdminPanel() {
             </div>
           )}
 
+          {/* TAB: CERTIFICATES */}
+          {activeTab === "certificates" && (
+            <div className="glass-panel rounded-2xl p-6 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/5">
+                <div>
+                  <h2 className="text-lg font-bold text-white">Kelola Sertifikat</h2>
+                  <p className="text-[11px] text-zinc-500 mt-1">
+                    {(data.certificates || []).length} sertifikat · edit lalu klik{" "}
+                    <span className="text-indigo-400 font-semibold">Simpan Perubahan</span> di atas
+                  </p>
+                </div>
+                <button
+                  onClick={handleAddCertificate}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 border border-indigo-500/50 text-xs font-bold text-white shadow-lg shadow-indigo-500/20 transition-all cursor-pointer shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  Tambah Sertifikat
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {(data.certificates || []).map((cert, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-2xl bg-zinc-900/60 border border-white/5 overflow-hidden"
+                  >
+                    <div className="flex items-center justify-between gap-3 px-5 py-3 bg-zinc-950/80 border-b border-white/5">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-md shrink-0">
+                          #{idx + 1}
+                        </span>
+                        <p className="text-sm font-semibold text-white truncate">
+                          {cert.title || "Sertifikat tanpa nama"}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveCertificate(idx)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-[11px] font-bold text-red-400 transition-all cursor-pointer shrink-0"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        Hapus
+                      </button>
+                    </div>
+
+                    <div className="p-5 space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">
+                          Nama Sertifikat
+                        </label>
+                        <input
+                          type="text"
+                          value={cert.title}
+                          onChange={(e) => handleCertificateChange(idx, "title", e.target.value)}
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">
+                          Penerbit / Platform
+                        </label>
+                        <input
+                          type="text"
+                          value={cert.issuer}
+                          onChange={(e) => handleCertificateChange(idx, "issuer", e.target.value)}
+                          placeholder="e.g. Coursera, Dicoding"
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">
+                          Tanggal
+                        </label>
+                        <input
+                          type="text"
+                          value={cert.date}
+                          onChange={(e) => handleCertificateChange(idx, "date", e.target.value)}
+                          placeholder="e.g. Januari 2025"
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">
+                          File Sertifikat (Foto / PDF)
+                        </label>
+                        <label className="flex flex-col items-center justify-center w-full max-w-md px-4 py-6 rounded-xl border-2 border-dashed border-white/10 hover:border-indigo-500/40 bg-zinc-950/50 cursor-pointer transition-colors">
+                          <Upload className="w-5 h-5 text-indigo-400 mb-2" />
+                          <span className="text-xs font-semibold text-zinc-300">
+                            {uploadingCertIndex === idx
+                              ? "Mengunggah..."
+                              : "Klik untuk pilih foto atau PDF"}
+                          </span>
+                          <span className="text-[10px] text-zinc-500 mt-1">
+                            JPG, PNG, WEBP, GIF, PDF — maks. 10MB
+                          </span>
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
+                            className="hidden"
+                            disabled={uploadingCertIndex === idx}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleCertificateUpload(idx, file);
+                              e.target.value = "";
+                            }}
+                          />
+                        </label>
+                        {getCertificateFile(cert) && (
+                          <div className="mt-3 rounded-xl overflow-hidden border border-white/10 bg-zinc-950 max-w-md">
+                            {getCertificateType(cert) === "pdf" ? (
+                              <div className="relative">
+                                <iframe
+                                  src={`${getCertificateFile(cert)}#toolbar=0&navpanes=0`}
+                                  title={cert.title}
+                                  className="w-full h-48 border-0 bg-white"
+                                />
+                                <div className="flex items-center gap-1.5 px-3 py-2 bg-zinc-900 text-[10px] text-zinc-400">
+                                  <FileText className="w-3 h-3" />
+                                  {getCertificateFile(cert)}
+                                </div>
+                              </div>
+                            ) : (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img
+                                src={getCertificateFile(cert)}
+                                alt={cert.title}
+                                className="w-full h-48 object-contain bg-zinc-900"
+                              />
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setData((prev) => {
+                                  const updated = [...(prev.certificates || [])];
+                                  updated[idx] = { ...updated[idx], file: "", fileType: "", image: "" };
+                                  return { ...prev, certificates: updated };
+                                });
+                              }}
+                              className="w-full py-2 text-[10px] font-semibold text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                            >
+                              Hapus file
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">
+                          URL Verifikasi (opsional)
+                        </label>
+                        <input
+                          type="text"
+                          value={cert.credentialUrl || ""}
+                          onChange={(e) => handleCertificateChange(idx, "credentialUrl", e.target.value)}
+                          placeholder="https://credly.com/badges/..."
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-white/5">
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveCertificate(idx)}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-[11px] font-bold text-red-400 transition-all cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        Hapus Sertifikat
+                      </button>
+                    </div>
+                    </div>
+                  </div>
+                ))}
+
+                {(data.certificates || []).length === 0 && (
+                  <div className="text-center py-12 px-6 rounded-2xl border border-dashed border-white/10 bg-zinc-900/30">
+                    <Award className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
+                    <p className="text-sm font-semibold text-zinc-400 mb-1">Belum ada sertifikat</p>
+                    <p className="text-xs text-zinc-600 mb-5">Tambahkan sertifikat pertama kamu di sini.</p>
+                    <button
+                      type="button"
+                      onClick={handleAddCertificate}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white transition-all cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Tambah Sertifikat Pertama
+                    </button>
+                  </div>
+                )}
+
+                {(data.certificates || []).length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleAddCertificate}
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-white/10 hover:border-indigo-500/40 hover:bg-indigo-500/5 text-xs font-bold text-zinc-400 hover:text-indigo-300 transition-all cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Tambah Sertifikat Lain
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* TAB: PROJECTS */}
           {activeTab === "projects" && (
             <div className="glass-panel rounded-2xl p-6 space-y-6">
@@ -645,6 +931,16 @@ export default function AdminPanel() {
                         />
                       </div>
                       <div>
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">Image Preview URL</label>
+                        <input
+                          type="text"
+                          value={project.image || ""}
+                          onChange={(e) => handleProjectChange(idx, "image", e.target.value)}
+                          placeholder="https://example.com/image.jpg"
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
                         <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">Repository URL (GitHub)</label>
                         <input
                           type="text"
@@ -702,6 +998,157 @@ export default function AdminPanel() {
 
                 {data.projects.length === 0 && (
                   <p className="text-center text-xs text-zinc-500 py-8">Project kosong. Klik Tambah Project.</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* TAB: TIMELINE */}
+          {activeTab === "timeline" && (
+            <div className="glass-panel rounded-2xl p-6 space-y-6">
+              <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                <h2 className="text-lg font-bold text-white">Kelola Timeline Perjalanan</h2>
+                <button
+                  onClick={() => {
+                    setData((prev) => ({
+                      ...prev,
+                      timeline: [...(prev.timeline || []), {
+                        year: "2026",
+                        month: "Bulan",
+                        title: "Judul Baru",
+                        subtitle: "Organisasi / Kategori",
+                        description: "Deskripsi pencapaian...",
+                        type: "milestone",
+                      }],
+                    }));
+                  }}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-white/5 hover:border-indigo-500/30 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 transition-all cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Tambah Timeline
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {(data.timeline || []).map((item, idx) => (
+                  <div key={idx} className="p-5 rounded-2xl bg-zinc-900/60 border border-white/5 space-y-4 relative">
+                    <button
+                      onClick={() => {
+                        setData((prev) => ({
+                          ...prev,
+                          timeline: prev.timeline.filter((_, i) => i !== idx),
+                        }));
+                      }}
+                      className="absolute top-4 right-4 p-2 rounded-lg bg-zinc-950 hover:bg-red-500/10 border border-white/5 hover:border-red-500/20 text-zinc-500 hover:text-red-400 transition-all cursor-pointer"
+                      title="Hapus Timeline"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-10">
+                      <div>
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">Tahun</label>
+                        <input
+                          type="text"
+                          value={item.year}
+                          onChange={(e) => {
+                            setData((prev) => {
+                              const updated = [...prev.timeline];
+                              updated[idx] = { ...updated[idx], year: e.target.value };
+                              return { ...prev, timeline: updated };
+                            });
+                          }}
+                          placeholder="e.g. 2025"
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">Bulan</label>
+                        <input
+                          type="text"
+                          value={item.month}
+                          onChange={(e) => {
+                            setData((prev) => {
+                              const updated = [...prev.timeline];
+                              updated[idx] = { ...updated[idx], month: e.target.value };
+                              return { ...prev, timeline: updated };
+                            });
+                          }}
+                          placeholder="e.g. Juni"
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">Judul</label>
+                        <input
+                          type="text"
+                          value={item.title}
+                          onChange={(e) => {
+                            setData((prev) => {
+                              const updated = [...prev.timeline];
+                              updated[idx] = { ...updated[idx], title: e.target.value };
+                              return { ...prev, timeline: updated };
+                            });
+                          }}
+                          placeholder="e.g. Chairman"
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">Subtitle</label>
+                        <input
+                          type="text"
+                          value={item.subtitle}
+                          onChange={(e) => {
+                            setData((prev) => {
+                              const updated = [...prev.timeline];
+                              updated[idx] = { ...updated[idx], subtitle: e.target.value };
+                              return { ...prev, timeline: updated };
+                            });
+                          }}
+                          placeholder="e.g. CodeHub Esa Unggul"
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">Type</label>
+                        <select
+                          value={item.type || "milestone"}
+                          onChange={(e) => {
+                            setData((prev) => {
+                              const updated = [...prev.timeline];
+                              updated[idx] = { ...updated[idx], type: e.target.value };
+                              return { ...prev, timeline: updated };
+                            });
+                          }}
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none cursor-pointer"
+                        >
+                          <option value="start">Start (Awal)</option>
+                          <option value="milestone">Milestone (Organisasi)</option>
+                          <option value="work">Work (Project)</option>
+                          <option value="future">Future (Target)</option>
+                        </select>
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-[10px] font-semibold text-zinc-500 mb-1.5 uppercase">Deskripsi</label>
+                        <textarea
+                          rows={2}
+                          value={item.description}
+                          onChange={(e) => {
+                            setData((prev) => {
+                              const updated = [...prev.timeline];
+                              updated[idx] = { ...updated[idx], description: e.target.value };
+                              return { ...prev, timeline: updated };
+                            });
+                          }}
+                          className="w-full px-3.5 py-2 rounded-lg bg-zinc-950 border border-white/5 focus:border-indigo-500 text-xs text-white focus:outline-none resize-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {(!data.timeline || data.timeline.length === 0) && (
+                  <p className="text-center text-xs text-zinc-500 py-8">Timeline kosong. Klik Tambah Timeline.</p>
                 )}
               </div>
             </div>
