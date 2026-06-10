@@ -18,7 +18,7 @@ export default function ContactSection({ profile }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
-    
+
     // Simulate API request send
     setSent(true);
     setFormState({ name: "", email: "", message: "" });
@@ -29,7 +29,7 @@ export default function ContactSection({ profile }) {
     <section id="contact" className="py-20 relative max-w-4xl mx-auto px-6">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Hubungi <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Saya</span>
+          Hubungi <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">Saya</span>
         </h2>
         <p className="text-zinc-400 text-sm md:text-base max-w-lg mx-auto">
           Punya penawaran proyek, lowongan magang, atau ingin sekadar berdiskusi? Jangan ragu hubungi saya.
@@ -41,11 +41,11 @@ export default function ContactSection({ profile }) {
         <div className="md:col-span-2 space-y-6">
           <div className="glass-panel rounded-2xl p-6">
             <h3 className="text-base font-bold text-white mb-4">Informasi Kontak</h3>
-            
+
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-900/60 border border-white/5">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-white/10 border border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
+                  <div className="p-2 rounded-lg bg-white/10 text-cyan-400">
                     <Mail className="w-4 h-4" />
                   </div>
                   <div>
@@ -55,7 +55,7 @@ export default function ContactSection({ profile }) {
                 </div>
                 <button
                   onClick={handleCopyEmail}
-                  className="p-2 rounded-lg bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors cursor-pointer"
+                  className="p-2 rounded-lg bg-white/10 text-zinc-400 hover:text-white hover:bg-white/20 transition-colors cursor-pointer"
                   title="Salin Email"
                 >
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -71,7 +71,7 @@ export default function ContactSection({ profile }) {
                 href={profile.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 p-3 rounded-xl bg-zinc-900/60 hover:bg-zinc-800 border border-white/5 text-zinc-300 hover:text-white transition-colors"
+                className="flex items-center gap-2 p-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-zinc-300 hover:text-white transition-colors"
               >
                 <span>GitHub</span>
                 <ExternalLink className="w-3 h-3 ml-auto text-zinc-500" />
@@ -80,7 +80,7 @@ export default function ContactSection({ profile }) {
                 href={profile.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 p-3 rounded-xl bg-zinc-900/60 hover:bg-zinc-800 border border-white/5 text-zinc-300 hover:text-white transition-colors"
+                className="flex items-center gap-2 p-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-zinc-300 hover:text-white transition-colors"
               >
                 <span>LinkedIn</span>
                 <ExternalLink className="w-3 h-3 ml-auto text-zinc-500" />
@@ -91,7 +91,7 @@ export default function ContactSection({ profile }) {
 
         {/* Contact Form Column */}
         <div className="md:col-span-3">
-          <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 md:p-8 space-y-4">
+          <form onSubmit={handleSubmit} className="glass-panel rounded-2xl p-6 md:p-8 space-y-4">
             <div>
               <label className="block text-xs font-semibold text-zinc-400 mb-2 uppercase">Nama Lengkap</label>
               <input
@@ -100,7 +100,7 @@ export default function ContactSection({ profile }) {
                 value={formState.name}
                 onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                 placeholder="John Doe"
-                className="w-full px-4 py-3 rounded-xl bg-zinc-900/60 border border-white/5 focus:border-indigo-500 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 focus:border-cyan-500/50 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors"
               />
             </div>
 
@@ -112,7 +112,7 @@ export default function ContactSection({ profile }) {
                 value={formState.email}
                 onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                 placeholder="johndoe@example.com"
-                className="w-full px-4 py-3 rounded-xl bg-zinc-900/60 border border-white/5 focus:border-indigo-500 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 focus:border-cyan-500/50 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors"
               />
             </div>
 
@@ -124,18 +124,18 @@ export default function ContactSection({ profile }) {
                 value={formState.message}
                 onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                 placeholder="Tulis pesan Anda di sini..."
-                className="w-full px-4 py-3 rounded-xl bg-zinc-900/60 border border-white/5 focus:border-indigo-500 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors resize-none"
+                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 focus:border-cyan-500/50 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors resize-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={sent}
-              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-semibold text-sm shadow-lg shadow-indigo-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm shadow-lg transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {sent ? (
                 <>
-                  <Check className="w-4 h-4 animate-bounce text-emerald-300" />
+                  <Check className="w-4 h-4 animate-bounce text-emerald-400" />
                   Pesan Terkirim!
                 </>
               ) : (

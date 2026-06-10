@@ -28,12 +28,12 @@ export default function ProjectsSection({ projects }) {
   return (
     <section id="projects" className="py-20 relative max-w-5xl mx-auto px-6">
       <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-bold text-indigo-300 mb-4 uppercase tracking-wider">
-          <Sparkles className="w-3 h-3" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-xs font-semibold text-white mb-4">
+          <Sparkles className="w-3 h-3 text-cyan-300" />
           Karya Pilihan
         </div>
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Featured <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Projects</span>
+          Featured <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">Projects</span>
         </h2>
         <p className="text-zinc-400 text-sm md:text-base max-w-lg mx-auto">
           Highlight beberapa aplikasi utama yang telah saya rancang dan kembangkan baru-baru ini.
@@ -50,15 +50,15 @@ export default function ProjectsSection({ projects }) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: idx * 0.1 }}
             whileHover={{ y: -6 }}
-            className="glass-panel glass-panel-hover rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden"
+            className="glass-panel rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden"
           >
             {/* Corner Light Glow */}
-            <div className="absolute -top-12 -right-12 w-28 h-28 bg-indigo-500/5 rounded-full blur-xl pointer-events-none" />
+            <div className="absolute -top-12 -right-12 w-28 h-28 bg-cyan-500/5 rounded-full blur-xl pointer-events-none" />
 
             <div>
               {/* Header Info */}
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[10px] uppercase tracking-wider font-extrabold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-md">
+                <span className="text-[10px] uppercase tracking-wider font-extrabold text-cyan-300 bg-white/10 px-2.5 py-1 rounded-md">
                   {project.role}
                 </span>
                 <span className="text-xs font-semibold text-zinc-500">{project.period}</span>
@@ -66,7 +66,7 @@ export default function ProjectsSection({ projects }) {
 
               {/* Title */}
               <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <Folder className="w-4 h-4 text-indigo-400" />
+                <Folder className="w-4 h-4 text-cyan-400" />
                 {project.title}
               </h3>
 
@@ -79,7 +79,7 @@ export default function ProjectsSection({ projects }) {
               <ul className="space-y-2 mb-6">
                 {project.bulletPoints.map((bullet, bulletIdx) => (
                   <li key={bulletIdx} className="text-xs text-zinc-500 flex items-start gap-2 leading-relaxed">
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500/50 mt-1.5 shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-500/50 mt-1.5 shrink-0" />
                     <span>{bullet}</span>
                   </li>
                 ))}
@@ -92,7 +92,7 @@ export default function ProjectsSection({ projects }) {
                 {project.techStack.map((tech) => (
                   <span
                     key={tech}
-                    className="text-[10px] font-medium bg-zinc-950 border border-white/5 text-zinc-400 px-2 py-0.5 rounded-md"
+                    className="text-[10px] font-medium bg-white/10 border border-white/10 text-zinc-400 px-2 py-0.5 rounded-md"
                   >
                     {tech}
                   </span>
@@ -100,7 +100,7 @@ export default function ProjectsSection({ projects }) {
               </div>
 
               {/* Links */}
-              <div className="flex items-center gap-4 pt-4 border-t border-white/5">
+              <div className="flex items-center gap-4 pt-4 border-t border-white/10">
                 {project.github && (
                   <a
                     href={project.github}
@@ -117,7 +117,7 @@ export default function ProjectsSection({ projects }) {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition-colors ml-auto"
+                    className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 font-semibold transition-colors ml-auto"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Live Demo
@@ -133,10 +133,10 @@ export default function ProjectsSection({ projects }) {
       <div className="flex justify-center">
         <Link
           href="/projects"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-indigo-500/30 text-sm font-bold text-white rounded-xl shadow-lg transition-all hover:scale-105 cursor-pointer"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-sm font-semibold text-white rounded-full shadow-lg transition-all hover:scale-105 cursor-pointer"
         >
           Lihat Semua Project
-          <ArrowRight className="w-4 h-4 text-indigo-400" />
+          <ArrowRight className="w-4 h-4 text-cyan-400" />
         </Link>
       </div>
     </section>
