@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Search, ArrowLeft, Folder, Sparkles, Github } from "lucide-react";
+import { ExternalLink, Search, ArrowLeft, Folder, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
