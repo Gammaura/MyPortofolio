@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Search, Folder, Sparkles } from "lucide-react";
+import { ExternalLink, Folder, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -12,180 +12,235 @@ const Github = ({ className }) => (
   </svg>
 );
 
+function ProjectImage({ project }) {
+  const getPreviewUrl = () => {
+    if (project.image) return project.image;
+    return null;
+  };
+
+  const src = getPreviewUrl();
+
+  if (!src) {
+    return (
+      <div className="w-full h-48 bg-theme-badge flex items-center justify-center relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10"
+          style={{ backgroundImage: "radial-gradient(circle, rgba(220,38,38,0.4) 1px, transparent 1px)", backgroundSize: "24px 24px" }}
+        />
+        <Folder className="w-10 h-10 text-primary/30" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full h-48 overflow-hidden bg-theme-badge">
+      <img
+        src={src}
+        alt={project.title}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        onError={(e) => {
+          e.target.style.display = "none";
+          e.target.parentElement.classList.add("flex", "items-center", "justify-center");
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+    </div>
+  );
+}
+
+function ProjectModal({ project, onClose }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.93, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.93, y: 20 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="glass-panel rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Modal Image */}
+          <ProjectImage project={project} />
+
+          <div className="p-7">
+            {/* Header */}
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <span className="text-[9px] uppercase tracking-wider font-extrabold text-primary bg-primary/10 px-2.5 py-1 rounded-md">
+                  {project.role}
+                </span>
+                <h2 className="text-2xl font-bold text-theme-heading mt-3 flex items-center gap-2">
+                  <Folder className="w-5 h-5 text-primary" />
+                  {project.title}
+                </h2>
+                <p className="text-xs text-theme-subtle mt-1">{project.period}</p>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 rounded-full hover:bg-white/10 text-theme-subtle hover:text-white transition-all"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Description */}
+            <p className="text-theme-muted text-sm leading-relaxed mb-5">
+              {project.shortDescription}
+            </p>
+
+            {/* Bullet Points */}
+            <ul className="space-y-2.5 mb-6">
+              {project.bulletPoints.map((bullet, i) => (
+                <li key={i} className="text-sm text-theme-body flex items-start gap-2.5 leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+
+            {/* Tech Stack */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {project.techStack.map((tech) => (
+                <span key={tech} className="text-[10px] font-medium bg-primary/10 border border-primary/20 text-primary px-2.5 py-1 rounded-md">
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            {/* Links */}
+            <div className="flex items-center gap-4 pt-4 border-t border-theme-card">
+              {project.github && (
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-theme-muted hover:text-white transition-colors"
+                >
+                  <Github className="w-4 h-4" />
+                  Source Code
+                </a>
+              )}
+              {project.demo && (
+                <a href={project.demo} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-semibold transition-colors ml-auto"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Live Demo
+                </a>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export default function ProjectsClient({ projects, profile }) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTech, setSelectedTech] = useState("All");
-  const [expandedImg, setExpandedImg] = useState(null);
-
-  const allTechs = ["All", ...new Set(projects.flatMap((p) => p.techStack))];
-
-  const filteredProjects = projects.filter((project) => {
-    const matchesSearch =
-      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.shortDescription.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.techStack.some((tech) => tech.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesTech = selectedTech === "All" || project.techStack.includes(selectedTech);
-    return matchesSearch && matchesTech;
-  });
+  const [selectedProject, setSelectedProject] = useState(null);
 
   return (
     <div className="min-h-screen grid-bg relative flex flex-col">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-radial from-primary/5 via-transparent to-transparent pointer-events-none z-0" />
       <Navbar />
-      <main className="flex-grow relative z-10 pt-20 pb-20 max-w-5xl mx-auto px-6 w-full">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-semibold text-theme-heading mb-4">
-            <Sparkles className="w-3 h-3 text-primary" />
-            Portofolio Karya
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-theme-heading mb-4">
-            Koleksi Project Saya
+
+      <main className="flex-grow relative z-10 pt-28 pb-20 max-w-5xl mx-auto px-6 w-full">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-theme-heading tracking-tight">
+            My Projects
           </h1>
-          <p className="text-theme-muted text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            Eksplorasi aplikasi web, sistem backend, otomasi, dan desain antarmuka interaktif yang telah saya rancang dan kembangkan.
-          </p>
         </div>
 
-        <div className="glass-panel rounded-2xl p-6 mb-12 space-y-6">
-          <div className="space-y-3">
-            <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-subtle" />
-              <input
-                type="text"
-                placeholder="Cari project berdasarkan nama, tech stack, atau deskripsi..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 rounded-xl bg-theme-badge border border-theme-badge focus:border-primary/50 text-sm text-theme-heading placeholder-theme-subtle focus:outline-none transition-colors"
-              />
-            </div>
-            <p className="text-center text-xs font-semibold text-theme-muted">
-              Menampilkan {filteredProjects.length} dari {projects.length} project
-            </p>
-          </div>
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((project, i) => (
+            <motion.div
+              key={project.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: i * 0.07 }}
+              whileHover={{ y: -4 }}
+              onClick={() => setSelectedProject(project)}
+              className="glass-panel rounded-2xl overflow-hidden cursor-pointer group hover:border-primary/30 transition-colors"
+            >
+              <ProjectImage project={project} />
 
-          <div>
-            <label className="block text-center text-[10px] font-bold text-theme-subtle uppercase tracking-wider mb-3">
-              Filter berdasarkan Teknologi
-            </label>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {allTechs.map((tech) => (
-                <button
-                  key={tech}
-                  onClick={() => setSelectedTech(tech)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
-                    selectedTech === tech
-                      ? "bg-primary/20 border-primary/50 text-primary shadow-lg"
-                      : "bg-theme-badge border-theme-badge text-theme-muted hover:text-theme-heading hover:bg-primary/10"
-                  }`}
-                >
-                  {tech}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project) => (
-              <motion.div
-                layout key={project.title}
-                initial={{ opacity: 0, scale: 0.95, y: 15 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                transition={{ duration: 0.4 }}
-                whileHover={{ y: -6 }}
-                className="glass-panel rounded-2xl overflow-hidden"
-              >
-                {/* Image Preview */}
-                {project.image ? (
-                  <div className="relative w-full h-48 overflow-hidden bg-theme-badge">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105 cursor-pointer"
-                      onClick={() => setExpandedImg(project.image)}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  </div>
-                ) : null}
-
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[9px] uppercase tracking-wider font-extrabold text-primary bg-primary/10 px-2.5 py-1 rounded-md">{project.role}</span>
-                    <span className="text-xs font-semibold text-theme-subtle">{project.period}</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-theme-heading mb-2 flex items-center gap-2">
-                    <Folder className="w-4 h-4 text-primary" />
-                    {project.title}
-                  </h3>
-                  <p className="text-theme-muted text-sm leading-relaxed mb-6">{project.shortDescription}</p>
-                  <ul className="space-y-2 mb-6">
-                    {project.bulletPoints.map((bullet, bulletIdx) => (
-                      <li key={bulletIdx} className="text-xs text-theme-muted flex items-start gap-2 leading-relaxed">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary/50 mt-1.5 shrink-0" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div>
-                    <div className="flex flex-wrap gap-1.5 mb-6">
-                      {project.techStack.map((tech) => (
-                        <span key={tech} className="text-[10px] font-medium bg-theme-badge border border-theme-badge text-theme-muted px-2.5 py-0.5 rounded-md">{tech}</span>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-4 pt-4 border-t border-theme-card">
-                      {project.github && (
-                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-theme-muted hover:text-theme-heading transition-colors">
-                          <Github className="w-4 h-4" />
-                          Source Code
-                        </a>
-                      )}
-                      {project.demo && (
-                        <a href={project.demo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-semibold transition-colors ml-auto">
-                          <ExternalLink className="w-4 h-4" />
-                          Live Demo
-                        </a>
-                      )}
-                    </div>
-                  </div>
+              <div className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[9px] uppercase tracking-wider font-extrabold text-primary bg-primary/10 px-2.5 py-1 rounded-md">
+                    {project.role}
+                  </span>
+                  <span className="text-xs font-semibold text-theme-subtle">{project.period}</span>
                 </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
 
-        {expandedImg && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
-            onClick={() => setExpandedImg(null)}
-          >
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              src={expandedImg}
-              alt="Preview"
-              className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl"
-            />
-          </motion.div>
-        )}
+                <h3 className="text-lg font-bold text-theme-heading mb-2 flex items-center gap-2">
+                  <Folder className="w-4 h-4 text-primary" />
+                  {project.title}
+                </h3>
 
-        {filteredProjects.length === 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20 glass-panel rounded-2xl">
-            <Folder className="w-12 h-12 text-theme-subtle mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-theme-heading mb-2">Project Tidak Ditemukan</h3>
-            <p className="text-theme-muted text-sm max-w-xs mx-auto">
-              Tidak ada project yang cocok dengan pencarian &ldquo;{searchQuery}&rdquo; atau filter teknologi &ldquo;{selectedTech}&rdquo;.
-            </p>
-          </motion.div>
-        )}
+                <p className="text-theme-muted text-sm leading-relaxed mb-4 line-clamp-2">
+                  {project.shortDescription}
+                </p>
+
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {project.techStack.slice(0, 4).map((tech) => (
+                    <span key={tech} className="text-[10px] font-medium bg-theme-badge border border-theme-badge text-theme-muted px-2 py-0.5 rounded-md">
+                      {tech}
+                    </span>
+                  ))}
+                  {project.techStack.length > 4 && (
+                    <span className="text-[10px] font-medium bg-theme-badge border border-theme-badge text-theme-muted px-2 py-0.5 rounded-md">
+                      +{project.techStack.length - 4}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-theme-card">
+                  <div className="flex gap-3">
+                    {project.github && (
+                      <a href={project.github} target="_blank" rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center gap-1.5 text-xs text-theme-muted hover:text-white transition-colors"
+                      >
+                        <Github className="w-3.5 h-3.5" />
+                        Source
+                      </a>
+                    )}
+                    {project.demo && (
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 font-semibold transition-colors"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        Demo
+                      </a>
+                    )}
+                  </div>
+                  <span className="text-xs text-primary/60 group-hover:text-primary transition-colors font-medium">
+                    Lihat Detail →
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </main>
+
       <Footer name={profile.name} />
+
+      {/* Modal */}
+      {selectedProject && (
+        <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+      )}
     </div>
   );
 }

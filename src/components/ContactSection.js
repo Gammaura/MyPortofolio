@@ -24,7 +24,7 @@ export default function ContactSection({ profile }) {
   };
 
   return (
-    <section id="contact" className="pb-20 pt-6 relative max-w-4xl mx-auto px-6">
+    <section id="contact" className="pb-20 pt-12 relative max-w-4xl mx-auto px-6">
       {/* Section Header */}
       <div className="text-center mb-16">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-light text-xs font-semibold text-theme-heading mb-4">

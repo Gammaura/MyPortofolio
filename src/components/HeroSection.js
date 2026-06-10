@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import PDFDownloadButton from "./PDFDownloadButton";
-import { MapPin, Mail, Sparkles } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
 
 const Github = ({ className }) => (
   <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -19,30 +19,13 @@ const Linkedin = ({ className }) => (
   </svg>
 );
 
-const FloatingParticle = ({ style }) => (
-  <motion.div
-    className="absolute rounded-full hero-particle pointer-events-none"
-    style={style}
-    animate={{ y: [-20, 20, -20], x: [-10, 10, -10], opacity: [0.3, 0.8, 0.3] }}
-    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-  />
-);
-
-export default function HeroSection({ profile, allData }) {
-  const particles = [
-    { top: "15%", left: "8%", width: 8, height: 8 },
-    { top: "70%", left: "5%", width: 6, height: 6 },
-    { top: "30%", right: "7%", width: 10, height: 10 },
-    { top: "75%", right: "10%", width: 7, height: 7 },
-    { top: "50%", left: "15%", width: 5, height: 5 },
-    { top: "20%", right: "20%", width: 9, height: 9 },
-  ];
-
+export default function HeroSection({ profile }) {
   return (
     <section
       id="about"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
+      {/* Background */}
       <div
         className="absolute inset-0 hero-bg-image"
         style={{
@@ -50,50 +33,142 @@ export default function HeroSection({ profile, allData }) {
         }}
       />
       <div className="hero-scrim-base absolute inset-0 pointer-events-none" />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(to top, rgba(3,7,18,0.85) 0%, rgba(3,7,18,0.2) 50%, rgba(3,7,18,0.1) 100%)" }}
+      />
       <div className="hero-scrim-fade absolute inset-x-0 bottom-0 pointer-events-none" />
 
-      {particles.map((style, i) => (
-        <FloatingParticle key={i} style={style} />
-      ))}
+      {/* Idle: ambient glow blob kiri */}
+      <motion.div
+        className="absolute pointer-events-none rounded-full"
+        style={{
+          width: 600,
+          height: 600,
+          left: "-15%",
+          top: "20%",
+          background: "radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 70%)",
+          filter: "blur(40px)",
+        }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center hero-content">
+      {/* Idle: ambient glow blob kanan */}
+      <motion.div
+        className="absolute pointer-events-none rounded-full"
+        style={{
+          width: 500,
+          height: 500,
+          right: "-10%",
+          top: "30%",
+          background: "radial-gradient(circle, rgba(220,38,38,0.06) 0%, transparent 70%)",
+          filter: "blur(50px)",
+        }}
+        animate={{ scale: [1.1, 1, 1.1], opacity: [0.5, 0.9, 0.5] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      />
+
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center pt-16">
+
+        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full hero-glass text-xs font-semibold hero-text-heading mb-8"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full hero-glass text-xs font-semibold hero-text-heading mb-6"
         >
-          <Sparkles className="w-3.5 h-3.5 text-primary" />
-          Tersedia Untuk Magang & Project
+          {/* Idle: pulse dot */}
+          <motion.span
+            className="w-1.5 h-1.5 rounded-full bg-primary inline-block"
+            animate={{ opacity: [1, 0.3, 1], scale: [1, 1.4, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          Selamat Datang di Portfolio Saya
         </motion.div>
 
+        {/* Photo — idle float */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="mb-6"
+        >
+          <div className="relative inline-block">
+            {/* Idle: outer glow ring pulse */}
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{ boxShadow: "0 0 0 4px rgba(220,38,38,0.3)" }}
+              animate={{ boxShadow: [
+                "0 0 0 4px rgba(220,38,38,0.3)",
+                "0 0 0 10px rgba(220,38,38,0.08)",
+                "0 0 0 4px rgba(220,38,38,0.3)",
+              ]}}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Idle: float up-down */}
+            <motion.div
+              animate={{ y: [-6, 6, -6] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="w-44 h-44 rounded-full ring-2 ring-primary ring-offset-2 ring-offset-transparent overflow-hidden mx-auto"
+            >
+              <img
+                src="/photo.png"
+                alt="Arditya Adjie Rosandi"
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Name */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-5xl md:text-7xl font-extrabold tracking-tight hero-text-heading mb-4 hero-title"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-3 hero-title"
+          style={{
+            fontFamily: "var(--font-geist-sans)",
+            fontSize: "76px",
+            fontWeight: 700,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            color: "#FFFFFF",
+          }}
         >
-          Halo, Saya {profile.name}
+          Arditya Adjie Rosandi
         </motion.h1>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg md:text-2xl font-semibold hero-text-body mb-6 hero-subtitle"
-        >
-          {profile.title}
-        </motion.h2>
-
-        <motion.p
+        {/* Subtitle — idle shimmer underline */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="hero-text-muted text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-8"
+          className="mb-6 relative inline-block"
         >
-          {profile.about}
-        </motion.p>
+          <h2
+            style={{
+              fontFamily: "var(--font-geist-sans)",
+              fontSize: "18px",
+              fontWeight: 500,
+              color: "rgba(255,255,255,0.55)",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+            }}
+          >
+            {profile.title}
+          </h2>
+          {/* Idle: shimmer line bawah subtitle */}
+          <motion.div
+            className="absolute bottom-0 left-0 h-px rounded-full"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.8), transparent)" }}
+            animate={{ left: ["-100%", "100%"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+          />
+        </motion.div>
 
+        {/* Location & Email */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -110,6 +185,7 @@ export default function HeroSection({ profile, allData }) {
           </span>
         </motion.div>
 
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}

@@ -5,7 +5,7 @@
     "email": "ardityaa.id@gmail.com",
     "phone": "+62 877-1795-6553",
     "location": "Tangerang, Banten",
-    "about": "Mahasiswa Teknik Informatika Universitas Esa Unggul (angkatan 2023) dengan IPK 3.84. Antusias dalam pengembangan web modern, arsitektur backend, dan desain antarmuka interaktif. Berpengalaman membangun aplikasi skala menengah, integrasi API real-time, dan sistem e-commerce.",
+    "about": "Mahasiswa Teknik Informatika Universitas Esa Unggul dengan IPK 3.84, berspesialisasi dalam full-stack development dan IT project management. Membangun aplikasi produksi, memimpin tim, dan mengeksekusi proyek dari konsep hingga deployment. Terbuka untuk peluang magang dan kolaborasi profesional.",
     "linkedin": "https://www.linkedin.com/in/ardityaadjierosandi",
     "github": "https://github.com/Gammaura"
   },
@@ -132,7 +132,7 @@
         "Mengintegrasikan PostgreSQL (Neon DB) untuk memproses data menu, transaksi, dan akun pengguna.",
         "Mengimplementasikan skema migrasi database otomatis untuk sinkronisasi lokal ke produksi."
       ],
-      "image": "",
+      "image": "/solaria.png",
       "github": "https://github.com/Gammaura/Solaria",
       "demo": "https://solaria-app.vercel.app"
     },
