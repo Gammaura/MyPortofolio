@@ -3,7 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import PDFDownloadButton from "./PDFDownloadButton";
-import InteractiveLanyard from "./InteractiveLanyard";
 import { MapPin, Mail, School, Sparkles, ArrowUpRight, ShieldCheck, Code, Award } from "lucide-react";
 
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -97,14 +96,88 @@ export default function HeroSection({ profile }) {
           </div>
         </motion.div>
 
-        {/* Right Column: Interactive 3D Lanyard Showcase */}
+        {/* Right Column: Premium Profile Showcase Card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="lg:col-span-5 flex justify-center items-center relative"
+          className="lg:col-span-5 relative"
         >
-          <InteractiveLanyard profile={profile} />
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl relative z-10 transition-all duration-300 hover:shadow-2xl">
+            {/* Header Badge & Verified Tag */}
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 dark:text-white">
+                  GAMMAURA PORTFOLIO
+                </span>
+              </div>
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[10px] font-mono font-extrabold uppercase tracking-wider">
+                VERIFIED #2023
+              </span>
+            </div>
+
+            {/* Avatar & Photo Showcase */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-200 dark:border-slate-700 shadow-md shrink-0 bg-slate-100 dark:bg-slate-800">
+                <img
+                  src="/photo.png"
+                  alt="Arditya Adjie Rosandi"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://github.com/Gammaura.png";
+                  }}
+                />
+              </div>
+              <div>
+                <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
+                  Arditya Adjie Rosandi
+                </h3>
+                <p className="text-xs font-bold text-blue-600 dark:text-blue-400 mt-0.5">
+                  Full-Stack Dev & IT Project Manager
+                </p>
+                <span className="text-[11px] font-medium text-slate-500 block mt-1">
+                  Universitas Esa Unggul (Tangerang)
+                </span>
+              </div>
+            </div>
+
+            {/* Metrics Grid */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+                  ACADEMIC GPA
+                </span>
+                <div className="text-2xl font-black text-blue-600 dark:text-blue-400">
+                  3.84
+                </div>
+                <span className="text-[11px] font-semibold text-slate-500">Skala 4.00 Kumulatif</span>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+                  DELIVERED PROJ.
+                </span>
+                <div className="text-2xl font-black text-slate-900 dark:text-white">
+                  12+
+                </div>
+                <span className="text-[11px] font-bold text-emerald-600">Production Apps</span>
+              </div>
+            </div>
+
+            {/* Leadership Banner */}
+            <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-start gap-3">
+              <Award className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+              <div>
+                <div className="text-xs font-extrabold text-blue-900 dark:text-blue-200">
+                  Chairman CodeHub & Branch Head BEM
+                </div>
+                <p className="text-[11px] font-medium text-slate-600 dark:text-slate-300 mt-0.5">
+                  Memimpin 15+ pengembang & mengkoordinasikan program kerja fakultas.
+                </p>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
       </div>
