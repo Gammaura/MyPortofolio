@@ -9,12 +9,14 @@ export function useTheme() {
 }
 
 export default function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
     const stored = localStorage.getItem("theme");
     if (stored === "light" || stored === "dark") {
       setTheme(stored);
+    } else {
+      setTheme("light");
     }
   }, []);
 

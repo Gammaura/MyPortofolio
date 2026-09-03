@@ -30,9 +30,9 @@ export default async function PrintCV() {
           <p className="text-indigo-600 font-bold text-sm uppercase tracking-wider mt-1">{profile.title}</p>
           
           <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-3 text-xs text-zinc-500 font-medium">
-            {profile.email && <span>✉ {profile.email}</span>}
-            {profile.phone && <span>☎ {profile.phone}</span>}
-            {profile.location && <span>📍 {profile.location}</span>}
+            {profile.email && <span>Email: {profile.email}</span>}
+            {profile.phone && <span>Tel: {profile.phone}</span>}
+            {profile.location && <span>Lokasi: {profile.location}</span>}
             {profile.github && (
               <span>
                 GitHub: <a href={profile.github} className="text-indigo-600 underline">github.com/Gammaura</a>
