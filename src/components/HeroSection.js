@@ -29,7 +29,7 @@ export default function HeroSection({ profile }) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 dark:bg-white/10 text-xs font-semibold text-slate-700 dark:text-slate-300 mb-6"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-xs font-semibold text-blue-700 dark:text-blue-300 mb-6"
         >
           <span className="w-2 h-2 rounded-full bg-blue-600" />
           <span>Full-Stack Developer & IT Project Manager</span>
@@ -40,7 +40,7 @@ export default function HeroSection({ profile }) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border border-black/10 dark:border-white/15 shadow-sm mb-6 bg-slate-100 dark:bg-slate-800"
+          className="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-700 shadow-md mb-6 bg-slate-200 dark:bg-slate-800"
         >
           <img
             src="/photo.png"
@@ -52,46 +52,46 @@ export default function HeroSection({ profile }) {
           />
         </motion.div>
 
-        {/* Apple Headline */}
+        {/* Headline */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="max-w-3xl flex flex-col items-center mb-4"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
             {profile.name || "Arditya Adjie Rosandi"}
           </h1>
-          <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-xl mt-3 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mt-3 leading-relaxed font-medium">
             Mahasiswa Teknik Informatika Universitas Esa Unggul (IPK 3.84). Berfokus pada pembangunan arsitektur sistem web skala produksi, aplikasi AI, dan manajemen proyek TI yang disiplin.
           </p>
         </motion.div>
 
-        {/* Minimal Metadata Pills */}
+        {/* Metadata Pills */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 text-xs font-medium text-slate-600 dark:text-slate-400"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 text-xs font-semibold text-slate-700 dark:text-slate-300"
         >
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-200/60 dark:bg-slate-800/60">
-            <MapPin className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-200/80 dark:bg-slate-800 border border-slate-300/80 dark:border-slate-700">
+            <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>{profile.location || "Tangerang, Banten"}</span>
           </div>
           <a
             href={`mailto:${profile.email || "ardityaa.id@gmail.com"}`}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-200/60 dark:bg-slate-800/60 hover:bg-slate-300/60 dark:hover:bg-slate-700/60 transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-200/80 dark:bg-slate-800 border border-slate-300/80 dark:border-slate-700 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors"
           >
-            <Mail className="w-3.5 h-3.5" />
+            <Mail className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>{profile.email || "ardityaa.id@gmail.com"}</span>
           </a>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-200/60 dark:bg-slate-800/60 font-semibold text-slate-900 dark:text-white">
-            <School className="w-3.5 h-3.5 text-blue-600" />
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-200 border border-blue-300 dark:border-blue-800 font-extrabold">
+            <School className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>IPK 3.84 / 4.00</span>
           </div>
         </motion.div>
 
-        {/* Apple CTAs */}
+        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -104,7 +104,7 @@ export default function HeroSection({ profile }) {
             href={profile.github || "https://github.com/Gammaura"}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold text-xs sm:text-sm hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-xs sm:text-sm hover:opacity-90 transition-opacity shadow-sm"
           >
             <Github className="w-4 h-4" />
             <span>GitHub</span>
@@ -114,9 +114,9 @@ export default function HeroSection({ profile }) {
             href={profile.linkedin || "https://www.linkedin.com/in/ardityaadjierosandi"}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold text-xs sm:text-sm hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs sm:text-sm hover:bg-blue-700 transition-colors shadow-sm"
           >
-            <Linkedin className="w-4 h-4 text-blue-600" />
+            <Linkedin className="w-4 h-4" />
             <span>LinkedIn</span>
           </a>
         </motion.div>

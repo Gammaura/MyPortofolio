@@ -29,30 +29,30 @@ export default function Navbar() {
     <>
       <header className="fixed top-0 inset-x-0 z-50 pt-4 pointer-events-none">
         <div className="h-16 max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-center">
-          <div className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 px-4 py-2 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-slate-200/80 dark:border-slate-800 transition-all duration-300 hover:shadow-md">
+          <div className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 px-4 py-2 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl shadow-lg border border-slate-300/80 dark:border-slate-800 transition-all duration-300">
             
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 pl-1 pr-2 group focus:outline-none">
-              <div className="w-8 h-8 rounded-full gradient-gammaura flex items-center justify-center text-white font-extrabold text-sm shadow-sm group-hover:scale-105 transition-transform">
+              <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-slate-900 font-extrabold text-sm shadow-sm group-hover:scale-105 transition-transform">
                 <Terminal className="w-4 h-4" />
               </div>
-              <span className="font-bold text-base tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+              <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">
                 Gammaura
               </span>
             </Link>
 
             {/* Desktop Nav Items */}
-            <nav className="hidden md:flex items-center gap-1 bg-slate-100/80 dark:bg-slate-800/60 p-1 rounded-full border border-slate-200/50 dark:border-slate-700/50">
+            <nav className="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-full border border-slate-200 dark:border-slate-700">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
                       isActive
                         ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm"
-                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/60 dark:hover:bg-slate-700/50"
+                        : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/80 dark:hover:bg-slate-700"
                     }`}
                   >
                     {item.label}
