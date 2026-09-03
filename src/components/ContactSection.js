@@ -42,39 +42,41 @@ export default function ContactSection({ profile }) {
   };
 
   return (
-    <section id="contact" className="pt-28 pb-20 md:pt-36 md:pb-24 max-w-5xl mx-auto px-4 sm:px-6">
+    <section id="contact" className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6">
       
       {/* Section Header */}
-      <div className="text-center mb-16 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
-          <MessageSquare className="w-3.5 h-3.5" />
-          Mari Terhubung
+      <div className="text-center mb-12 max-w-2xl mx-auto">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <span className="w-8 h-0.5 bg-blue-600 dark:bg-blue-400"></span>
+          <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+            MARI TERHUBUNG
+          </span>
         </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
           Tertarik Kolaborasi atau Punya Kesempatan Magang?
-        </h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+        </h2>
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
           Saya terbuka untuk diskusi proyek, peluang magang full-stack / IT PM, atau sekadar berdiskusi seputar arsitektur teknologi.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start mb-12">
         
         {/* Info Kontak & Social Channels */}
         <div className="md:col-span-2 space-y-6">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
             <h3 className="text-base font-extrabold text-slate-900 dark:text-white mb-4">
               Informasi Kontak
             </h3>
             <div className="space-y-4">
               {/* Email Card */}
-              <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50">
+              <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-lg bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
                     <Mail className="w-4.5 h-4.5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Email</p>
+                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</p>
                     <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
                       {emailAddress}
                     </p>
@@ -83,7 +85,7 @@ export default function ContactSection({ profile }) {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="p-2 rounded-lg bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white transition-colors cursor-pointer shrink-0"
+                  className="p-2 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:text-blue-600 transition-colors cursor-pointer shrink-0"
                   title="Salin Email"
                 >
                   {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
@@ -91,12 +93,12 @@ export default function ContactSection({ profile }) {
               </div>
 
               {/* Location Card */}
-              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50">
-                <div className="w-9 h-9 rounded-lg bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
+              <div className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
                   <MapPin className="w-4.5 h-4.5" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Lokasi Domisili</p>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lokasi Domisili</p>
                   <p className="text-xs font-bold text-slate-900 dark:text-white">
                     {locationText}
                   </p>
@@ -106,7 +108,7 @@ export default function ContactSection({ profile }) {
           </div>
 
           {/* Social Profiles Card */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
             <h3 className="text-base font-extrabold text-slate-900 dark:text-white mb-4">
               Jejaring Profesional
             </h3>
@@ -115,7 +117,7 @@ export default function ContactSection({ profile }) {
                 href={profile?.linkedin || "https://www.linkedin.com/in/ardityaadjierosandi"}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-blue-600 transition-colors"
               >
                 <Linkedin className="w-4 h-4 text-blue-600 shrink-0" />
                 <span>LinkedIn</span>
@@ -126,7 +128,7 @@ export default function ContactSection({ profile }) {
                 href={profile?.github || "https://github.com/Gammaura"}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-blue-600 transition-colors"
               >
                 <Github className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
                 <span>GitHub</span>
@@ -138,38 +140,38 @@ export default function ContactSection({ profile }) {
 
         {/* Form Kontak */}
         <div className="md:col-span-3">
-          <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-5">
+          <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-5">
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nama Lengkap</label>
+              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Nama Lengkap</label>
               <input
                 type="text"
                 required
                 value={formState.name}
                 onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                 placeholder="Masukkan nama Anda..."
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-400 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors font-medium"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Alamat Email</label>
+              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Alamat Email</label>
               <input
                 type="email"
                 required
                 value={formState.email}
                 onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                 placeholder="nama@perusahaan.com"
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-400 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors font-medium"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pesan Anda</label>
+              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Pesan Anda</label>
               <textarea
                 required
                 rows={4}
                 value={formState.message}
                 onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                 placeholder="Tuliskan ide proyek, penawaran magang, atau pesan diskusi Anda di sini..."
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-400 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors resize-none"
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors resize-none font-medium"
               />
             </div>
             <button
@@ -193,9 +195,9 @@ export default function ContactSection({ profile }) {
         <PDFDownloadButton variant="hero" />
         <a
           href={`mailto:${emailAddress}`}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 text-xs font-bold hover:bg-slate-200 transition-colors"
         >
-          <Mail className="w-4 h-4 text-indigo-600" />
+          <Mail className="w-4 h-4 text-blue-600" />
           <span>Kirim Email Direct</span>
         </a>
       </div>
