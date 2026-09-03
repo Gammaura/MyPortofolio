@@ -50,6 +50,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://gammaura.codes"),
   title: "Arditya Adjie Rosandi (Gammaura) | Full-Stack Developer & IT Project Manager",
   description: "Portofolio profesional Arditya Adjie Rosandi (Gammaura) — Mahasiswa Teknik Informatika UEU dengan IPK 3.84, berpengalaman memimpin tim dan membangun 12+ aplikasi skala produksi (Next.js, Python, Streamlit, Laravel, Unity).",
   keywords: [
@@ -66,15 +67,24 @@ export const metadata = {
   openGraph: {
     title: "Arditya Adjie Rosandi (Gammaura) — Full-Stack Developer & IT Project Manager",
     description: "Koleksi 12+ karya proyek web full-stack, AI chatbot, game 2D, dan sistem informasi terintegrasi.",
-    url: "https://github.com/Gammaura",
+    url: "https://gammaura.codes",
     siteName: "Gammaura Portfolio",
     locale: "id_ID",
     type: "website",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "Arditya Adjie Rosandi Portfolio Social Card",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Arditya Adjie Rosandi (Gammaura) — Portfolio",
     description: "Full-Stack Developer & IT Project Manager | IPK 3.84",
+    images: ["/api/og"],
   },
 };
 

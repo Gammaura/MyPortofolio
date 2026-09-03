@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Folder, Calendar, Sparkles, X, ArrowRight, Layers, SlidersHorizontal, CheckCircle2 } from "lucide-react";
+import { ExternalLink, Folder, Calendar, Sparkles, X, ArrowRight, Layers, SlidersHorizontal, CheckCircle2, BookOpen } from "lucide-react";
 import Link from "next/link";
 
 const Github = ({ className = "w-4 h-4" }) => (
@@ -133,6 +133,16 @@ export default function ProjectsSection({ projects = [] }) {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProject, setSelectedProject] = useState(null);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const s = params.get("search");
+      if (s) {
+        setSearchQuery(s);
+      }
+    }
+  }, []);
 
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
@@ -353,29 +363,39 @@ export default function ProjectsSection({ projects = [] }) {
               </div>
 
               {/* Action Links */}
-              <div className="flex items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-                {selectedProject.github && (
-                  <a
-                    href={selectedProject.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-slate-800 text-xs font-bold shadow-sm hover:bg-slate-800 transition-colors"
-                  >
-                    <Github className="w-4 h-4" />
-                    <span>Lihat Repository Code</span>
-                  </a>
-                )}
-                {selectedProject.demo && (
-                  <a
-                    href={selectedProject.demo}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl gradient-gammaura text-white text-xs font-bold shadow-sm hover:opacity-90 transition-opacity ml-auto"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    <span>Buka Live Demo</span>
-                  </a>
-                )}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <Link
+                  href={`/projects/${selectedProject.title.toLowerCase().replace(/[^\w\s-]/g, "").replace(/[\s_-]+/g, "-").replace(/^-+|-+$/g, "")}`}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-bold hover:bg-blue-100 transition-colors"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>Baca Case Study Lengkap →</span>
+                </Link>
+
+                <div className="flex items-center gap-3">
+                  {selectedProject.github && (
+                    <a
+                      href={selectedProject.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-bold shadow-sm hover:opacity-90 transition-opacity"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                      <span>Source</span>
+                    </a>
+                  )}
+                  {selectedProject.demo && (
+                    <a
+                      href={selectedProject.demo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-sm hover:bg-blue-700 transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Demo</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </motion.div>
           </motion.div>

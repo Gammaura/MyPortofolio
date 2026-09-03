@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { Code, UserCheck, BookOpen, Award, ExternalLink, X, Terminal, Cpu, Database, Brain, Wrench, FileText, CheckCircle } from "lucide-react";
 import CertificatePreview, { getCertificateFile, getCertificateType } from "./CertificatePreview";
 
@@ -128,12 +129,14 @@ export default function SkillsSection({ certificates = [] }) {
 
                 <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100 dark:border-slate-800">
                   {group.items.map((item) => (
-                    <span
+                    <Link
                       key={item}
-                      className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50"
+                      href={`/projects?search=${encodeURIComponent(item)}`}
+                      className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50 hover:bg-blue-50 dark:hover:bg-blue-950 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 transition-colors"
+                      title={`Lihat proyek yang menggunakan ${item}`}
                     >
                       {item}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               </motion.div>
