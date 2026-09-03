@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import PDFDownloadButton from "./PDFDownloadButton";
+import InteractiveLanyard from "./InteractiveLanyard";
 import { MapPin, Mail, School, Sparkles, ArrowUpRight, ShieldCheck, Code, Award } from "lucide-react";
 
 const GithubIcon = ({ className = "w-4 h-4" }) => (
@@ -96,75 +97,14 @@ export default function HeroSection({ profile }) {
           </div>
         </motion.div>
 
-        {/* Right Column: Premium Showcase Profile Card */}
+        {/* Right Column: Interactive 3D Lanyard Showcase */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="lg:col-span-5 relative"
+          className="lg:col-span-5 flex justify-center items-center relative"
         >
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl relative z-10">
-            {/* Header / Avatar */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-200 dark:border-slate-700 shadow-md shrink-0 bg-slate-100 dark:bg-slate-800">
-                <img
-                  src="/photo.png"
-                  alt="Arditya Adjie Rosandi"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = "https://github.com/Gammaura.png";
-                  }}
-                />
-              </div>
-              <div>
-                <div className="text-xs font-mono font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-0.5">
-                  @Gammaura
-                </div>
-                <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
-                  Arditya Adjie R.
-                </h3>
-                <p className="text-xs text-slate-500 font-medium">
-                  Full-Stack Dev & IT Lead
-                </p>
-              </div>
-            </div>
-
-            {/* Performance Stats Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
-                  ACADEMIC GPA
-                </span>
-                <div className="text-2xl font-black text-blue-600 dark:text-blue-400">
-                  3.84
-                </div>
-                <span className="text-[11px] font-semibold text-slate-500">Skala 4.00 UEU</span>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
-                  DELIVERED PROJ.
-                </span>
-                <div className="text-2xl font-black text-slate-900 dark:text-white">
-                  12+
-                </div>
-                <span className="text-[11px] font-semibold text-emerald-600">Production Ready</span>
-              </div>
-            </div>
-
-            {/* Leadership Highlight */}
-            <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-start gap-3">
-              <Award className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-              <div>
-                <div className="text-xs font-extrabold text-blue-900 dark:text-blue-200">
-                  Chairman CodeHub & Branch Head BEM
-                </div>
-                <p className="text-[11px] font-medium text-slate-600 dark:text-slate-300 mt-0.5">
-                  Memimpin 15+ pengembang & mengkoordinasikan kegiatan teknologi tingkat fakultas.
-                </p>
-              </div>
-            </div>
-          </div>
+          <InteractiveLanyard profile={profile} />
         </motion.div>
 
       </div>

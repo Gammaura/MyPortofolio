@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Folder, Calendar, Sparkles, X, ArrowRight, Layers, SlidersHorizontal, CheckCircle2, BookOpen } from "lucide-react";
 import Link from "next/link";
+import ProjectImageMockup from "./ProjectImageMockup";
 
 const Github = ({ className = "w-4 h-4" }) => (
   <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -45,28 +46,34 @@ function ProjectCard({ project, onSelect }) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3 }}
-      className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
+      className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+      onClick={() => onSelect(project)}
     >
       <div>
-        {/* Card Top / Category Tag */}
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 font-mono text-[10px] font-extrabold uppercase border border-indigo-200/50 dark:border-indigo-800">
+        {/* Visual Cover Banner Image Mockup */}
+        <div className="mb-4">
+          <ProjectImageMockup title={project.title} role={project.role} techStack={project.techStack} />
+        </div>
+
+        {/* Card Metadata Bar */}
+        <div className="flex items-center justify-between gap-2 mb-2.5">
+          <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-200 font-mono text-[10px] font-extrabold uppercase">
             {project.role}
           </span>
-          <span className="text-xs font-medium text-slate-500 flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
+          <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
+            <Calendar className="w-3 h-3 text-blue-600" />
             {project.period}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors flex items-center gap-2">
-          <Folder className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+        <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors flex items-center gap-2">
+          <Folder className="w-4 h-4 text-blue-600 shrink-0" />
           {project.title}
         </h3>
 
         {/* Description */}
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4 line-clamp-2">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4 line-clamp-2 font-medium">
           {project.shortDescription}
         </p>
 
