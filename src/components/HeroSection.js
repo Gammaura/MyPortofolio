@@ -3,16 +3,16 @@
 import React from "react";
 import { motion } from "framer-motion";
 import PDFDownloadButton from "./PDFDownloadButton";
-import { MapPin, Mail } from "lucide-react";
+import { MapPin, Mail, School, Terminal } from "lucide-react";
 
-const Github = ({ className }) => (
-  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className={className}>
+const Github = ({ className = "w-4 h-4" }) => (
+  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
   </svg>
 );
 
-const Linkedin = ({ className }) => (
-  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className={className}>
+const Linkedin = ({ className = "w-4 h-4" }) => (
+  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
     <rect x="2" y="9" width="4" height="12" />
     <circle cx="4" cy="4" r="2" />
@@ -21,200 +21,122 @@ const Linkedin = ({ className }) => (
 
 export default function HeroSection({ profile }) {
   return (
-    <section
-      id="about"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-    >
-      {/* Background */}
-      <div
-        className="absolute inset-0 hero-bg-image"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')",
-        }}
-      />
-      <div className="hero-scrim-base absolute inset-0 pointer-events-none" />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: "linear-gradient(to top, rgba(3,7,18,0.85) 0%, rgba(3,7,18,0.2) 50%, rgba(3,7,18,0.1) 100%)" }}
-      />
-      <div className="hero-scrim-fade absolute inset-x-0 bottom-0 pointer-events-none" />
+    <section id="hero" className="relative pt-28 pb-16 md:pt-36 md:pb-20 overflow-hidden">
+      {/* Top Ambient Glow Aura */}
+      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[720px] h-[360px] bg-gradient-to-r from-indigo-200/50 via-sky-200/40 to-rose-200/50 dark:from-indigo-900/30 dark:via-sky-950/20 dark:to-rose-900/30 blur-3xl pointer-events-none rounded-full" />
 
-      {/* Idle: ambient glow blob kiri */}
-      <motion.div
-        className="absolute pointer-events-none rounded-full"
-        style={{
-          width: 600,
-          height: 600,
-          left: "-15%",
-          top: "20%",
-          background: "radial-gradient(circle, rgba(220,38,38,0.08) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-        animate={{ scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Idle: ambient glow blob kanan */}
-      <motion.div
-        className="absolute pointer-events-none rounded-full"
-        style={{
-          width: 500,
-          height: 500,
-          right: "-10%",
-          top: "30%",
-          background: "radial-gradient(circle, rgba(220,38,38,0.06) 0%, transparent 70%)",
-          filter: "blur(50px)",
-        }}
-        animate={{ scale: [1.1, 1, 1.1], opacity: [0.5, 0.9, 0.5] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      />
-
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center pt-16">
-
-        {/* Badge */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
+        
+        {/* Status Badge */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full hero-glass text-xs font-semibold hero-text-heading mb-6"
+          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white dark:bg-slate-900 shadow-sm border border-slate-200/80 dark:border-slate-800 mb-6 transition-transform hover:-translate-y-0.5"
         >
-          {/* Idle: pulse dot */}
-          <motion.span
-            className="w-1.5 h-1.5 rounded-full bg-primary inline-block"
-            animate={{ opacity: [1, 0.3, 1], scale: [1, 1.4, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          />
-          Selamat Datang di Portfolio Saya
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+            Selamat Datang di Portfolio Saya
+          </span>
         </motion.div>
 
-        {/* Photo — idle float */}
+        {/* Avatar with Dynamic Gradient Frame */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-6"
+          className="relative mb-6 group"
         >
-          <div className="relative inline-block">
-            {/* Idle: outer glow ring pulse */}
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              style={{ boxShadow: "0 0 0 4px rgba(220,38,38,0.3)" }}
-              animate={{ boxShadow: [
-                "0 0 0 4px rgba(220,38,38,0.3)",
-                "0 0 0 10px rgba(220,38,38,0.08)",
-                "0 0 0 4px rgba(220,38,38,0.3)",
-              ]}}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            />
-            {/* Idle: float up-down */}
-            <motion.div
-              animate={{ y: [-6, 6, -6] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-44 h-44 rounded-full ring-2 ring-primary ring-offset-2 ring-offset-transparent overflow-hidden mx-auto"
-            >
+          <div className="w-32 h-32 md:w-36 md:h-36 rounded-3xl p-1 gradient-gammaura shadow-xl transform transition-transform duration-300 group-hover:scale-105 group-hover:rotate-1">
+            <div className="w-full h-full rounded-[22px] overflow-hidden bg-white dark:bg-slate-900">
               <img
                 src="/photo.png"
-                alt="Arditya Adjie Rosandi"
+                alt={profile.name || "Arditya Adjie Rosandi"}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = "https://github.com/Gammaura.png";
+                }}
               />
-            </motion.div>
+            </div>
+          </div>
+          <div className="absolute -bottom-2 -right-2 px-2.5 py-1 bg-indigo-600 text-white text-[11px] font-bold rounded-lg shadow-md flex items-center gap-1">
+            <Terminal className="w-3.5 h-3.5" />
+            <span>DEV & PM</span>
           </div>
         </motion.div>
 
-        {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+        {/* Main Typography Stack */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-3 hero-title"
-          style={{
-            fontFamily: "var(--font-geist-sans)",
-            fontSize: "76px",
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            color: "#FFFFFF",
-          }}
+          className="max-w-3xl flex flex-col items-center gap-2 mb-4"
         >
-          Arditya Adjie Rosandi
-        </motion.h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            {profile.name || "Arditya Adjie Rosandi"}
+          </h1>
+          <p className="text-lg sm:text-xl font-bold text-gradient-gammaura">
+            {profile.title || "Full-Stack Developer & IT Project Manager"}
+          </p>
+        </motion.div>
 
-        {/* Subtitle — idle shimmer underline */}
+        {/* Quick Metadata Pills */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-6 relative inline-block"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8"
         >
-          <h2
-            style={{
-              fontFamily: "var(--font-geist-sans)",
-              fontSize: "18px",
-              fontWeight: 500,
-              color: "rgba(255,255,255,0.55)",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-            }}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200/60 dark:border-slate-700/60">
+            <MapPin className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <span>{profile.location || "Tangerang, Banten"}</span>
+          </div>
+          <a
+            href={`mailto:${profile.email || "ardityaa.id@gmail.com"}`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
           >
-            {profile.title}
-          </h2>
-          {/* Idle: shimmer line bawah subtitle */}
-          <motion.div
-            className="absolute bottom-0 left-0 h-px rounded-full"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(220,38,38,0.8), transparent)" }}
-            animate={{ left: ["-100%", "100%"] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
-          />
+            <Mail className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <span>{profile.email || "ardityaa.id@gmail.com"}</span>
+          </a>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-100 dark:bg-indigo-950/70 text-indigo-900 dark:text-indigo-200 text-xs font-extrabold tracking-wider border border-indigo-200 dark:border-indigo-800">
+            <School className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <span>IPK 3.84 / 4.00</span>
+          </div>
         </motion.div>
 
-        {/* Location & Email */}
+        {/* CTA Buttons & Social Links */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-3 text-xs hero-text-body mb-10"
-        >
-          <span className="flex items-center gap-1.5 hero-glass px-3 py-1.5 rounded-full">
-            <MapPin className="w-3.5 h-3.5 text-primary" />
-            {profile.location}
-          </span>
-          <span className="flex items-center gap-1.5 hero-glass px-3 py-1.5 rounded-full">
-            <Mail className="w-3.5 h-3.5 text-primary" />
-            {profile.email}
-          </span>
-        </motion.div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4"
         >
           <PDFDownloadButton variant="hero" />
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <a
-              href={profile.github}
+              href={profile.github || "https://github.com/Gammaura"}
               target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-11 h-11 hero-glass rounded-full hero-text-body hover:text-white transition-all hover:scale-105"
-              aria-label="GitHub Profile"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              title="GitHub Profile"
             >
-              <Github className="w-5 h-5" />
+              <Github className="w-4 h-4 text-slate-900 dark:text-white" />
+              <span>GitHub</span>
             </a>
             <a
-              href={profile.linkedin}
+              href={profile.linkedin || "https://www.linkedin.com/in/ardityaadjierosandi"}
               target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-11 h-11 hero-glass rounded-full hero-text-body hover:text-white transition-all hover:scale-105"
-              aria-label="LinkedIn Profile"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              title="LinkedIn Profile"
             >
-              <Linkedin className="w-5 h-5" />
+              <Linkedin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span>LinkedIn</span>
             </a>
           </div>
         </motion.div>
+
       </div>
     </section>
   );

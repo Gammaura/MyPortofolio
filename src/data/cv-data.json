@@ -225,6 +225,36 @@
       "image": "",
       "github": "https://github.com/Gammaura/Compro",
       "demo": ""
+    },
+    {
+      "title": "Green Survival | 2D PC Game",
+      "role": "Team Lead & Game Designer",
+      "period": "Okt – Des 2025",
+      "techStack": ["Unity", "C#", "2D Pixel Art", "Game Physics"],
+      "shortDescription": "Game PC 2D bertema survival yang dikembangkan oleh tim 5 orang dalam kurun waktu 2 bulan.",
+      "bulletPoints": [
+        "Memimpin 5 anggota tim pengembang dari tahap ideasi mekanik game, sprint backlog, hingga rilis alpha.",
+        "Mengimplementasikan sistem mekanik survival, inventaris barang, pergerakan karakter, dan kecerdasan musuh (AI pathfinding).",
+        "Mengelola koordinasi timeline dan alokasi tugas pengembang hingga proyek selesai tepat waktu."
+      ],
+      "image": "",
+      "github": "https://github.com/Gammaura",
+      "demo": ""
+    },
+    {
+      "title": "UEU Academy | Online English Course",
+      "role": "Business Analyst & DB Architect",
+      "period": "Okt – Des 2025",
+      "techStack": ["ERD", "Relational Database", "UI Wireframing", "Figma", "System Architecture"],
+      "shortDescription": "Platform kursus bahasa Inggris online yang dirancang untuk melayani 120+ pengguna aktif.",
+      "bulletPoints": [
+        "Menyusun dokumentasi arsitektur sistem komprehensif, mencakup diagram ERD dan skema relasional database.",
+        "Merancang wireframe antarmuka UI/UX interaktif berbasis Figma untuk pengalaman belajar online yang intuitif.",
+        "Melakukan analisis kebutuhan bisnis dan spesifikasi fungsionalitas sistem pembelajaran online."
+      ],
+      "image": "",
+      "github": "https://github.com/Gammaura",
+      "demo": ""
     }
   ],
   "timeline": [

@@ -2,164 +2,255 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { User, Route, Target } from "lucide-react";
-
-const blocks = [
-  {
-    icon: User,
-    title: "Siapa Saya",
-    label: "About",
-    content: [
-      "Mahasiswa Teknik Informatika Universitas Esa Unggul (angkatan 2023) dengan IPK 3.84.",
-      "Antusias dalam pengembangan web modern, arsitektur backend, dan desain antarmuka interaktif.",
-      "Berpengalaman membangun aplikasi skala menengah, integrasi API real-time, dan sistem e-commerce.",
-    ],
-  },
-  {
-    icon: Route,
-    title: "Perjalanan Saya",
-    label: "Journey",
-    content: [
-      "Mulai dari dunia coding di kampus, aktif di CodeHub sebagai Ketua, memimpin BEM Fakultas sebagai Branch Head, hingga mengerjakan proyek-proyek nyata dari machine learning, game development, sampai full-stack web app.",
-      "Perjalanan dari mahasiswa biasa → developer yang bisa memimpin tim dan deliver produk.",
-    ],
-  },
-  {
-    icon: Target,
-    title: "Tujuan Saya",
-    label: "Goal",
-    content: [
-      "Mencari peluang magang atau kolaborasi di bidang IT Project Management dan Full-Stack Web Development.",
-      "Ingin berkontribusi di tim yang bergerak cepat, belajar dari praktisi nyata, dan membangun produk yang berdampak.",
-    ],
-  },
-];
-
-function NeonIconCard({ icon: Icon, isPhoto = false }) {
-  return (
-    <div className="relative flex items-center justify-center w-full aspect-square max-w-[260px] mx-auto">
-      <motion.div
-        className="absolute inset-0 rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(220,38,38,0.18) 0%, rgba(220,38,38,0.04) 55%, transparent 75%)" }}
-        animate={{ scale: [1, 1.08, 1], opacity: [0.7, 1, 0.7] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute rounded-full"
-        style={{
-          width: "72%", height: "72%",
-          background: isPhoto ? "transparent" : "radial-gradient(circle, rgba(220,38,38,0.12) 0%, rgba(10,10,20,0.9) 70%)",
-          border: "1.5px solid rgba(220,38,38,0.4)",
-          overflow: "hidden",
-        }}
-        animate={{ boxShadow: [
-          "0 0 20px rgba(220,38,38,0.15), inset 0 0 16px rgba(220,38,38,0.06)",
-          "0 0 44px rgba(220,38,38,0.4), inset 0 0 28px rgba(220,38,38,0.12)",
-          "0 0 20px rgba(220,38,38,0.15), inset 0 0 16px rgba(220,38,38,0.06)",
-        ]}}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        {isPhoto && (
-          <img
-            src="/me.png"
-            alt="Arditya Adjie Rosandi"
-            className="w-full h-full object-cover"
-          />
-        )}
-      </motion.div>
-      <motion.div
-        className="absolute rounded-full"
-        style={{ width: "90%", height: "90%", border: "1px solid rgba(220,38,38,0.15)" }}
-        animate={{ opacity: [0.3, 0.7, 0.3] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-      />
-      {!isPhoto && (
-        <motion.div
-          className="relative z-10"
-          animate={{ filter: [
-            "drop-shadow(0 0 6px rgba(220,38,38,0.5))",
-            "drop-shadow(0 0 18px rgba(220,38,38,0.9))",
-            "drop-shadow(0 0 6px rgba(220,38,38,0.5))",
-          ]}}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Icon className="w-14 h-14 text-primary" strokeWidth={1.5} />
-        </motion.div>
-      )}
-    </div>
-  );
-}
-
-function AboutRow({ block, index }) {
-  const isEven = index % 2 === 0;
-
-  const IconSide = (
-    <motion.div
-      initial={{ opacity: 0, x: isEven ? -40 : 40 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
-      className="flex flex-col items-center justify-center gap-5"
-    >
-      <NeonIconCard icon={block.icon} isPhoto={index === 0} />
-      <div className="text-center">
-        <p className="text-xs text-primary font-semibold tracking-[0.2em] uppercase mb-1">
-          {block.label}
-        </p>
-        <h3 className="text-2xl font-bold text-theme-heading">
-          {block.title}
-        </h3>
-      </div>
-    </motion.div>
-  );
-
-  const TextSide = (
-    <motion.div
-      initial={{ opacity: 0, x: isEven ? 40 : -40 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-      className="flex flex-col justify-center gap-5"
-    >
-      {block.content.map((paragraph, i) => (
-        <p key={i} className="text-base text-theme-body leading-relaxed">
-          {paragraph}
-        </p>
-      ))}
-    </motion.div>
-  );
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center py-12">
-      {isEven ? <>{IconSide}{TextSide}</> : <>{TextSide}{IconSide}</>}
-    </div>
-  );
-}
+import { School, Code, Rocket, CheckCircle2, Award, Target, ArrowRight } from "lucide-react";
 
 export default function AboutSection() {
   return (
-    <section id="about-detail" className="py-24 relative max-w-5xl mx-auto px-6">
+    <section id="about-detail" className="py-16 md:py-24 max-w-6xl mx-auto px-4 sm:px-6">
+      
+      {/* Section Title */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-8 h-0.5 bg-indigo-600 dark:bg-indigo-400"></span>
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
+              Who I Am
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Siapa Saya
+          </h2>
+        </div>
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed">
+          Menjembatani keunggulan rekayasa perangkat lunak full-stack dengan kepemimpinan agile untuk mewujudkan produk digital berdaya tahan tinggi.
+        </p>
+      </div>
 
-      {/* Section Header */}
+      {/* Bento Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-16">
+        
+        {/* Academic Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="md:col-span-7 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                <School className="w-6 h-6" />
+              </div>
+              <span className="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-200 text-xs font-extrabold tracking-wider uppercase">
+                Angkatan 2023
+              </span>
+            </div>
+            
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-2">
+              Teknik Informatika Universitas Esa Unggul
+            </h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+              Mempertahankan rekam jejak akademik unggul dengan IPK 3.84 sambil aktif memimpin inisiatif riset, komunitas pengembang internal, dan penyelenggaraan kegiatan fakultas.
+            </p>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+                  Academic Metric
+                </span>
+                <div className="text-3xl font-black text-indigo-600 dark:text-indigo-400">
+                  3.84
+                </div>
+                <span className="text-xs font-medium text-slate-500">Skala 4.00 Kumulatif</span>
+              </div>
+
+              <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200/50 dark:border-slate-700/50 flex flex-col justify-between">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                  Transformasi
+                </span>
+                <p className="text-xs font-bold text-slate-900 dark:text-white">
+                  Mahasiswa Biasa <span className="text-indigo-600">→</span> Tech Lead & Product Delivery
+                </p>
+                <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">Ready to scale</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+            <CheckCircle2 className="w-4 h-4" />
+            <span>Terakreditasi & Berorientasi Praktik Industri</span>
+          </div>
+        </motion.div>
+
+        {/* Passion Cards */}
+        <div className="md:col-span-5 flex flex-col gap-6">
+          
+          {/* Card: Modern Web */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-lg bg-sky-50 dark:bg-sky-950/60 flex items-center justify-center text-sky-600 dark:text-sky-400 mb-3">
+                <Code className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+                Arsitektur Web Modern
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Antusias dalam pengembangan web full-stack, integrasi API real-time, dan ekosistem Next.js / React berkinerja tinggi.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                React / Next.js
+              </span>
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                Node.js / Express
+              </span>
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                PostgreSQL / MySQL
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Card: Delivery */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-lg bg-rose-50 dark:bg-rose-950/60 flex items-center justify-center text-rose-600 dark:text-rose-400 mb-3">
+                <Rocket className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+                System Delivery & E-Commerce
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Pengalaman nyata membangun sistem pemesanan online, automasi kiosk photobooth, chatbot AI, hingga aplikasi manajemen arena.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                Full-Stack Build
+              </span>
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                AI Integration
+              </span>
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                Project Lead
+              </span>
+            </div>
+          </motion.div>
+
+        </div>
+      </div>
+
+      {/* Perjalanan Saya & Tujuan Saya */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        {/* Journey Card */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 rounded-2xl shadow-sm"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+              <Award className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
+                Perjalanan Saya
+              </span>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Journey</h3>
+            </div>
+          </div>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Mulai dari dunia coding di kampus, aktif di CodeHub sebagai Ketua, memimpin BEM Fakultas sebagai Branch Head, hingga mengerjakan proyek-proyek nyata dari machine learning, game development, sampai full-stack web app.
+          </p>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+            <ArrowRight className="w-4 h-4 text-indigo-600 shrink-0" />
+            <span>Dari mahasiswa biasa → Developer yang bisa memimpin tim & deliver produk.</span>
+          </div>
+        </motion.div>
+
+        {/* Goal Card */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 rounded-2xl shadow-sm"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950 flex items-center justify-center text-rose-600 dark:text-rose-400">
+              <Target className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider block">
+                Tujuan Saya
+              </span>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Goal</h3>
+            </div>
+          </div>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            Mencari peluang magang atau kolaborasi profesional di bidang IT Project Management dan Full-Stack Web Development. Ingin berkontribusi di tim yang bergerak cepat, belajar dari praktisi nyata, dan membangun produk yang berdampak.
+          </p>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+            <ArrowRight className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>Tersedia untuk Magang & Project Kolaborasi.</span>
+          </div>
+        </motion.div>
+
+      </div>
+
+      {/* IT PM Framework & Scorecard Widget */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="text-center mb-20"
+        className="mt-12 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-indigo-800/40 relative overflow-hidden"
       >
-        <p className="text-2xl md:text-3xl text-primary font-bold tracking-[0.2em] uppercase">
-          — Who I Am —
-        </p>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="max-w-xl">
+            <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-extrabold uppercase tracking-wider mb-3 inline-block">
+              IT Project Management Capabilities
+            </span>
+            <h3 className="text-2xl font-black text-white tracking-tight mb-2">
+              Management Framework & Delivery Discipline
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Memimpin tim pengembang dengan integrasi metodologi Agile/Scrum, penyusunan Work Breakdown Structure (WBS), serta analisis arsitektur database (ERD & Wireframing UI).
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0">
+            <div className="p-3 rounded-xl bg-white/10 border border-white/10 text-center">
+              <span className="text-lg font-black text-indigo-300 block">Agile / Scrum</span>
+              <span className="text-[10px] font-semibold text-slate-300">Sprint & Backlog</span>
+            </div>
+            <div className="p-3 rounded-xl bg-white/10 border border-white/10 text-center">
+              <span className="text-lg font-black text-indigo-300 block">WBS & ERD</span>
+              <span className="text-[10px] font-semibold text-slate-300">System Design</span>
+            </div>
+            <div className="p-3 rounded-xl bg-white/10 border border-white/10 text-center col-span-2 sm:col-span-1">
+              <span className="text-lg font-black text-emerald-400 block">5 - 15+</span>
+              <span className="text-[10px] font-semibold text-slate-300">Team Size Led</span>
+            </div>
+          </div>
+        </div>
       </motion.div>
-
-      {/* Alternating Rows */}
-      <div className="flex flex-col divide-y divide-white/5">
-        {blocks.map((block, idx) => (
-          <AboutRow key={block.title} block={block} index={idx} />
-        ))}
-      </div>
-
     </section>
   );
 }

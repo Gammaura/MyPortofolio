@@ -17,26 +17,82 @@
   --color-dark-border: rgba(255, 255, 255, 0.08);
 }
 
-/* Dark theme (default) */
+/* Modern Technical Director Design System Tokens */
 :root {
-  --background: #030712;
-  --foreground: #f3f4f6;
-  --card-bg: rgba(17, 24, 39, 0.45);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --input-bg: rgba(255, 255, 255, 0.1);
-  --input-border: rgba(255, 255, 255, 0.1);
-  --badge-bg: rgba(255, 255, 255, 0.1);
-  --badge-border: rgba(255, 255, 255, 0.1);
+  --background: #f8f9ff;
+  --foreground: #0b1c30;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #eff4ff;
+  --surface-container: #e5eeff;
+  --surface-container-high: #dce9ff;
+  --surface-variant: #d3e4fe;
+  --on-surface: #0b1c30;
+  --on-surface-variant: #45464d;
+  --primary: #0f172a;
+  --secondary: #4648d4;
+  --secondary-fixed: #e1e0ff;
+  --on-secondary-fixed: #07006c;
+  --accent-rose: #e11d48;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(226, 232, 240, 0.8);
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+  --badge-bg: #f1f5f9;
+  --badge-border: #e2e8f0;
+  --text-heading: #0b1c30;
+  --text-body: #45464d;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+  --nav-border: #e2e8f0;
+  --grid-line: rgba(15, 23, 42, 0.04);
+  --scrollbar-track: #f8f9ff;
+  --scrollbar-thumb: #cbd5e1;
+}
+
+[data-theme="dark"] {
+  --background: #0b1120;
+  --foreground: #f8fafc;
+  --surface-container-lowest: #111827;
+  --surface-container-low: #1e293b;
+  --surface-container: #334155;
+  --surface-container-high: #475569;
+  --surface-variant: #334155;
+  --on-surface: #f8fafc;
+  --on-surface-variant: #94a3b8;
+  --primary: #f8fafc;
+  --secondary: #818cf8;
+  --secondary-fixed: #312e81;
+  --on-secondary-fixed: #e0e7ff;
+  --accent-rose: #f43f5e;
+  --card-bg: #111827;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(17, 24, 39, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --input-bg: #1e293b;
+  --input-border: rgba(255, 255, 255, 0.12);
+  --badge-bg: #1e293b;
+  --badge-border: rgba(255, 255, 255, 0.12);
   --text-heading: #ffffff;
-  --text-body: #e4e4e7;
-  --text-muted: #a1a1aa;
-  --text-subtle: #71717a;
-  --nav-border: rgba(255, 255, 255, 0.15);
-  --grid-line: rgba(255, 255, 255, 0.02);
-  --scrollbar-track: #030712;
-  --scrollbar-thumb: #1f2937;
+  --text-body: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --nav-border: rgba(255, 255, 255, 0.12);
+  --grid-line: rgba(255, 255, 255, 0.04);
+  --scrollbar-track: #0b1120;
+  --scrollbar-thumb: #334155;
+}
+
+.gradient-gammaura {
+  background: linear-gradient(135deg, #e11d48 0%, #6366f1 100%);
+}
+
+.text-gradient-gammaura {
+  background: linear-gradient(135deg, #e11d48 0%, #6366f1 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Hero — always cinematic dark; only bottom fade follows page theme */

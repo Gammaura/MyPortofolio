@@ -50,8 +50,32 @@ const dmSans = DM_Sans({
 });
 
 export const metadata = {
-  title: "Gammaura | Portfolio",
-  description: "Portfolio website of Gammaura — Fullstack Developer & Creative Technologist",
+  title: "Arditya Adjie Rosandi (Gammaura) | Full-Stack Developer & IT Project Manager",
+  description: "Portofolio profesional Arditya Adjie Rosandi (Gammaura) — Mahasiswa Teknik Informatika UEU dengan IPK 3.84, berpengalaman memimpin tim dan membangun 12+ aplikasi skala produksi (Next.js, Python, Streamlit, Laravel, Unity).",
+  keywords: [
+    "Arditya Adjie Rosandi",
+    "Gammaura",
+    "Full-Stack Developer",
+    "IT Project Manager",
+    "Software Engineer Portfolio",
+    "Next.js Developer Indonesia",
+    "Python AI Engineer",
+    "Esa Unggul",
+  ],
+  authors: [{ name: "Arditya Adjie Rosandi", url: "https://github.com/Gammaura" }],
+  openGraph: {
+    title: "Arditya Adjie Rosandi (Gammaura) — Full-Stack Developer & IT Project Manager",
+    description: "Koleksi 12+ karya proyek web full-stack, AI chatbot, game 2D, dan sistem informasi terintegrasi.",
+    url: "https://github.com/Gammaura",
+    siteName: "Gammaura Portfolio",
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Arditya Adjie Rosandi (Gammaura) — Portfolio",
+    description: "Full-Stack Developer & IT Project Manager | IPK 3.84",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -60,6 +84,12 @@ export default function RootLayout({ children }) {
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${plusJakartaSans.variable} ${syne.variable} ${spaceGrotesk.variable} ${outfit.variable} ${dmSans.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+      </head>
       <body className="min-h-full flex flex-col">
         <ClientLayout>{children}</ClientLayout>
       </body>
