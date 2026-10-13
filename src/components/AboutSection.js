@@ -6,23 +6,18 @@ import { School, Code, Rocket, CheckCircle2, Award, Target, ArrowRight, ShieldCh
 
 export default function AboutSection() {
   return (
-    <section id="about-detail" className="py-16 md:py-24 max-w-6xl mx-auto px-4 sm:px-6">
+    <section id="about-detail" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6">
       
-      {/* Section Title */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-8 h-0.5 bg-blue-600 dark:bg-blue-400"></span>
-            <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
-              WHO I AM
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Siapa Saya
-          </h2>
-        </div>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed font-medium">
-          Menjembatani keunggulan rekayasa perangkat lunak full-stack dengan kepemimpinan agile untuk mewujudkan produk digital berdaya tahan tinggi.
+      {/* Section Header (Rata Tengah) */}
+      <div className="text-center max-w-2xl mx-auto mb-12">
+        <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 block mb-2">
+          PROFILE
+        </span>
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
+          About Me
+        </h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+          Academic background, software engineering competencies, and leadership experience.
         </p>
       </div>
 
@@ -43,43 +38,43 @@ export default function AboutSection() {
                 <School className="w-6 h-6" />
               </div>
               <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-200 text-xs font-extrabold tracking-wider uppercase">
-                ANGKATAN 2023
+                CLASS OF 2023
               </span>
             </div>
             
             <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
-              Teknik Informatika Universitas Esa Unggul
+              Informatics Engineering at Universitas Esa Unggul
             </h3>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6 font-medium">
-              Mempertahankan rekam jejak akademik unggul dengan IPK 3.84 sambil aktif memimpin inisiatif riset, komunitas pengembang internal, dan penyelenggaraan kegiatan fakultas.
+              Maintaining a 3.84 out of 4.00 cumulative GPA while actively leading developer communities and contributing to student organizations.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
                 <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
-                  ACADEMIC METRIC
+                  CUMULATIVE GPA
                 </span>
                 <div className="text-3xl font-black text-blue-600 dark:text-blue-400">
                   3.84
                 </div>
-                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Skala 4.00 Kumulatif</span>
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Scale 4.00</span>
               </div>
 
               <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
                 <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
-                  TRANSFORMASI
+                  ACADEMIC STATUS
                 </span>
                 <p className="text-xs font-bold text-slate-900 dark:text-white">
-                  Mahasiswa Biasa <span className="text-blue-600">→</span> Tech Lead & Product Delivery
+                  Active 6th Semester Student
                 </p>
-                <span className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400">Ready to scale</span>
+                <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400">Computer Science</span>
               </div>
             </div>
           </div>
 
           <div className="pt-6 mt-6 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400">
             <CheckCircle2 className="w-4 h-4" />
-            <span>Terakreditasi & Berorientasi Praktik Industri</span>
+            <span>Faculty of Computer Science</span>
           </div>
         </motion.div>
 
@@ -99,10 +94,10 @@ export default function AboutSection() {
                 <Code className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-1">
-                Arsitektur Web Modern
+                Modern Web Architecture
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4 font-medium">
-                Antusias dalam pengembangan web full-stack, integrasi API real-time, dan ekosistem Next.js / React berkinerja tinggi.
+                Passionate about full-stack engineering, real-time API integrations, and high-performance React & Next.js systems.
               </p>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -113,7 +108,7 @@ export default function AboutSection() {
                 Node.js / Express
               </span>
               <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
-                PostgreSQL / MySQL
+                PostgreSQL / Prisma
               </span>
             </div>
           </motion.div>
@@ -131,10 +126,10 @@ export default function AboutSection() {
                 <Rocket className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-1">
-                System Delivery & E-Commerce
+                System Delivery & Integration
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4 font-medium">
-                Pengalaman nyata membangun sistem pemesanan online, automasi kiosk photobooth, chatbot AI, hingga aplikasi manajemen arena.
+                Proven track record building online reservation systems, payment gateway integrations, and contextual AI workflows.
               </p>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -170,17 +165,17 @@ export default function AboutSection() {
             </div>
             <div>
               <span className="text-xs font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
-                PERJALANAN SAYA
+                BACKGROUND
               </span>
               <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">Journey</h3>
             </div>
           </div>
           <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4 font-medium">
-            Mulai dari dunia coding di kampus, aktif di CodeHub sebagai Ketua, memimpin BEM Fakultas sebagai Branch Head, hingga mengerjakan proyek-proyek nyata dari machine learning, game development, sampai full-stack web app.
+            Active as CodeHub President, BEM Faculty Branch Head, while executing real-world software engineering projects ranging from AI applications to production web platforms.
           </p>
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
             <ArrowRight className="w-4 h-4 text-blue-600 shrink-0" />
-            <span>Dari mahasiswa biasa → Developer yang bisa memimpin tim & deliver produk.</span>
+            <span>Committed to software architecture quality & disciplined delivery.</span>
           </div>
         </motion.div>
 
@@ -198,17 +193,17 @@ export default function AboutSection() {
             </div>
             <div>
               <span className="text-xs font-extrabold text-rose-600 dark:text-rose-400 uppercase tracking-wider block">
-                TUJUAN SAYA
+                OBJECTIVE
               </span>
               <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">Goal</h3>
             </div>
           </div>
           <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4 font-medium">
-            Mencari peluang magang atau kolaborasi profesional di bidang IT Project Management dan Full-Stack Web Development. Ingin berkontribusi di tim yang bergerak cepat, belajar dari praktisi nyata, dan membangun produk yang berdampak.
+            Seeking internship opportunities and professional collaborations in Full-Stack Web Development and IT Project Management to contribute to fast-moving teams and impactful products.
           </p>
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
             <ArrowRight className="w-4 h-4 text-rose-600 shrink-0" />
-            <span>Tersedia untuk Magang & Project Kolaborasi.</span>
+            <span>Available for Internships & Technical Collaborations.</span>
           </div>
         </motion.div>
 
@@ -224,14 +219,14 @@ export default function AboutSection() {
       >
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="max-w-xl">
-            <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-200 text-[10px] font-mono font-extrabold uppercase tracking-wider mb-3 inline-block">
-              IT PROJECT MANAGEMENT CAPABILITIES
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2 block">
+              IT PROJECT MANAGEMENT
             </span>
             <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">
-              Management Framework & Delivery Discipline
+              Delivery Framework & Technical Documentation
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-              Memimpin tim pengembang dengan integrasi metodologi Agile/Scrum, penyusunan Work Breakdown Structure (WBS), serta analisis arsitektur database (ERD & Wireframing UI).
+              Application of Agile/Scrum methodologies, Work Breakdown Structure (WBS), system architectural design, and developer coordination.
             </p>
           </div>
 

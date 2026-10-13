@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Send, Check, Copy, ExternalLink, MapPin, Sparkles, MessageSquare } from "lucide-react";
+import { Mail, Send, Check, Copy, ExternalLink, MapPin, Sparkles, MessageSquare, Loader2 } from "lucide-react";
 import PDFDownloadButton from "./PDFDownloadButton";
+import { submitContactMessage } from "@/app/actions";
 
 const Github = ({ className = "w-4 h-4" }) => (
   <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -22,6 +23,7 @@ const Linkedin = ({ className = "w-4 h-4" }) => (
 export default function ContactSection({ profile }) {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [copied, setCopied] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
   const emailAddress = profile?.email || "ardityaa.id@gmail.com";
@@ -33,30 +35,61 @@ export default function ContactSection({ profile }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
-    setSent(true);
-    setFormState({ name: "", email: "", message: "" });
-    setTimeout(() => setSent(false), 4000);
+    setIsSubmitting(true);
+
+    try {
+      // 1. Simpan pesan langsung ke Supabase (tabel contact_messages)
+      submitContactMessage({
+        name: formState.name,
+        email: formState.email,
+        message: formState.message,
+      }).catch((err) => console.warn("Supabase contact log warning:", err));
+
+      // 2. Kirim notifikasi email via Web3Forms
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "c0b8fa0a-b3eb-4682-968b-9e4a30a103c5",
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+          subject: `Pesan Portofolio Baru dari ${formState.name}`,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setSent(true);
+        setFormState({ name: "", email: "", message: "" });
+      } else {
+        window.location.href = `mailto:${emailAddress}?subject=Pesan dari ${encodeURIComponent(formState.name)}&body=${encodeURIComponent(formState.message + "\n\nEmail Pengirim: " + formState.email)}`;
+        setSent(true);
+      }
+    } catch {
+      window.location.href = `mailto:${emailAddress}?subject=Pesan dari ${encodeURIComponent(formState.name)}&body=${encodeURIComponent(formState.message + "\n\nEmail Pengirim: " + formState.email)}`;
+      setSent(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24 max-w-5xl mx-auto px-4 sm:px-6">
+    <section id="contact" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6">
       
-      {/* Section Header */}
-      <div className="text-center mb-12 max-w-2xl mx-auto">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <span className="w-8 h-0.5 bg-blue-600 dark:bg-blue-400"></span>
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
-            MARI TERHUBUNG
-          </span>
-        </div>
+      {/* Header Rata Tengah */}
+      <div className="text-center max-w-2xl mx-auto mb-14">
+        <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 block mb-2">
+          CONTACT
+        </span>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
-          Tertarik Kolaborasi atau Punya Kesempatan Magang?
+          Contact & Collaboration
         </h2>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-          Saya terbuka untuk diskusi proyek, peluang magang full-stack / IT PM, atau sekadar berdiskusi seputar arsitektur teknologi.
+          Feel free to reach out for professional inquiries, internship opportunities, or software engineering discussions.
         </p>
       </div>
 
@@ -66,7 +99,7 @@ export default function ContactSection({ profile }) {
         <div className="md:col-span-2 space-y-6">
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
             <h3 className="text-base font-extrabold text-slate-900 dark:text-white mb-4">
-              Informasi Kontak
+              Contact Information
             </h3>
             <div className="space-y-4">
               {/* Email Card */}
@@ -86,7 +119,7 @@ export default function ContactSection({ profile }) {
                   type="button"
                   onClick={handleCopyEmail}
                   className="p-2 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:text-blue-600 transition-colors cursor-pointer shrink-0"
-                  title="Salin Email"
+                  title="Copy Email"
                 >
                   {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                 </button>
@@ -98,7 +131,7 @@ export default function ContactSection({ profile }) {
                   <MapPin className="w-4.5 h-4.5" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lokasi Domisili</p>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Location</p>
                   <p className="text-xs font-bold text-slate-900 dark:text-white">
                     {locationText}
                   </p>
@@ -110,7 +143,7 @@ export default function ContactSection({ profile }) {
           {/* Social Profiles Card */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
             <h3 className="text-base font-extrabold text-slate-900 dark:text-white mb-4">
-              Jejaring Profesional
+              Professional Networks
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <a
@@ -142,47 +175,58 @@ export default function ContactSection({ profile }) {
         <div className="md:col-span-3">
           <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-5">
             <div>
-              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Nama Lengkap</label>
+              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Full Name</label>
               <input
                 type="text"
                 required
                 value={formState.name}
                 onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                placeholder="Masukkan nama Anda..."
+                placeholder="Enter your name..."
                 className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors font-medium"
               />
             </div>
             <div>
-              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Alamat Email</label>
+              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Email Address</label>
               <input
                 type="email"
                 required
                 value={formState.email}
                 onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                placeholder="nama@perusahaan.com"
+                placeholder="name@company.com"
                 className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors font-medium"
               />
             </div>
             <div>
-              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Pesan Anda</label>
+              <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Your Message</label>
               <textarea
                 required
                 rows={4}
                 value={formState.message}
                 onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                placeholder="Tuliskan ide proyek, penawaran magang, atau pesan diskusi Anda di sini..."
+                placeholder="Write your project proposal, inquiry, or discussion message here..."
                 className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-colors resize-none font-medium"
               />
             </div>
             <button
               type="submit"
-              disabled={sent}
-              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:opacity-90 font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSubmitting || sent}
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-blue-600 text-white hover:bg-blue-700 font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {sent ? (
-                <><Check className="w-4 h-4 text-emerald-500 animate-bounce" /> Pesan Berhasil Terkirim!</>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Sending Message...</span>
+                </>
+              ) : sent ? (
+                <>
+                  <Check className="w-4 h-4 text-emerald-300 animate-bounce" />
+                  <span>Message Sent Successfully!</span>
+                </>
               ) : (
-                <><Send className="w-4 h-4" /> Kirim Pesan Sekarang</>
+                <>
+                  <Send className="w-4 h-4" />
+                  <span>Send Message</span>
+                </>
               )}
             </button>
           </form>
@@ -198,7 +242,7 @@ export default function ContactSection({ profile }) {
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 text-xs font-bold hover:bg-slate-200 transition-colors"
         >
           <Mail className="w-4 h-4 text-blue-600" />
-          <span>Kirim Email Direct</span>
+          <span>Send Direct Email</span>
         </a>
       </div>
 
@@ -214,7 +258,7 @@ export default function ContactSection({ profile }) {
             <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-white">
               <Check className="w-3.5 h-3.5" />
             </div>
-            <span className="text-xs font-bold">Email berhasil disalin ke clipboard!</span>
+            <span className="text-xs font-bold">Email copied to clipboard!</span>
           </motion.div>
         )}
       </AnimatePresence>

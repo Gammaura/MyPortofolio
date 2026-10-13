@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="100%" height="100%">
+  <defs>
+    <radialGradient id="band-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="240" fill="#18130e"/>
+  <circle cx="200" cy="115" r="90" fill="url(#band-glow)"/>
+  <rect x="30" y="30" width="340" height="180" rx="16" fill="#241b12" stroke="#78350f" stroke-width="2"/>
+  
+  <!-- Musical Emblem -->
+  <circle cx="200" cy="105" r="32" fill="#78350f" stroke="#f59e0b" stroke-width="2.5"/>
+  <path d="M 190 120 C 190 125, 184 128, 178 126 C 172 124, 170 118, 174 113 C 178 108, 186 108, 190 113 L 190 92 L 216 85 L 216 114 C 216 119, 210 122, 204 120 C 198 118, 196 112, 200 107 C 204 102, 212 102, 216 107" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
+
+  <!-- Text -->
+  <text x="200" y="165" font-family="'Space Grotesk', -apple-system, sans-serif" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">INAUGURASI UKM BAND</text>
+  <text x="200" y="185" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="500" fill="#fcd34d" text-anchor="middle" letter-spacing="1.5">MUSIC &amp; CREATIVE COMMUNITY</text>
+</svg>

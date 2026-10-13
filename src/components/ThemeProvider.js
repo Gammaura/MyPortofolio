@@ -1,24 +1,44 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useSyncExternalStore, useCallback } from "react";
 
-const ThemeContext = createContext();
+const ThemeContext = createContext({
+  theme: "light",
+  toggleTheme: () => {},
+});
 
 export function useTheme() {
   return useContext(ThemeContext);
 }
 
-export default function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("light");
+const themeListeners = new Set();
 
-  useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored === "light" || stored === "dark") {
-      setTheme(stored);
-    } else {
-      setTheme("light");
-    }
-  }, []);
+function emitChange() {
+  for (const listener of themeListeners) {
+    listener();
+  }
+}
+
+function subscribe(callback) {
+  themeListeners.add(callback);
+  window.addEventListener("storage", callback);
+  return () => {
+    themeListeners.delete(callback);
+    window.removeEventListener("storage", callback);
+  };
+}
+
+function getSnapshot() {
+  if (typeof window === "undefined") return "light";
+  return localStorage.getItem("theme") || "light";
+}
+
+function getServerSnapshot() {
+  return "light";
+}
+
+export default function ThemeProvider({ children }) {
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -27,12 +47,13 @@ export default function ThemeProvider({ children }) {
     } else {
       document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
+  const toggleTheme = useCallback(() => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", nextTheme);
+    emitChange();
+  }, [theme]);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

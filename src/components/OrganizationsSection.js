@@ -3,28 +3,24 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Users, Calendar, MapPin, Award, CheckCircle2, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
+import OrganizationImageMockup from "./OrganizationImageMockup";
 
 export default function OrganizationsSection({ timeline = [], organizations = [] }) {
   const [expandedOrg, setExpandedOrg] = useState(null);
 
   return (
-    <section id="organizations" className="py-16 md:py-24 max-w-6xl mx-auto px-4 sm:px-6">
+    <section id="organizations" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6">
       
-      {/* Header Intro */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-        <div className="max-w-2xl">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-8 h-0.5 bg-blue-600 dark:bg-blue-400"></span>
-            <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
-              LEADERSHIP & GOVERNANCE
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Organisasi & Kepemimpinan
-          </h2>
-        </div>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed font-medium">
-          Selain rekayasa perangkat lunak, saya aktif memimpin organisasi kampus untuk mengasah kemampuan komunikasi, tata kelola tim, dan kepemimpinan agile secara nyata.
+      {/* Header Intro (Rata Tengah & Formal) */}
+      <div className="text-center max-w-3xl mx-auto mb-14">
+        <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 block mb-2">
+          ORGANIZATIONAL EXPERIENCE
+        </span>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
+          Leadership & Activities
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+          Track record of leadership, student governance, and developer community building.
         </p>
       </div>
 
@@ -42,29 +38,41 @@ export default function OrganizationsSection({ timeline = [], organizations = []
             {/* Timeline Node Disk */}
             <div className="absolute -left-[31px] md:-left-[39px] top-1.5 w-5 h-5 rounded-full bg-white dark:bg-slate-900 border-4 border-blue-600 dark:border-blue-400 shadow-sm group-hover:scale-125 transition-transform" />
 
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition-all duration-300">
+              {/* Visual Cover Photo / Mockup Banner */}
+              <div className="mb-6">
+                <OrganizationImageMockup
+                  role={org.role}
+                  organization={org.organization}
+                  period={org.period}
+                  image={org.image}
+                />
+              </div>
+
               {/* Role Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-200 text-xs font-mono font-extrabold uppercase">
+                <div>
+                  <span className="block text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 mb-1">
                     {org.role}
                   </span>
-                  <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white leading-snug">
                     {org.organization}
                   </h3>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs font-bold text-slate-500 dark:text-slate-400">
-                  <span className="flex items-center gap-1">
+                <div className="flex items-center gap-3 text-xs font-bold text-slate-500 dark:text-slate-400 shrink-0">
+                  <span className="flex items-center gap-1 font-mono">
                     <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                     {org.period}
                   </span>
                   <span className="flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
                     {org.location}
                   </span>
                 </div>
               </div>
+
+
 
               {/* Achievements & Bullet Points */}
               <ul className="space-y-2.5 pt-4 border-t border-slate-200 dark:border-slate-800">
@@ -88,10 +96,10 @@ export default function OrganizationsSection({ timeline = [], organizations = []
           </div>
           <div>
             <h4 className="text-base font-extrabold text-slate-900 dark:text-white mb-0.5">
-              Leadership & Delivery Impact
+              Leadership & Community Impact
             </h4>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium">
-              Terbukti meningkatkan partisipasi kegiatan mahasiswa hingga 30%+ dan mengelola eksekusi event besar secara disiplin.
+              Demonstrated ability in leading student communities, organizing major technical conferences, and driving collaboration.
             </p>
           </div>
         </div>

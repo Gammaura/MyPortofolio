@@ -12,13 +12,7 @@ const GithubIcon = ({ className = "w-4 h-4" }) => (
   </svg>
 );
 
-export function slugify(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+import { slugify } from "@/lib/slugify";
 
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;

@@ -1,6 +1,34 @@
-/* globals.css - preserved for Portofolio, font reset handled in xaviera.css */
+@import "tailwindcss";
+
 html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: default;
+  scroll-behavior: auto !important;
+}
+
+/* Ensure buttons, links, and interactive elements always show pointer arrow cursor instead of text I-beam */
+a,
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+.clickable,
+a *,
+button *,
+[role="button"] * {
+  cursor: pointer !important;
+}
+
+/* Genuine input fields get text cursor */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+textarea {
+  cursor: text !important;
 }

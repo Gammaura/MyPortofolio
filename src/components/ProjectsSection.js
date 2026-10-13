@@ -13,11 +13,11 @@ const Github = ({ className = "w-4 h-4" }) => (
 );
 
 const CATEGORIES = [
-  { id: "all", label: "Semua" },
+  { id: "all", label: "All" },
   { id: "fullstack", label: "Full-Stack" },
   { id: "frontend", label: "Front-End" },
   { id: "python-ai", label: "Python & AI" },
-  { id: "game-arch", label: "Game & Architecture" },
+  { id: "game-arch", label: "Game & Systems" },
 ];
 
 function getCategoryForProject(project) {
@@ -52,19 +52,15 @@ function ProjectCard({ project, onSelect }) {
       <div>
         {/* Visual Cover Banner Image Mockup */}
         <div className="mb-4">
-          <ProjectImageMockup title={project.title} role={project.role} techStack={project.techStack} />
+          <ProjectImageMockup
+            title={project.title}
+            role={project.role}
+            techStack={project.techStack}
+            image={project.image}
+            images={project.images}
+          />
         </div>
 
-        {/* Card Metadata Bar */}
-        <div className="flex items-center justify-between gap-2 mb-2.5">
-          <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-blue-200 font-mono text-[10px] font-extrabold uppercase">
-            {project.role}
-          </span>
-          <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-            <Calendar className="w-3 h-3 text-blue-600" />
-            {project.period}
-          </span>
-        </div>
 
         {/* Title */}
         <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors flex items-center gap-2">
@@ -129,7 +125,7 @@ function ProjectCard({ project, onSelect }) {
           onClick={() => onSelect(project)}
           className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:translate-x-0.5 transition-transform"
         >
-          Lihat Detail <ArrowRight className="w-3.5 h-3.5" />
+          View Details <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
     </motion.article>
@@ -138,18 +134,13 @@ function ProjectCard({ project, onSelect }) {
 
 export default function ProjectsSection({ projects = [] }) {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedProject, setSelectedProject] = useState(null);
-
-  React.useEffect(() => {
+  const [searchQuery, setSearchQuery] = useState(() => {
     if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const s = params.get("search");
-      if (s) {
-        setSearchQuery(s);
-      }
+      return new URLSearchParams(window.location.search).get("search") || "";
     }
-  }, []);
+    return "";
+  });
+  const [selectedProject, setSelectedProject] = useState(null);
 
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
@@ -167,40 +158,19 @@ export default function ProjectsSection({ projects = [] }) {
   }, [projects, activeFilter, searchQuery]);
 
   return (
-    <section id="projects" className="py-16 md:py-24 max-w-6xl mx-auto px-4 sm:px-6">
+    <section id="projects" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6">
       
-      {/* Header Intro & Metric Ribbon */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
-        <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            Curated Engineering Portfolio — {projects.length} Projects
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            My Projects
-          </h2>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed mt-2">
-            Eksplorasi arsitektur sistem, automasi, integrasi AI, game development, dan antarmuka interaktif yang dirancang dengan presisi teknis.
-          </p>
-        </div>
-
-        {/* Quick Metrics Ribbon */}
-        <div className="flex items-center gap-4 bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm shrink-0">
-          <div className="px-3 py-1 text-center">
-            <span className="text-lg font-black text-slate-900 dark:text-white block">{projects.length}</span>
-            <span className="text-[11px] font-semibold text-slate-500">Shipped Builds</span>
-          </div>
-          <div className="w-px h-8 bg-slate-200 dark:bg-slate-800" />
-          <div className="px-3 py-1 text-center">
-            <span className="text-lg font-black text-indigo-600 dark:text-indigo-400 block">100%</span>
-            <span className="text-[11px] font-semibold text-slate-500">Modular Code</span>
-          </div>
-          <div className="w-px h-8 bg-slate-200 dark:bg-slate-800" />
-          <div className="px-3 py-1 text-center">
-            <span className="text-lg font-black text-emerald-600 dark:text-emerald-400 block">4.9/5</span>
-            <span className="text-[11px] font-semibold text-slate-500">Architecture</span>
-          </div>
-        </div>
+      {/* Header Intro (Rata Tengah & Formal) */}
+      <div className="text-center max-w-3xl mx-auto mb-12">
+        <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 block mb-2">
+          PORTFOLIO
+        </span>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
+          All Projects
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+          A comprehensive catalog of web applications, management systems, and software engineering projects.
+        </p>
       </div>
 
       {/* Filter & Search Bar */}
@@ -236,7 +206,7 @@ export default function ProjectsSection({ projects = [] }) {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari tech stack (misal: Next.js, Python, Unity)..."
+            placeholder="Search by tech stack (e.g. Next.js, Python, Unity)..."
             className="w-full pl-9 pr-8 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-indigo-600 dark:focus:border-indigo-400 transition-colors shadow-sm"
           />
           <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -252,9 +222,9 @@ export default function ProjectsSection({ projects = [] }) {
       </div>
 
       <div className="flex items-center justify-between mb-6 text-xs text-slate-500 font-semibold">
-        <span>Menampilkan <strong className="text-slate-900 dark:text-white font-bold">{filteredProjects.length}</strong> dari {projects.length} proyek</span>
+        <span>Showing <strong className="text-slate-900 dark:text-white font-bold">{filteredProjects.length}</strong> of {projects.length} projects</span>
         {searchQuery && (
-          <span className="text-indigo-600 dark:text-indigo-400">Kata kunci: "{searchQuery}"</span>
+          <span className="text-indigo-600 dark:text-indigo-400">Keyword: &ldquo;{searchQuery}&rdquo;</span>
         )}
       </div>
 
@@ -340,7 +310,7 @@ export default function ProjectsSection({ projects = [] }) {
               {/* Bullet Points */}
               <div className="mb-6">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
-                  Highlight Pengerjaan & Deliverables:
+                  Key Deliverables & Responsibilities:
                 </h4>
                 <ul className="space-y-2.5">
                   {selectedProject.bulletPoints?.map((point, idx) => (
@@ -376,7 +346,7 @@ export default function ProjectsSection({ projects = [] }) {
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-bold hover:bg-blue-100 transition-colors"
                 >
                   <BookOpen className="w-4 h-4" />
-                  <span>Baca Case Study Lengkap →</span>
+                  <span>Read Full Case Study →</span>
                 </Link>
 
                 <div className="flex items-center gap-3">

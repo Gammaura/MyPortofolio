@@ -4,18 +4,19 @@ import React, { useState } from "react";
 import { Download, ChevronDown, Code, Briefcase, Bot, FileText } from "lucide-react";
 
 const cvOptions = [
-  { label: "CV Full-Stack Developer", icon: Code, desc: "Fokus Next.js, React, Node.js, Laravel" },
-  { label: "CV IT Project Manager", icon: Briefcase, desc: "Fokus Leadership, Agile/Scrum, WBS" },
-  { label: "CV AI & Python Engineer", icon: Bot, desc: "Fokus Machine Learning, Streamlit, LLM" },
-  { label: "CV Print Standard (A4)", icon: FileText, desc: "Format Ringkas untuk Cetak Dokumen" },
+  { label: "CV Full-Stack Developer", role: "fullstack", icon: Code, desc: "Fokus Next.js, React, Node.js, Laravel" },
+  { label: "CV IT Project Manager", role: "pm", icon: Briefcase, desc: "Fokus Leadership, Agile/Scrum, WBS" },
+  { label: "CV AI & Python Engineer", role: "ai", icon: Bot, desc: "Fokus Machine Learning, Streamlit, LLM" },
+  { label: "CV Print Standard (A4)", role: "standard", icon: FileText, desc: "Format Ringkas untuk Cetak Dokumen" },
 ];
 
 export default function PDFDownloadButton({ variant = "default" }) {
   const [open, setOpen] = useState(false);
 
-  const handleDownloadRole = (label) => {
+  const handleDownloadRole = (role) => {
     setOpen(false);
-    window.open("/print", "_blank");
+    const targetUrl = role === "standard" ? "/print" : `/print?role=${role}`;
+    window.open(targetUrl, "_blank");
   };
 
   return (
@@ -25,7 +26,7 @@ export default function PDFDownloadButton({ variant = "default" }) {
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-xs sm:text-sm shadow-md hover:opacity-95 transition-all cursor-pointer"
         type="button"
       >
-        <Download className="w-4 h-4 text-indigo-400 dark:text-indigo-600" />
+        <Download className="w-4 h-4 text-blue-400 dark:text-blue-600" />
         <span>Unduh PDF CV</span>
         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
@@ -41,16 +42,16 @@ export default function PDFDownloadButton({ variant = "default" }) {
               const IconComp = opt.icon;
               return (
                 <button
-                  key={opt.label}
-                  onClick={() => handleDownloadRole(opt.label)}
+                  key={opt.role}
+                  onClick={() => handleDownloadRole(opt.role)}
                   className="w-full text-left p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-start gap-2.5 transition-colors group cursor-pointer"
                   type="button"
                 >
-                  <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 group-hover:scale-110 transition-transform">
+                  <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
                     <IconComp className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {opt.label}
                     </div>
                     <div className="text-[10px] font-medium text-slate-500">

@@ -19,6 +19,7 @@ varying vec2 v_uv;
 uniform vec2 u_res;
 uniform float u_time;
 uniform float u_count;
+uniform float u_night;
 uniform vec3 u_cloud;
 uniform vec3 u_skyTop;
 uniform vec3 u_skyBottom;
@@ -85,15 +86,18 @@ vec3 shadeCloud(vec3 color, vec3 sky, vec2 p, vec2 c, vec2 r, float seed, float 
   float dUp = cloudDensity(p + vec2(0.0, r.y * 0.55), c, r, seed, t);
   float occl = clamp((dUp - d) * 1.1 + d * 0.55, 0.0, 1.0);
 
-  vec3 lit = u_cloud * 1.04;
-  vec3 shadow = mix(u_cloud * 0.60, sky, 0.38);
-  vec3 cloudCol = mix(lit, shadow, occl * 0.85);
+  vec3 lit = mix(u_cloud * 1.04, u_cloud * 1.12, u_night);
+  vec3 shadow = mix(u_cloud * 0.60, sky, mix(0.38, 0.65, u_night));
+  vec3 cloudCol = mix(lit, shadow, occl * (0.85 - u_night * 0.35));
 
   float alpha = smoothstep(0.02, 0.38, d);
   float rim = smoothstep(0.02, 0.14, d) * (1.0 - smoothstep(0.14, 0.40, d));
-  cloudCol += rim * 0.10;
+  cloudCol += rim * (0.10 * (1.0 - u_night * 0.6));
   cloudCol = mix(cloudCol, sky, dist * 0.35);
+
+  // Soft atmospheric night opacity
   alpha *= mix(1.0, 0.8, dist);
+  alpha *= mix(1.0, 0.58, u_night);
 
   return mix(color, cloudCol, alpha);
 }
@@ -113,7 +117,7 @@ void main() {
   vec3 sky = mix(u_skyBottom, u_skyTop, v_uv.y);
   vec3 color = sky;
 
-  color = mix(color, u_skyBottom * 1.06, smoothstep(0.35, 0.0, v_uv.y) * 0.5);
+  color = mix(color, u_skyBottom * 1.06, smoothstep(0.35, 0.0, v_uv.y) * (0.5 * (1.0 - u_night * 0.4)));
 
   vec2 sunPos = vec2(aspect * 0.78, 0.92);
   float sunDist = length(p - sunPos);
@@ -123,7 +127,7 @@ void main() {
   if (cirrusBand > 0.01) {
     float streak = fbm(vec2(p.x * 1.6 - t * 0.006, p.y * 12.0));
     float wisp = smoothstep(0.52, 0.78, streak) * cirrusBand;
-    color = mix(color, u_cloud * 0.98, wisp * 0.35);
+    color = mix(color, u_cloud * 0.98, wisp * mix(0.35, 0.18, u_night));
   }
 
   if (u_count > 5.5) {
@@ -164,6 +168,14 @@ export default function CloudShader({
   count = 6
 }) {
   const canvasRef = useRef(null);
+  const timeRef = useRef(0);
+  const nightFactorRef = useRef(isNight ? 1.0 : 0.0);
+  const isNightRef = useRef(isNight);
+
+  // Keep target night status updated without tearing down the WebGL loop
+  useEffect(() => {
+    isNightRef.current = isNight;
+  }, [isNight]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -215,25 +227,37 @@ export default function CloudShader({
       res: gl.getUniformLocation(prog, "u_res"),
       time: gl.getUniformLocation(prog, "u_time"),
       count: gl.getUniformLocation(prog, "u_count"),
+      night: gl.getUniformLocation(prog, "u_night"),
       cloud: gl.getUniformLocation(prog, "u_cloud"),
       skyTop: gl.getUniformLocation(prog, "u_skyTop"),
       skyBottom: gl.getUniformLocation(prog, "u_skyBottom"),
       sunGlow: gl.getUniformLocation(prog, "u_sunGlow")
     };
 
-    let time = 0;
     let animId;
 
-    const skyTop = isNight ? [0.03, 0.09, 0.2] : hexToRgb("#3876ba");
-    const skyBottom = isNight ? [0.12, 0.23, 0.42] : hexToRgb("#8cbfe8");
-    const cloudColor = isNight ? [0.1, 0.15, 0.28] : hexToRgb("#fbf8f2");
-    const sunGlow = isNight ? 0.0 : 0.32;
+    // Day palette
+    const daySkyTop = hexToRgb("#3876ba");
+    const daySkyBottom = hexToRgb("#8cbfe8");
+    const dayCloud = hexToRgb("#fbf8f2");
+    const daySunGlow = 0.32;
+
+    // Natural night palette: deep cinematic midnight navy & soft starlit mist
+    const nightSkyTop = [0.035, 0.070, 0.155];
+    const nightSkyBottom = [0.070, 0.125, 0.235];
+    const nightCloud = [0.10, 0.16, 0.28];
+
+    const lerp3 = (a, b, f) => [
+      a[0] + (b[0] - a[0]) * f,
+      a[1] + (b[1] - a[1]) * f,
+      a[2] + (b[2] - a[2]) * f
+    ];
 
     const resize = () => {
       const parent = canvas.parentElement;
       const w = parent ? parent.clientWidth : window.innerWidth;
       const h = parent ? parent.clientHeight : window.innerHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.0);
       const dw = Math.floor(w * dpr);
       const dh = Math.floor(h * dpr);
       if (canvas.width !== dw || canvas.height !== dh) {
@@ -247,30 +271,64 @@ export default function CloudShader({
     resize();
     window.addEventListener("resize", resize);
 
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animId) {
+          animId = requestAnimationFrame(render);
+        } else if (!isVisible && animId) {
+          cancelAnimationFrame(animId);
+          animId = null;
+        }
+      },
+      { threshold: 0.02 }
+    );
+    observer.observe(canvas);
+
     const render = () => {
-      time += 0.015 * speed;
-      gl.uniform1f(uniforms.time, time);
+      if (!isVisible || document.hidden) {
+        animId = null;
+        return;
+      }
+
+      // Continuous time progression (never resets to 0 when toggling day/night)
+      timeRef.current += 0.015 * speed;
+
+      // Smooth buttery crossfade between day and night (no sudden flash/reload)
+      const targetNight = isNightRef.current ? 1.0 : 0.0;
+      nightFactorRef.current += (targetNight - nightFactorRef.current) * 0.06;
+      const nf = nightFactorRef.current;
+
+      const curSkyTop = lerp3(daySkyTop, nightSkyTop, nf);
+      const curSkyBottom = lerp3(daySkyBottom, nightSkyBottom, nf);
+      const curCloud = lerp3(dayCloud, nightCloud, nf);
+      const curSunGlow = daySunGlow * (1.0 - nf);
+
+      gl.uniform1f(uniforms.time, timeRef.current);
       gl.uniform1f(uniforms.count, count);
-      gl.uniform3f(uniforms.cloud, cloudColor[0], cloudColor[1], cloudColor[2]);
-      gl.uniform3f(uniforms.skyTop, skyTop[0], skyTop[1], skyTop[2]);
-      gl.uniform3f(uniforms.skyBottom, skyBottom[0], skyBottom[1], skyBottom[2]);
-      gl.uniform1f(uniforms.sunGlow, sunGlow);
+      gl.uniform1f(uniforms.night, nf);
+      gl.uniform3f(uniforms.cloud, curCloud[0], curCloud[1], curCloud[2]);
+      gl.uniform3f(uniforms.skyTop, curSkyTop[0], curSkyTop[1], curSkyTop[2]);
+      gl.uniform3f(uniforms.skyBottom, curSkyBottom[0], curSkyBottom[1], curSkyBottom[2]);
+      gl.uniform1f(uniforms.sunGlow, curSunGlow);
 
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       animId = requestAnimationFrame(render);
     };
 
-    render();
+    animId = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(animId);
+      if (animId) cancelAnimationFrame(animId);
+      observer.disconnect();
       window.removeEventListener("resize", resize);
       gl.deleteProgram(prog);
       gl.deleteShader(vs);
       gl.deleteShader(fs);
       gl.deleteBuffer(buf);
     };
-  }, [isNight, speed, count]);
+  }, [speed, count]);
 
-  return <canvas ref={canvasRef} className={`w-full h-full block ${className}`} />;
+  return <canvas ref={canvasRef} className={`w-full h-full block ${className}`} style={{ transform: "translateZ(0)" }} />;
 }

@@ -1,0 +1,19 @@
+name: Supabase Keep Alive Cron
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every 3 days (well within Supabase 7-day free tier limit)
+    - cron: '0 0 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Keep-Alive Endpoint
+        run: |
+          echo "Pinging Supabase REST API to prevent auto-pause..."
+          curl -s -f -X GET "https://svypgjfhzdlanfqxkwng.supabase.co/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2eXBnamZoemRsYW5mcXhrd25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4ODEyMzQsImV4cCI6MjEwNzQ1NzIzNH0.sD5h62Emu19d5tBkHQV1u1SoR-vdCZ9anObaHGFPmEY' }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2eXBnamZoemRsYW5mcXhrd25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4ODEyMzQsImV4cCI6MjEwNzQ1NzIzNH0.sD5h62Emu19d5tBkHQV1u1SoR-vdCZ9anObaHGFPmEY' }}" || true
+          echo "Supabase keep-alive ping complete."

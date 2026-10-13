@@ -1,11 +1,32 @@
+import { DM_Serif_Display, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import "./xaviera.css";
+import "./gammaura.css";
+import Script from "next/script";
 import ClientLayout from "@/components/ClientLayout";
+
+const dmSerifDisplay = DM_Serif_Display({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-dm-serif-display",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
 
 export const metadata = {
   metadataBase: new URL("https://gammaura.codes"),
   title: "Arditya Adjie Rosandi — Full-Stack Developer & IT Project Manager",
-  description: "Portofolio profesional Arditya Adjie Rosandi (Gammaura) — Mahasiswa Teknik Informatika UEU dengan IPK 3.84, berpengalaman memimpin tim dan membangun aplikasi skala produksi.",
+  description: "Portofolio profesional Arditya Adjie Rosandi (Gammaura) — Full-Stack Developer & IT Project Manager berpengalaman membangun aplikasi skala produksi modern.",
   keywords: [
     "Arditya Adjie Rosandi",
     "Gammaura",
@@ -24,17 +45,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="id" className="antialiased scroll-smooth">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html
+      lang="en"
+      className={`${dmSerifDisplay.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} antialiased`}
+    >
       <body className="antialiased min-h-screen">
         <ClientLayout>{children}</ClientLayout>
+        <Script src="/assets/i18n.js" strategy="afterInteractive" />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import { getCVData } from "./actions";
-import XavieraPortfolio from "@/components/XavieraPortfolio";
+import GammauraPortfolio from "@/components/GammauraPortfolio";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +9,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen">
-      <XavieraPortfolio data={data} />
+      <GammauraPortfolio data={data} />
     </main>
   );
 }

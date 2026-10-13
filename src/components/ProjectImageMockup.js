@@ -1,82 +1,228 @@
 "use client";
 
-import React from "react";
-import { Terminal, Shield, Sparkles, Scissors, Camera, Trophy, Stethoscope, Lock, Image as ImageIcon, BookOpen, Layers, ShoppingBag } from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Terminal,
+  Shield,
+  Scissors,
+  Camera,
+  Trophy,
+  Stethoscope,
+  Lock,
+  Image as ImageIcon,
+  BookOpen,
+  Layers,
+  ShoppingBag,
+  Cpu,
+} from "lucide-react";
 
-export default function ProjectImageMockup({ title, role, techStack = [] }) {
+export default function ProjectImageMockup({
+  title = "",
+  role = "",
+  techStack = [],
+  image = "",
+  images = [],
+}) {
+  // Normalize images array (support multiple images or fallback to single image)
+  const allImages = useMemo(() => {
+    if (Array.isArray(images) && images.length > 0) {
+      return images.filter(Boolean);
+    }
+    if (image) {
+      return [image];
+    }
+    return [];
+  }, [images, image]);
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto-slide every 3.5 seconds when there are multiple images
+  useEffect(() => {
+    if (allImages.length <= 1 || isHovered) return;
+
+    const timer = setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % allImages.length);
+    }, 3500);
+
+    return () => clearInterval(timer);
+  }, [allImages.length, isHovered]);
+
   const t = title.toLowerCase();
 
   let theme = {
-    bg: "from-blue-600 to-indigo-900",
+    bg: "from-slate-950 via-slate-900 to-blue-950",
     icon: Terminal,
-    tag: "WEB APP",
-    accent: "bg-blue-500",
+    accent: "text-blue-400",
   };
 
-  if (t.includes("certify")) {
-    theme = { bg: "from-blue-600 via-indigo-700 to-slate-900", icon: Shield, tag: "CERTIFICATE VERIFIER", accent: "bg-blue-400" };
+  if (t.includes("asdoku")) {
+    theme = {
+      bg: "from-slate-950 via-blue-950 to-indigo-950",
+      icon: Cpu,
+      accent: "text-blue-400",
+    };
+  } else if (t.includes("velora pos") || t.includes("pos-velora")) {
+    theme = {
+      bg: "from-slate-950 via-emerald-950 to-slate-900",
+      icon: ShoppingBag,
+      accent: "text-emerald-400",
+    };
+  } else if (t.includes("velora")) {
+    theme = {
+      bg: "from-slate-950 via-zinc-900 to-black",
+      icon: Camera,
+      accent: "text-amber-400",
+    };
+  } else if (t.includes("certify")) {
+    theme = {
+      bg: "from-slate-950 via-blue-950 to-indigo-950",
+      icon: Shield,
+      accent: "text-blue-400",
+    };
   } else if (t.includes("solaria") || t.includes("pos")) {
-    theme = { bg: "from-emerald-600 via-teal-800 to-slate-900", icon: ShoppingBag, tag: "RESTAURANT POS", accent: "bg-emerald-400" };
+    theme = {
+      bg: "from-slate-950 via-emerald-950 to-slate-900",
+      icon: ShoppingBag,
+      accent: "text-emerald-400",
+    };
   } else if (t.includes("framecut")) {
-    theme = { bg: "from-rose-600 via-purple-800 to-slate-900", icon: Scissors, tag: "PHOTOBOOTH KIOSK", accent: "bg-rose-400" };
+    theme = {
+      bg: "from-slate-950 via-rose-950 to-slate-900",
+      icon: Scissors,
+      accent: "text-rose-400",
+    };
   } else if (t.includes("fotosphere")) {
-    theme = { bg: "from-purple-600 via-indigo-800 to-slate-900", icon: Camera, tag: "CREATIVE AGENCY", accent: "bg-purple-400" };
+    theme = {
+      bg: "from-slate-950 via-purple-950 to-slate-900",
+      icon: Camera,
+      accent: "text-purple-400",
+    };
   } else if (t.includes("smashzone")) {
-    theme = { bg: "from-amber-500 via-orange-700 to-slate-900", icon: Trophy, tag: "BADMINTON BOOKING", accent: "bg-amber-400" };
+    theme = {
+      bg: "from-slate-950 via-amber-950 to-slate-900",
+      icon: Trophy,
+      accent: "text-amber-400",
+    };
   } else if (t.includes("healthcare") || t.includes("ai")) {
-    theme = { bg: "from-cyan-600 via-blue-800 to-slate-900", icon: Stethoscope, tag: "AI DIAGNOSTIC", accent: "bg-cyan-400" };
+    theme = {
+      bg: "from-slate-950 via-cyan-950 to-slate-900",
+      icon: Stethoscope,
+      accent: "text-cyan-400",
+    };
   } else if (t.includes("lockme")) {
-    theme = { bg: "from-slate-700 via-slate-900 to-black", icon: Lock, tag: "SECURITY APP", accent: "bg-slate-400" };
+    theme = {
+      bg: "from-slate-950 via-zinc-900 to-black",
+      icon: Lock,
+      accent: "text-zinc-400",
+    };
   } else if (t.includes("nanopic")) {
-    theme = { bg: "from-violet-600 via-fuchsia-800 to-slate-900", icon: ImageIcon, tag: "IMAGE OPTIMIZER", accent: "bg-violet-400" };
+    theme = {
+      bg: "from-slate-950 via-fuchsia-950 to-slate-900",
+      icon: ImageIcon,
+      accent: "text-fuchsia-400",
+    };
   } else if (t.includes("codehub")) {
-    theme = { bg: "from-sky-600 via-blue-900 to-slate-900", icon: Layers, tag: "COMMUNITY PORTAL", accent: "bg-sky-400" };
-  } else if (t.includes("edu") || t.includes("task")) {
-    theme = { bg: "from-blue-700 via-indigo-900 to-slate-900", icon: BookOpen, tag: "MANAGEMENT SYSTEM", accent: "bg-blue-400" };
+    theme = {
+      bg: "from-slate-950 via-sky-950 to-slate-900",
+      icon: Layers,
+      accent: "text-sky-400",
+    };
+  } else if (t.includes("edu") || t.includes("task") || t.includes("kiosk")) {
+    theme = {
+      bg: "from-slate-950 via-indigo-950 to-slate-900",
+      icon: BookOpen,
+      accent: "text-indigo-400",
+    };
   }
 
   const IconComp = theme.icon;
+  const currentImage = allImages[activeIdx] || allImages[0];
 
   return (
-    <div className={`relative w-full h-44 rounded-xl bg-gradient-to-br ${theme.bg} overflow-hidden p-5 flex flex-col justify-between shadow-inner group-hover:scale-[1.02] transition-transform duration-300`}>
-      {/* Decorative Top Window Bar */}
-      <div className="flex items-center justify-between z-10">
-        <div className="flex items-center gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
-          <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
-        </div>
-        <span className="px-2 py-0.5 rounded-full bg-black/40 backdrop-blur-md text-white/90 font-mono text-[9px] font-extrabold uppercase tracking-wider border border-white/10">
-          {theme.tag}
-        </span>
+    <div
+      className="w-full flex flex-col"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Main Showcase Canvas */}
+      <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+        {currentImage ? (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentImage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={currentImage}
+                alt={`${title} - Preview ${activeIdx + 1}`}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover object-top"
+                priority={activeIdx === 0}
+              />
+            </motion.div>
+          </AnimatePresence>
+        ) : (
+          /* Clean minimal graphic when no image is uploaded */
+          <div className={`w-full h-full bg-gradient-to-br ${theme.bg} p-6 flex flex-col justify-center items-center text-center relative`}>
+            <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center text-white shadow-sm mb-3">
+              <IconComp className={`w-6 h-6 ${theme.accent}`} />
+            </div>
+            <h4 className="text-base font-extrabold text-white truncate max-w-[260px] tracking-tight">
+              {title}
+            </h4>
+            <p className="text-xs font-mono text-slate-400 mt-1">
+              {role}
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Main Center UI Motif */}
-      <div className="relative z-10 flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg shrink-0">
-          <IconComp className="w-6 h-6" />
-        </div>
-        <div className="min-w-0">
-          <h4 className="text-base font-extrabold text-white truncate tracking-tight drop-shadow-sm">
-            {title}
-          </h4>
-          <p className="text-xs font-semibold text-slate-200/90 truncate">
-            {role}
-          </p>
-        </div>
-      </div>
+      {/* 3 Interactive Thumbnail Boxes Below the Main Image */}
+      {allImages.length > 1 && (
+        <div className="grid grid-cols-3 gap-2 mt-2.5">
+          {allImages.slice(0, 3).map((imgSrc, idx) => {
+            const isActive = activeIdx === idx;
 
-      {/* Tech Chips Footer */}
-      <div className="relative z-10 flex items-center gap-1.5 overflow-hidden">
-        {techStack.slice(0, 3).map((tech) => (
-          <span key={tech} className="px-2 py-0.5 rounded bg-black/30 backdrop-blur-sm text-white/80 text-[10px] font-mono font-bold">
-            {tech}
-          </span>
-        ))}
-      </div>
-
-      {/* Background Mesh Grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent pointer-events-none" />
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setActiveIdx(idx);
+                }}
+                aria-label={`Lihat gambar ke-${idx + 1}`}
+                className={`relative aspect-[16/10] rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                  isActive
+                    ? "border-blue-600 dark:border-blue-400 ring-2 ring-blue-500/20 shadow-sm opacity-100 scale-[1.02]"
+                    : "border-slate-200 dark:border-slate-800 opacity-50 hover:opacity-90 hover:border-slate-300 dark:hover:border-slate-700"
+                }`}
+              >
+                <Image
+                  src={imgSrc}
+                  alt={`${title} thumbnail ${idx + 1}`}
+                  fill
+                  sizes="120px"
+                  className="object-cover object-top"
+                />
+                {/* Active bottom indicator line */}
+                {isActive && (
+                  <div className="absolute bottom-0 inset-x-0 h-1 bg-blue-600 dark:bg-blue-400" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

@@ -52,7 +52,7 @@ export default function CertificatePreview({ cert, className = "", interactive =
         alt={cert.title}
         fill
         unoptimized
-        className={`object-cover ${interactive ? "transition-transform duration-300 group-hover:scale-105" : ""}`}
+        className="object-cover"
       />
     </div>
   );

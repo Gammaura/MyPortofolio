@@ -1,186 +1,217 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Award, Terminal, ShieldCheck, Sparkles } from "lucide-react";
+import { Terminal, ShieldCheck, Sparkles, Award, Cpu, Wifi } from "lucide-react";
 
 export default function InteractiveLanyard({ profile }) {
-  const containerRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const cardRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Motion values for 3D physics
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+  // Motion values for smooth 3D tilt
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  // Spring physics setup for smooth pendulum return
-  const mouseX = useSpring(x, { stiffness: 300, damping: 20 });
-  const mouseY = useSpring(y, { stiffness: 300, damping: 20 });
+  // Smooth spring physics for natural return
+  const springX = useSpring(mouseX, { stiffness: 220, damping: 22 });
+  const springY = useSpring(mouseY, { stiffness: 220, damping: 22 });
 
-  const rotateX = useTransform(mouseY, [-150, 150], [25, -25]);
-  const rotateY = useTransform(mouseX, [-150, 150], [-25, 25]);
-  const shineX = useTransform(mouseX, [-150, 150], [0, 100]);
-  const shineY = useTransform(mouseY, [-150, 150], [0, 100]);
+  // Restrained tilt angles (±10 degrees) so it never clips or flies out of frame
+  const rotateX = useTransform(springY, [-120, 120], [9, -9]);
+  const rotateY = useTransform(springX, [-120, 120], [-9, 9]);
+
+  // Holographic glare position
+  const sheenX = useTransform(springX, [-120, 120], ["15%", "85%"]);
+  const sheenY = useTransform(springY, [-120, 120], ["15%", "85%"]);
 
   const handleMouseMove = (e) => {
-    if (!containerRef.current || isDragging) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    x.set(e.clientX - centerX);
-    y.set(e.clientY - centerY);
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - (rect.left + rect.width / 2);
+    const y = e.clientY - (rect.top + rect.height / 2);
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
-    if (!isDragging) {
-      x.set(0);
-      y.set(0);
-    }
+    setIsHovered(false);
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
   return (
     <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="relative flex flex-col items-center justify-start w-full py-4 select-none touch-none"
-      style={{ perspective: 1000 }}
+      className="relative flex flex-col items-center justify-center w-full select-none"
+      style={{ perspective: 1200 }}
     >
-      {/* Top Lanyard Strap Container */}
-      <div className="relative flex flex-col items-center z-10">
-        {/* Fabric Strap Spline */}
-        <svg width="120" height="90" viewBox="0 0 120 90" className="overflow-visible">
-          <defs>
-            <linearGradient id="strapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0f172a" />
-              <stop offset="50%" stopColor="#2563eb" />
-              <stop offset="100%" stopColor="#0f172a" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M 20 0 Q 60 75 100 0"
-            fill="none"
-            stroke="url(#strapGrad)"
-            strokeWidth="12"
-            strokeLinecap="round"
-            className="drop-shadow-md"
-          />
-          <path
-            d="M 20 0 Q 60 75 100 0"
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="1.5"
-            strokeDasharray="4 4"
-            strokeOpacity="0.4"
-          />
-        </svg>
+      {/* Top Lanyard Strap - Connected Directly */}
+      <div className="flex flex-col items-center relative z-20 pointer-events-none">
+        {/* Fabric Woven Lanyard Ribbon */}
+        <div className="w-10 h-10 -mb-2 relative">
+          <svg viewBox="0 0 40 40" className="w-full h-full overflow-visible drop-shadow-sm">
+            <defs>
+              <linearGradient id="strapGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#0b0f1a" />
+                <stop offset="50%" stopColor="#2563eb" />
+                <stop offset="100%" stopColor="#0b0f1a" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M 12 0 L 20 28 L 28 0"
+              fill="none"
+              stroke="url(#strapGradient)"
+              strokeWidth="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M 12 0 L 20 28 L 28 0"
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth="1"
+              strokeDasharray="2 3"
+              strokeOpacity="0.4"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
 
-        {/* Metallic Clip & Hook */}
-        <div className="relative -mt-3 flex flex-col items-center z-20">
-          <div className="w-8 h-4 rounded-md bg-gradient-to-r from-slate-400 via-slate-100 to-slate-400 border border-slate-400/80 shadow-md" />
-          <div className="w-4 h-5 rounded-b-full border-2 border-slate-400 bg-slate-300 shadow-inner -mt-1" />
+        {/* Chrome / Metal Clip Fitting */}
+        <div className="relative flex flex-col items-center -mt-1 z-30">
+          <div className="w-7 h-3 rounded bg-gradient-to-r from-slate-400 via-slate-100 to-slate-400 border border-slate-500/40 shadow-sm" />
+          <div className="w-3.5 h-3.5 rounded-full border-2 border-slate-400 bg-gradient-to-b from-slate-200 to-slate-400 shadow-inner -mt-1" />
         </div>
       </div>
 
       {/* 3D Interactive Card Component */}
       <motion.div
-        drag
-        dragConstraints={{ left: -100, right: 100, top: -50, bottom: 80 }}
-        dragElastic={0.2}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={() => {
-          setIsDragging(false);
-          x.set(0);
-          y.set(0);
-        }}
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         style={{
           rotateX,
           rotateY,
-          x: mouseX,
-          y: mouseY,
           transformStyle: "preserve-3d",
         }}
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.98 }}
-        className="relative w-72 sm:w-80 h-[430px] rounded-3xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden cursor-grab active:cursor-grabbing z-30 transition-shadow duration-300 hover:shadow-[0_20px_50px_rgba(37,99,235,0.2)]"
+        whileHover={{ scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="relative w-[300px] sm:w-[320px] rounded-3xl p-5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xl overflow-hidden cursor-pointer -mt-2 z-10 transition-shadow duration-300 hover:shadow-[0_20px_50px_rgba(37,99,235,0.18)]"
       >
-        {/* Holographic Glare Overlay */}
+        {/* Dynamic Iridescent Holographic Sheen Layer */}
         <motion.div
           style={{
-            background: `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)`,
+            background: `radial-gradient(circle 180px at ${sheenX} ${sheenY}, rgba(255,255,255,0.45) 0%, rgba(147,197,253,0.2) 35%, transparent 70%)`,
           }}
-          className="absolute inset-0 pointer-events-none z-40 rounded-3xl"
+          className="absolute inset-0 pointer-events-none z-30 rounded-3xl"
         />
 
-        {/* Metallic Hole Ring */}
-        <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-slate-400 mx-auto mb-4 flex items-center justify-center shadow-inner">
-          <div className="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-slate-600" />
+        {/* Holographic Security Foil Strip (diagonal reflection) */}
+        <div className="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br from-blue-500/15 via-indigo-500/10 to-transparent rounded-full blur-xl pointer-events-none" />
+
+        {/* Punch Hole for Lanyard Clip */}
+        <div className="w-7 h-2.5 rounded-full bg-slate-200/80 dark:bg-slate-800/80 border border-slate-400/60 dark:border-slate-600 mx-auto mb-3 flex items-center justify-center shadow-inner">
+          <div className="w-5 h-1.5 rounded-full bg-slate-400/80 dark:bg-slate-600/80" />
         </div>
 
-        {/* Card Header Branding */}
-        <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        {/* Header Ribbon / University & Branding */}
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-800/80">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white font-extrabold text-xs shadow-sm">
+            <div className="w-6 h-6 rounded-lg bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-slate-900 shadow-sm">
               <Terminal className="w-3.5 h-3.5" />
             </div>
-            <span className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight">
-              GAMMAURA
+            <div>
+              <span className="font-black text-xs text-slate-900 dark:text-white tracking-tight block leading-none">
+                GAMMAURA
+              </span>
+              <span className="text-[9px] font-mono font-semibold text-slate-400 tracking-wider">
+                ID CARD #2023
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[9px] font-mono font-bold tracking-wider">VERIFIED</span>
+          </div>
+        </div>
+
+        {/* Card Body: Photo & Identity */}
+        <div className="flex items-center gap-3.5 mb-4">
+          <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-slate-200 dark:border-slate-700 shadow-md bg-slate-100 dark:bg-slate-800 shrink-0">
+            <Image
+              src="/photo.png"
+              alt={profile?.name || "Arditya Adjie Rosandi"}
+              width={80}
+              height={80}
+              priority
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900" />
+          </div>
+
+          <div className="min-w-0">
+            <h3 className="text-base font-black text-slate-900 dark:text-white tracking-tight leading-snug">
+              {profile?.name || "Arditya Adjie Rosandi"}
+            </h3>
+            <p className="text-xs font-bold text-blue-600 dark:text-blue-400 mt-0.5 leading-tight">
+              Full-Stack Developer & IT Project Manager
+            </p>
+            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mt-1">
+              Universitas Esa Unggul
             </span>
           </div>
-          <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[9px] font-mono font-extrabold uppercase tracking-wider">
-            VERIFIED #2023
-          </span>
         </div>
 
-        {/* Avatar & Photo Showcase */}
-        <div className="relative w-28 h-28 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-slate-200 dark:border-slate-700 shadow-md bg-slate-100 dark:bg-slate-800">
-          <img
-            src="/photo.png"
-            alt={profile?.name || "Arditya Adjie Rosandi"}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.src = "https://github.com/Gammaura.png";
-            }}
-          />
-          <div className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900" />
-        </div>
+        {/* Credentials & Key Metrics Pill */}
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <div className="bg-slate-50 dark:bg-slate-800/80 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 text-center">
+            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">
+              ACADEMIC GPA
+            </span>
+            <span className="text-lg font-black text-blue-600 dark:text-blue-400 leading-tight block">
+              3.84
+            </span>
+            <span className="text-[10px] font-medium text-slate-500">Skala 4.00</span>
+          </div>
 
-        {/* Name & Role Details */}
-        <div className="text-center mb-4">
-          <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
-            {profile?.name || "Arditya Adjie Rosandi"}
-          </h3>
-          <p className="text-xs font-bold text-blue-600 dark:text-blue-400 mt-0.5">
-            Full-Stack Dev & IT Project Manager
-          </p>
-        </div>
-
-        {/* Academic & University Details */}
-        <div className="bg-slate-50 dark:bg-slate-800/80 rounded-xl p-3 border border-slate-200/80 dark:border-slate-700/80 mb-4 text-center">
-          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-0.5">
-            UNIVERSITAS ESA UNGGUL
-          </span>
-          <div className="text-xs font-extrabold text-slate-900 dark:text-white flex items-center justify-center gap-1.5">
-            <Award className="w-3.5 h-3.5 text-blue-600" />
-            <span>IPK 3.84 / 4.00 (Teknik Informatika)</span>
+          <div className="bg-slate-50 dark:bg-slate-800/80 p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 text-center">
+            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">
+              LEADERSHIP
+            </span>
+            <span className="text-xs font-black text-slate-900 dark:text-white mt-1 block">
+              Chairman
+            </span>
+            <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+              CodeHub UEU
+            </span>
           </div>
         </div>
 
-        {/* Barcode & Footer Motif */}
-        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-          <div className="flex gap-0.5 h-5 items-center opacity-70">
-            {[2, 4, 1, 3, 5, 2, 4, 1, 3, 2, 4, 3].map((w, i) => (
+        {/* Technical Chip & NFC Security Watermark */}
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400">
+            <Cpu className="w-3.5 h-3.5 text-blue-600" />
+            <span>NFC // TECH 2026</span>
+          </div>
+
+          {/* Barcode Accent */}
+          <div className="flex gap-0.5 h-4 items-center opacity-70">
+            {[2, 3, 1, 4, 2, 5, 1, 3, 2, 4, 2, 3].map((w, i) => (
               <div key={i} className="bg-slate-900 dark:bg-white h-full" style={{ width: `${w}px` }} />
             ))}
           </div>
-          <span className="text-[9px] font-mono text-slate-400 font-bold uppercase">
-            ID: UEU-2023-TECH
-          </span>
         </div>
 
-        {/* Drag Hint */}
+        {/* Tactile Tilt Hint */}
         <div className="mt-2 text-center">
           <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
-            ↔ DRAG OR TILT CARD
+            ✦ ARAHKAN KURSOR UNTUK EFEK 3D
           </span>
         </div>
       </motion.div>

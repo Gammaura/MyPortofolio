@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Code, UserCheck, BookOpen, Award, ExternalLink, X, Terminal, Cpu, Database, Brain, Wrench, FileText, CheckCircle } from "lucide-react";
@@ -52,39 +53,36 @@ const hardSkillCategories = [
 ];
 
 const softSkills = [
-  { name: "Project Management", desc: "Perencanaan timeline & manajemen alokasi tugas" },
-  { name: "Team Leadership", desc: "Memimpin tim pengembang dari konsep hingga rilis" },
-  { name: "Communication", desc: "Koordinasi efektif antar stakeholder & pengembang" },
-  { name: "Problem Solving", desc: "Analisis akar masalah & penyelesaian teknis" },
-  { name: "Public Speaking", desc: "Presentasi proyek & pelatihan teknis" },
-  { name: "Teamwork", desc: "Kolaborasi adaptif dalam tim lintas disiplin" },
+  { name: "Project Management", desc: "Timeline planning & task allocation tracking" },
+  { name: "Team Leadership", desc: "Leading developer teams from planning to deployment" },
+  { name: "Communication", desc: "Effective collaboration across stakeholders and engineers" },
+  { name: "Problem Solving", desc: "Root-cause analysis and technical problem solving" },
+  { name: "Technical Presentation", desc: "Project demonstrations, workshops, and seminars" },
+  { name: "Teamwork", desc: "Adaptable collaboration within multi-disciplinary teams" },
 ];
 
 const currentlyLearning = [
-  "Next.js 14 / App Router",
-  "Tailwind CSS v4 & System Tokens",
-  "Full-Stack Cloud Deployment (Vercel, Railway, Neon Postgres)",
+  "Next.js 16 / React 19 Ecosystem",
+  "Tailwind CSS v4 & Modern Tokens",
+  "Cloud Architecture & Database Scalability",
 ];
 
 export default function SkillsSection({ certificates = [] }) {
   const [previewCert, setPreviewCert] = useState(null);
 
   return (
-    <section id="skills" className="pt-28 pb-20 md:pt-36 md:pb-24 max-w-6xl mx-auto px-4 sm:px-6">
+    <section id="skills" className="pt-28 pb-20 md:pt-36 md:pb-24 max-w-7xl mx-auto px-4 sm:px-6">
       
-      {/* Header Intro */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
-            <Cpu className="w-3.5 h-3.5" />
-            Curated Technical Stack
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Keahlian & Ekosistem
-          </h1>
-        </div>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed">
-          Spektrum kemampuan teknis dan soft skills yang digunakan untuk merancang, mengintegrasikan, dan mengeksekusi sistem aplikasi modern.
+      {/* Header Intro (Rata Tengah & Formal) */}
+      <div className="text-center max-w-3xl mx-auto mb-16">
+        <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 block mb-2">
+          TECHNICAL SKILLS
+        </span>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
+          Skills & Competencies
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+          Proficiency in programming languages, web frameworks, developer tooling, and professional certifications.
         </p>
       </div>
 
@@ -203,7 +201,7 @@ export default function SkillsSection({ certificates = [] }) {
               </div>
             </div>
             <p className="text-xs sm:text-sm text-slate-300 mb-6 max-w-2xl leading-relaxed">
-              Teknologi dan arsitektur terkini yang sedang diperdalam untuk meningkatkan standar efisiensi, skalabilitas, dan keamanan aplikasi produksi.
+              Modern architectural paradigms and tools currently being explored to enhance application scalability, security, and developer velocity.
             </p>
             <div className="flex flex-wrap gap-2.5">
               {currentlyLearning.map((item) => (
@@ -225,7 +223,7 @@ export default function SkillsSection({ certificates = [] }) {
           <div className="flex items-center gap-2 mb-6">
             <span className="w-8 h-0.5 bg-indigo-600 dark:bg-indigo-400"></span>
             <h2 className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
-              Sertifikasi & Lisensi
+              Certifications & Licenses
             </h2>
           </div>
 
@@ -335,10 +333,13 @@ export default function SkillsSection({ certificates = [] }) {
                     />
                   ) : (
                     <div className="relative w-full flex items-center justify-center">
-                      <img
+                      <Image
                         src={getCertificateFile(previewCert)}
                         alt={previewCert.title}
-                        className="max-w-full max-h-[min(65vh,calc(100vh-14rem))] object-contain rounded-xl"
+                        width={800}
+                        height={600}
+                        unoptimized
+                        className="max-w-full max-h-[min(65vh,calc(100vh-14rem))] object-contain rounded-xl w-auto h-auto"
                       />
                     </div>
                   )}
