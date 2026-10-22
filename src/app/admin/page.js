@@ -41,6 +41,48 @@ import {
   Sparkles,
 } from "lucide-react";
 
+// Themesbrand Minia Signature Metric Sparkline Component
+function MiniaSparkline({ color = "#5156BE", points = [12, 18, 14, 25, 22, 35, 30, 46, 42, 58] }) {
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const range = max - min || 1;
+  const width = 110;
+  const height = 40;
+
+  const coords = points.map((val, i) => {
+    const x = (i / (points.length - 1)) * width;
+    const y = height - ((val - min) / range) * (height - 12) - 6;
+    return [x, y];
+  });
+
+  let pathD = `M ${coords[0][0]},${coords[0][1]}`;
+  for (let i = 0; i < coords.length - 1; i++) {
+    const curr = coords[i];
+    const next = coords[i + 1];
+    const cpx1 = curr[0] + (next[0] - curr[0]) / 2;
+    const cpy1 = curr[1];
+    const cpx2 = curr[0] + (next[0] - curr[0]) / 2;
+    const cpy2 = next[1];
+    pathD += ` C ${cpx1},${cpy1} ${cpx2},${cpy2} ${next[0]},${next[1]}`;
+  }
+
+  const fillD = `${pathD} L ${width},${height} L 0,${height} Z`;
+  const gradId = `minia-spark-${color.replace(/[^a-zA-Z0-9]/g, "")}`;
+
+  return (
+    <svg className="w-24 h-10 overflow-visible shrink-0" viewBox={`0 0 ${width} ${height}`}>
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.30" />
+          <stop offset="100%" stopColor={color} stopOpacity="0.0" />
+        </linearGradient>
+      </defs>
+      <path d={fillD} fill={`url(#${gradId})`} />
+      <path d={pathD} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export default function AdminPanel() {
   const [data, setData] = useState(null);
   const [passcode, setPasscode] = useState("");
@@ -48,6 +90,14 @@ export default function AdminPanel() {
   const [authError, setAuthError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+
+  // Inquiries and mobile drawer states
+  const [messages, setMessages] = useState([]);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [deletingMsgId, setDeletingMsgId] = useState(null);
+  const [activityPeriod, setActivityPeriod] = useState("monthly");
 
   // Navigation & status states
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -57,14 +107,46 @@ export default function AdminPanel() {
   const [uploadingImageKey, setUploadingImageKey] = useState(null);
   const [lastSavedTime, setLastSavedTime] = useState(null);
 
-  // Load initial data
+  // Load initial data and inquiries
   useEffect(() => {
     async function loadData() {
       const res = await getCVData();
       setData(res);
+      try {
+        setIsLoadingMessages(true);
+        const msgs = await getContactMessages();
+        setMessages(msgs || []);
+      } catch (err) {
+        console.warn("Contact messages load:", err);
+      } finally {
+        setIsLoadingMessages(false);
+      }
     }
     loadData();
   }, []);
+
+  const handleDeleteMessage = async (msgId) => {
+    if (!confirm("Hapus pesan ini dari inbox kontak?")) return;
+    setDeletingMsgId(msgId);
+    try {
+      const res = await deleteContactMessage(msgId);
+      if (res.success) {
+        setMessages((prev) => prev.filter((m) => m.id !== msgId));
+      }
+    } catch (e) {
+      console.warn("Failed to delete message:", e);
+    } finally {
+      setDeletingMsgId(null);
+    }
+  };
+
+  const handleSignOut = () => {
+    setIsAuthenticated(false);
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("tailadmin_auth");
+      sessionStorage.removeItem("minia_auth");
+    }
+  };
 
   const handleSave = React.useCallback(async () => {
     if (!data) return;
@@ -524,54 +606,67 @@ export default function AdminPanel() {
   };
 
   // -------------------------------------------------------------
-  // LOGIN SCREEN (TailAdmin Light Edition)
+  // LOGIN SCREEN (Themesbrand Minia Edition - Themed to #FFF9F1)
   // -------------------------------------------------------------
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen min-h-[100dvh] w-full bg-[#F4F7FB] text-slate-800 flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden selection:bg-[#465FFF] selection:text-white">
-        {/* Soft Ambient TailAdmin Glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#465FFF]/8 rounded-full blur-[90px] pointer-events-none" />
+      <div className="min-h-screen min-h-[100dvh] w-full bg-[#FFF9F1] text-[#17201C] flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden selection:bg-[#5156BE] selection:text-white">
+        {/* Soft Ambient Warm Glow matching Image 2 */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[680px] h-[680px] bg-gradient-to-tr from-[#5156BE]/8 via-[#FC9073]/5 to-[#FFF9F1]/0 rounded-full blur-[100px] pointer-events-none" />
+
+        {/* Subtle Architectural Dot Matrix */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-60"
+          style={{
+            backgroundImage: "radial-gradient(#17201C 0.75px, transparent 0.75px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
 
         {/* Top Header Bar */}
-        <div className="w-full max-w-[420px] mb-6 flex items-center justify-between relative z-10">
+        <div className="w-full max-w-[430px] mb-6 flex items-center justify-between relative z-10">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-[#575C55] hover:text-[#17201C] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Return to Portfolio</span>
           </Link>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200/80 shadow-xs text-[11px] font-mono font-medium text-emerald-600">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#EAE3D6] shadow-xs text-[11px] font-mono font-medium text-emerald-700">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>TailAdmin Console</span>
+            <span>Minia Console v4.2</span>
           </div>
         </div>
 
-        {/* TailAdmin Login Card */}
-        <div className="w-full max-w-[420px] bg-white border border-slate-200/90 rounded-2xl p-7 sm:p-8 shadow-xl shadow-slate-200/50 relative z-10">
+        {/* Minia Login Card */}
+        <div className="w-full max-w-[430px] bg-white border border-[#EAE3D6] rounded-2xl p-7 sm:p-9 shadow-xl shadow-[#17201C]/5 relative z-10">
           <div className="text-center mb-6">
-            <div className="w-13 h-13 rounded-2xl bg-[#465FFF] flex items-center justify-center mx-auto mb-4 text-white shadow-lg shadow-[#465FFF]/25">
-              <div className="flex items-end gap-1 h-5">
-                <span className="w-1 h-3 bg-white rounded-full" />
-                <span className="w-1 h-5 bg-white rounded-full" />
-                <span className="w-1 h-4 bg-white rounded-full" />
+            {/* Minia Stylized Geometric Emblem */}
+            <div className="w-14 h-14 rounded-2xl bg-[#5156BE] flex items-center justify-center mx-auto mb-4 text-white shadow-lg shadow-[#5156BE]/25 ring-4 ring-[#F4ECE0]">
+              <div className="flex items-end gap-1.5 h-5">
+                <span className="w-1.5 h-3 bg-white/80 rounded-full" />
+                <span className="w-1.5 h-5 bg-white rounded-full" />
+                <span className="w-1.5 h-4 bg-white/90 rounded-full" />
               </div>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-              TailAdmin Access
+            <h1 className="text-2xl font-bold text-[#17201C] tracking-tight">
+              Welcome Back !
             </h1>
-            <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-              Masuk ke konsol admin portfolio untuk mengelola proyek, skill, dan data.
+            <p className="text-xs text-[#666B63] mt-1.5 leading-relaxed">
+              Sign in to continue to Minia Portfolio Console.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
-                Passcode
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-bold text-[#3A433E] uppercase tracking-wider">
+                  Passcode Access
+                </label>
+                <span className="text-[10px] font-mono text-[#8C9188]">Admin Authorization</span>
+              </div>
               <div className="relative">
-                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8C9188] pointer-events-none">
                   <Lock className="w-4 h-4" />
                 </div>
                 <input
@@ -584,12 +679,12 @@ export default function AdminPanel() {
                     if (authError) setAuthError("");
                   }}
                   placeholder="Masukkan passcode admin..."
-                  className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-[#465FFF] focus:ring-2 focus:ring-[#465FFF]/15 text-sm text-slate-800 placeholder-slate-400 outline-none transition-all"
+                  className="w-full pl-10 pr-10 py-3 rounded-xl bg-[#FCFAF7] border border-[#DFD7CB] focus:bg-white focus:border-[#5156BE] focus:ring-4 focus:ring-[#5156BE]/12 text-sm text-[#17201C] placeholder-[#9C9F98] outline-none transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C9188] hover:text-[#17201C] p-1 transition-colors cursor-pointer"
                   title={showPassword ? "Hide passcode" : "Show passcode"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -597,8 +692,44 @@ export default function AdminPanel() {
               </div>
             </div>
 
+            {/* Remember & Session helper */}
+            <div className="flex items-center justify-between text-xs text-[#666B63] pt-0.5">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-[#DFD7CB] text-[#5156BE] focus:ring-[#5156BE] accent-[#5156BE]"
+                />
+                <span className="text-[12px] font-medium text-[#575C55]">Ingat sesi ini</span>
+              </label>
+              <span className="text-[11px] font-mono text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                SSL Secured
+              </span>
+            </div>
+
+            {/* Quick Access Helper Buttons for Demo */}
+            <div className="p-2.5 rounded-xl bg-[#FCFAF7] border border-[#EAE3D6] flex items-center justify-between text-[11px]">
+              <span className="text-[#737870] font-medium">Demo passcode:</span>
+              <div className="flex items-center gap-1.5">
+                {["admin123", "gammaura", "adjie"].map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => {
+                      setPasscode(key);
+                      setAuthError("");
+                    }}
+                    className="px-2 py-0.5 rounded-md bg-white border border-[#DFD7CB] hover:border-[#5156BE] hover:text-[#5156BE] font-mono text-[10px] font-semibold text-[#575C55] transition-colors cursor-pointer shadow-2xs"
+                  >
+                    {key}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {authError && (
-              <div className="flex items-center gap-2 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-medium">
+              <div className="flex items-center gap-2 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium animate-shake">
                 <XCircle className="w-4 h-4 shrink-0" />
                 <span>{authError}</span>
               </div>
@@ -607,12 +738,12 @@ export default function AdminPanel() {
             <button
               type="submit"
               disabled={isLoggingIn || !passcode}
-              className="w-full py-3 px-4 rounded-xl bg-[#465FFF] hover:bg-[#384FE5] active:scale-[0.99] text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md shadow-[#465FFF]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 px-4 rounded-xl bg-[#5156BE] hover:bg-[#4348A8] active:scale-[0.99] text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md shadow-[#5156BE]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoggingIn ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Memverifikasi...</span>
+                  <span>Memverifikasi Otoritas...</span>
                 </>
               ) : (
                 <span>Masuk ke Dashboard</span>
@@ -620,9 +751,12 @@ export default function AdminPanel() {
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] font-mono text-slate-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Secure Admin Session</span>
+          <div className="mt-6 pt-5 border-t border-[#F3ECE1] flex items-center justify-between text-[11px] font-mono text-[#737870]">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>256-Bit Protection</span>
+            </div>
+            <span>Themesbrand • Minia</span>
           </div>
         </div>
       </div>
@@ -632,9 +766,9 @@ export default function AdminPanel() {
   // Loading state
   if (!data) {
     return (
-      <div className="min-h-screen bg-[#F4F7FB] text-slate-600 flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-7 h-7 animate-spin text-[#465FFF]" />
-        <span className="text-sm font-semibold tracking-wide">Loading portfolio database...</span>
+      <div className="min-h-screen min-h-[100dvh] bg-[#FFF9F1] text-[#17201C] flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-8 h-8 animate-spin text-[#5156BE]" />
+        <span className="text-sm font-semibold tracking-wide text-[#575C55]">Memuat database portofolio Minia...</span>
       </div>
     );
   }
@@ -647,42 +781,71 @@ export default function AdminPanel() {
     { id: "certificates", label: "Certificates & Licenses", icon: Award, count: data.certificates?.length || 0 },
     { id: "profile", label: "Profile & Identity", icon: User },
     { id: "timeline", label: "Career Timeline", icon: MapPin, count: data.timeline?.length || 0 },
+    { id: "messages", label: "Inquiries & Inbox", icon: MessageSquare, count: messages?.length || 0 },
   ];
 
   // -------------------------------------------------------------
-  // MAIN TAILWIND ADMIN DASHBOARD (Light Theme)
+  // MAIN MINIA ADMIN DASHBOARD (Themed to #FFF9F1)
   // -------------------------------------------------------------
   return (
-    <div className="tailadmin-workspace font-sans">
+    <div className="minia-workspace tailadmin-workspace font-sans selection:bg-[#5156BE] selection:text-white">
+      {/* Mobile Drawer Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-xs z-40 transition-opacity"
+        />
+      )}
+
       {/* ---------------------------------------------------------
-          FIXED / STICKY SIDEBAR (TailAdmin Light Sidebar)
+          FIXED / STICKY SIDEBAR (Themesbrand Minia Sidebar)
       --------------------------------------------------------- */}
-      <aside className="tailadmin-sidebar">
-        {/* TailAdmin Brand Header */}
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+      <aside
+        className={`minia-sidebar tailadmin-sidebar ${
+          isMobileMenuOpen
+            ? "fixed inset-y-0 left-0 z-50 shadow-2xl flex"
+            : "hidden lg:flex"
+        }`}
+      >
+        {/* Minia Brand Header */}
+        <div className="p-5 border-b border-[#F3ECE1] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#465FFF] flex items-center justify-center text-white shadow-sm shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[#5156BE] flex items-center justify-center text-white shadow-md shadow-[#5156BE]/20 shrink-0 ring-2 ring-[#F4ECE0]">
               <div className="flex items-end gap-1 h-4">
-                <span className="w-1 h-2.5 bg-white rounded-full" />
+                <span className="w-1 h-2.5 bg-white/80 rounded-full" />
                 <span className="w-1 h-4 bg-white rounded-full" />
-                <span className="w-1 h-3 bg-white rounded-full" />
+                <span className="w-1 h-3 bg-white/90 rounded-full" />
               </div>
             </div>
-            <span className="text-xl font-bold text-slate-900 tracking-tight">TailAdmin</span>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-lg font-bold text-[#17201C] tracking-tight leading-none">Minia</span>
+                <span className="text-[9px] font-mono font-bold bg-[#5156BE]/10 text-[#5156BE] px-1.5 py-0.2 rounded">Console</span>
+              </div>
+              <span className="text-[10px] text-[#737870] font-medium block mt-1">Portfolio Admin</span>
+            </div>
           </div>
-          <Link
-            href="/"
-            target="_blank"
-            className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
-            title="View Live Website"
-          >
-            <ExternalLink className="w-4 h-4" />
-          </Link>
+          <div className="flex items-center gap-1">
+            <Link
+              href="/"
+              target="_blank"
+              className="p-2 rounded-lg hover:bg-[#F5EFE4] text-[#737870] hover:text-[#17201C] transition-colors"
+              title="View Live Website"
+            >
+              <ExternalLink className="w-4 h-4" />
+            </Link>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="lg:hidden p-2 rounded-lg hover:bg-[#F5EFE4] text-[#737870]"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Navigation Menu */}
-        <div className="tailadmin-sidebar-nav flex-grow overflow-y-auto">
-          <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div className="minia-sidebar-nav tailadmin-sidebar-nav flex-grow overflow-y-auto minia-scrollbar">
+          <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-[#8C9188]">
             MENU
           </div>
           {tabs.map((tab) => {
@@ -691,27 +854,30 @@ export default function AdminPanel() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setIsMobileMenuOpen(false);
+                }}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? "bg-[#F0F5FF] text-[#465FFF] font-bold shadow-xs"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 font-medium"
+                    ? "bg-[#5156BE]/10 text-[#5156BE] font-bold shadow-2xs border-l-3 border-[#5156BE]"
+                    : "text-[#575C55] hover:text-[#17201C] hover:bg-[#F8F3EA] font-medium"
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <IconComp className={`w-4 h-4 ${isActive ? "text-[#465FFF]" : "text-slate-400"}`} />
+                  <IconComp className={`w-4 h-4 ${isActive ? "text-[#5156BE]" : "text-[#8C9188]"}`} />
                   <span>{tab.label}</span>
                 </div>
                 {tab.count !== undefined ? (
                   <span
                     className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
-                      isActive ? "bg-[#465FFF]/15 text-[#465FFF]" : "bg-slate-100 text-slate-500"
+                      isActive ? "bg-[#5156BE] text-white" : "bg-[#F3ECE1] text-[#6C726A]"
                     }`}
                   >
                     {tab.count}
                   </span>
                 ) : tab.id === "dashboard" ? (
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-50 text-emerald-600 border border-emerald-100">
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
                     Live
                   </span>
                 ) : null}
@@ -721,18 +887,20 @@ export default function AdminPanel() {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50 space-y-2 shrink-0">
-          <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+        <div className="p-4 border-t border-[#F3ECE1] bg-[#FCFAF7] space-y-2.5 shrink-0">
+          <div className="flex items-center justify-between text-xs text-[#575C55] px-1">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="font-semibold text-slate-700 truncate max-w-[130px]">{data.profile?.name || "Adjie Rosandi"}</span>
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-semibold text-[#17201C] truncate max-w-[130px]">
+                {data.profile?.name || "Adjie Rosandi"}
+              </span>
             </div>
-            <span className="text-[10px] font-mono text-slate-400">v4.0</span>
+            <span className="text-[10px] font-mono text-[#8C9188]">v4.2</span>
           </div>
 
           <button
-            onClick={() => setIsAuthenticated(false)}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-white hover:bg-rose-50 hover:text-rose-600 text-slate-500 text-xs font-semibold border border-slate-200 transition-all cursor-pointer"
+            onClick={handleSignOut}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-white hover:bg-rose-50 hover:text-rose-600 text-[#575C55] text-xs font-semibold border border-[#EAE3D6] transition-all cursor-pointer shadow-2xs"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Sign Out Console</span>
@@ -743,59 +911,80 @@ export default function AdminPanel() {
       {/* ---------------------------------------------------------
           MAIN CONTENT WORKSPACE
       --------------------------------------------------------- */}
-      <div className="tailadmin-content-area flex-1 flex flex-col min-w-0">
-        {/* Sticky Top Header (TailAdmin Light Topbar) */}
-        <header className="tailadmin-header">
-          <div className="flex items-center gap-4">
-            {/* Search Bar matching screenshot */}
-            <div className="relative w-full max-w-xs sm:w-80">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+      <div className="minia-content-area tailadmin-content-area flex-1 flex flex-col min-w-0">
+        {/* Sticky Top Header (Themesbrand Minia Topbar) */}
+        <header className="minia-header tailadmin-header">
+          <div className="flex items-center gap-3">
+            {/* Mobile Toggle Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 rounded-xl border border-[#DFD7CB] bg-white text-[#575C55] hover:text-[#17201C] cursor-pointer"
+              title="Open Navigation"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
+
+            {/* Breadcrumb / Page Title */}
+            <div className="hidden sm:block">
+              <div className="flex items-center gap-1.5 text-xs text-[#737870]">
+                <span className="font-semibold text-[#5156BE]">Minia</span>
+                <span>/</span>
+                <span className="text-[#17201C] capitalize font-medium">{activeTab}</span>
+              </div>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative w-44 sm:w-64">
+              <Search className="w-4 h-4 text-[#8C9188] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search or type command..."
-                className="w-full pl-9 pr-12 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#465FFF] focus:ring-2 focus:ring-[#465FFF]/15 outline-none transition-all"
+                placeholder="Search..."
+                className="w-full pl-9 pr-10 py-1.5 rounded-xl bg-white border border-[#DFD7CB] text-xs text-[#17201C] placeholder-[#9C9F98] focus:border-[#5156BE] focus:ring-2 focus:ring-[#5156BE]/12 outline-none transition-all"
                 readOnly
               />
-              <span className="absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-white border border-slate-200 text-[10px] font-mono text-slate-400 shadow-2xs">
-                ⌘ K
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-[#F3ECE1] text-[9px] font-mono text-[#737870]">
+                ⌘K
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Day / Night visual toggle icon */}
-            <button
-              className="w-9 h-9 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 flex items-center justify-center transition-colors"
-              title="Theme Toggle"
-            >
-              <Sparkles className="w-4 h-4" />
-            </button>
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* Live Badge */}
+            <div className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-mono font-medium text-emerald-800">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+              <span>Live Synced</span>
+            </div>
 
-            {/* Notification bell with badge */}
+            {/* Notification Bell with Messages badge */}
             <div className="relative">
               <button
-                className="w-9 h-9 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 flex items-center justify-center transition-colors"
-                title="Notifications"
+                onClick={() => setActiveTab("messages")}
+                className="w-9 h-9 rounded-xl border border-[#DFD7CB] bg-white text-[#575C55] hover:text-[#17201C] hover:bg-[#F8F3EA] flex items-center justify-center transition-colors cursor-pointer"
+                title="Lihat pesan masuk"
               >
                 <Bell className="w-4 h-4" />
               </button>
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-white" />
+              {messages.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#5156BE] text-white text-[9px] font-mono font-bold flex items-center justify-center shadow-xs">
+                  {messages.length}
+                </span>
+              )}
             </div>
 
             {/* User Profile Pill */}
-            <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-200 border border-slate-300 shrink-0">
+            <div className="flex items-center gap-2 pl-2 border-l border-[#EAE3D6]">
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-white border border-[#DFD7CB] shrink-0">
                 <img
                   src={data.profile?.avatar || "/assets/photo.png"}
                   alt="Avatar"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="hidden lg:block text-left leading-tight">
-                <span className="text-xs font-bold text-slate-800 block truncate max-w-[120px]">
+              <div className="hidden xl:block text-left leading-tight">
+                <span className="text-xs font-bold text-[#17201C] block truncate max-w-[120px]">
                   {data.profile?.name?.split(" ")[0] || "Adjie"}
                 </span>
-                <span className="text-[10px] text-slate-400 font-medium">Administrator</span>
+                <span className="text-[10px] text-[#737870] font-medium">Administrator</span>
               </div>
             </div>
 
@@ -803,17 +992,18 @@ export default function AdminPanel() {
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#465FFF] hover:bg-[#384FE5] active:bg-[#2F44D0] disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all cursor-pointer disabled:cursor-wait"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-[#5156BE] hover:bg-[#4348A8] active:bg-[#383C94] disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider shadow-sm shadow-[#5156BE]/25 transition-all cursor-pointer disabled:cursor-wait"
             >
               {isSaving ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Saving...</span>
+                  <span className="hidden sm:inline">Saving...</span>
                 </>
               ) : (
                 <>
                   <Save className="w-3.5 h-3.5" />
-                  <span>Save All Changes</span>
+                  <span className="hidden sm:inline">Save All Changes</span>
+                  <span className="sm:hidden">Save</span>
                 </>
               )}
             </button>
@@ -856,63 +1046,97 @@ export default function AdminPanel() {
         {/* Workspace Body */}
         <main className="p-6 max-w-7xl w-full mx-auto space-y-6 flex-grow">
           {/* =====================================================
-              TAB: DASHBOARD (Adapted to Adjie's Real Portfolio)
+              TAB: DASHBOARD (Themesbrand Minia Edition)
               ===================================================== */}
           {activeTab === "dashboard" && (
             <div className="space-y-6">
-              {/* TOP 3 STAT METRIC CARDS (Portofolio Metrics) */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {/* Stat 1: Total Projects Showcase */}
-                <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex items-center gap-4 hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#465FFF] shrink-0">
-                    <FolderOpen className="w-6 h-6" />
+              {/* MINIA 4-CARD METRIC STRIP WITH SIGNATURE SPARKLINES */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+                {/* Metric 1: Showcase Projects */}
+                <div className="minia-metric-card bg-white border border-[#EAE3D6] rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-all">
+                  <div className="flex items-center justify-between text-xs text-[#737870] font-medium">
+                    <span className="uppercase tracking-wider font-semibold text-[11px]">Showcase Projects</span>
+                    <span className="text-[#9C9F98]">⋮</span>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                  <div className="my-2.5">
+                    <h3 className="text-2xl font-bold text-[#17201C] tracking-tight">
                       {data.projects?.length || 15}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-slate-500 font-medium">Showcase Projects</span>
-                      <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-1.5 py-0.2 rounded-md">
-                        100% Live
+                  </div>
+                  <div className="flex items-end justify-between pt-2 border-t border-[#F3ECE1]">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-1.5 py-0.5 rounded-md">
+                        +2 Live
                       </span>
+                      <span className="text-[11px] text-[#737870]">Production</span>
                     </div>
+                    <MiniaSparkline color="#5156BE" points={[10, 18, 14, 28, 24, 38, 32, 50, 44, 62]} />
                   </div>
                 </div>
 
-                {/* Stat 2: Technical Skills */}
-                <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex items-center gap-4 hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-[#A898F8] shrink-0">
-                    <Code className="w-6 h-6" />
+                {/* Metric 2: Core Tech Skills */}
+                <div className="minia-metric-card bg-white border border-[#EAE3D6] rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-all">
+                  <div className="flex items-center justify-between text-xs text-[#737870] font-medium">
+                    <span className="uppercase tracking-wider font-semibold text-[11px]">Technical Skills</span>
+                    <span className="text-[#9C9F98]">⋮</span>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                  <div className="my-2.5">
+                    <h3 className="text-2xl font-bold text-[#17201C] tracking-tight">
                       {data.skills?.length || 18}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-slate-500 font-medium">Core Tech Skills</span>
-                      <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-1.5 py-0.2 rounded-md">
+                  </div>
+                  <div className="flex items-end justify-between pt-2 border-t border-[#F3ECE1]">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-1.5 py-0.5 rounded-md">
                         Verified
                       </span>
+                      <span className="text-[11px] text-[#737870]">Full-Stack &amp; AI</span>
                     </div>
+                    <MiniaSparkline color="#2AB57D" points={[15, 22, 28, 25, 36, 32, 42, 48, 45, 58]} />
                   </div>
                 </div>
 
-                {/* Stat 3: Leadership & Licenses */}
-                <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex items-center gap-4 hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-                    <Award className="w-6 h-6" />
+                {/* Metric 3: Certifications & Leadership */}
+                <div className="minia-metric-card bg-white border border-[#EAE3D6] rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-all">
+                  <div className="flex items-center justify-between text-xs text-[#737870] font-medium">
+                    <span className="uppercase tracking-wider font-semibold text-[11px]">Certs &amp; Leadership</span>
+                    <span className="text-[#9C9F98]">⋮</span>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                  <div className="my-2.5">
+                    <h3 className="text-2xl font-bold text-[#17201C] tracking-tight">
                       {(data.certificates?.length || 4) + (data.organizations?.length || 4)}
                     </h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-slate-500 font-medium">Certs &amp; Leadership</span>
-                      <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-1.5 py-0.2 rounded-md">
+                  </div>
+                  <div className="flex items-end justify-between pt-2 border-t border-[#F3ECE1]">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] font-bold text-sky-700 bg-sky-50 border border-sky-200/60 px-1.5 py-0.5 rounded-md">
                         Active
                       </span>
+                      <span className="text-[11px] text-[#737870]">Esa Unggul</span>
                     </div>
+                    <MiniaSparkline color="#4BA6EF" points={[8, 14, 18, 16, 26, 30, 28, 38, 42, 50]} />
+                  </div>
+                </div>
+
+                {/* Metric 4: Client & Recruiter Inquiries */}
+                <div className="minia-metric-card bg-white border border-[#EAE3D6] rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-all">
+                  <div className="flex items-center justify-between text-xs text-[#737870] font-medium">
+                    <span className="uppercase tracking-wider font-semibold text-[11px]">Client Inquiries</span>
+                    <span className="text-[#9C9F98]">⋮</span>
+                  </div>
+                  <div className="my-2.5">
+                    <h3 className="text-2xl font-bold text-[#17201C] tracking-tight">
+                      {messages?.length || 0}
+                    </h3>
+                  </div>
+                  <div className="flex items-end justify-between pt-2 border-t border-[#F3ECE1]">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200/60 px-1.5 py-0.5 rounded-md">
+                        {messages?.length > 0 ? `${messages.length} Baru` : "Inbox"}
+                      </span>
+                      <span className="text-[11px] text-[#737870]">Live Feed</span>
+                    </div>
+                    <MiniaSparkline color="#FD625E" points={[5, 12, 10, 18, 15, 24, 22, 30, 28, 40]} />
                   </div>
                 </div>
               </div>
@@ -921,21 +1145,25 @@ export default function AdminPanel() {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Column 1 (2/3 width): Engineering Activity Chart */}
                 <div className="lg:col-span-2 space-y-6">
-                  <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs">
+                  <div className="bg-white border border-[#EAE3D6] rounded-2xl p-6 shadow-xs">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                       <div>
-                        <h2 className="text-base font-bold text-slate-900 tracking-tight">
+                        <h2 className="text-base font-bold text-[#17201C] tracking-tight">
                           Engineering &amp; Project Activity
                         </h2>
-                        <p className="text-xs text-slate-400 mt-0.5">
+                        <p className="text-xs text-[#737870] mt-0.5">
                           Total production commits &amp; architecture milestones: 70.5K+
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <select className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-700 outline-none">
-                          <option>Monthly Activity</option>
-                          <option>Quarterly Releases</option>
-                          <option>Yearly Summary</option>
+                        <select
+                          value={activityPeriod}
+                          onChange={(e) => setActivityPeriod(e.target.value)}
+                          className="px-3 py-1.5 rounded-xl border border-[#DFD7CB] bg-[#FCFAF7] text-xs font-semibold text-[#17201C] outline-none cursor-pointer"
+                        >
+                          <option value="monthly">Monthly Activity</option>
+                          <option value="quarterly">Quarterly Releases</option>
+                          <option value="yearly">Yearly Summary</option>
                         </select>
                       </div>
                     </div>
@@ -943,38 +1171,38 @@ export default function AdminPanel() {
                     {/* Chart Legend tailored to Adjie's specialties */}
                     <div className="flex items-center gap-5 text-xs font-semibold mb-6">
                       <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#465FFF]" />
-                        <span className="text-slate-600">Production Code</span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#5156BE]" />
+                        <span className="text-[#575C55]">Production Code</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#A898F8]" />
-                        <span className="text-slate-600">AI &amp; Systems</span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#2AB57D]" />
+                        <span className="text-[#575C55]">AI &amp; Systems</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#52D1F7]" />
-                        <span className="text-slate-600">Deliveries &amp; Releases</span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#4BA6EF]" />
+                        <span className="text-[#575C55]">Deliveries &amp; Releases</span>
                       </div>
                     </div>
 
                     {/* Grouped Bar Chart Visualization */}
                     <div className="relative pt-4">
                       {/* Grid lines */}
-                      <div className="flex flex-col gap-6 text-[11px] font-mono text-slate-400 border-b border-slate-100 pb-2">
+                      <div className="flex flex-col gap-6 text-[11px] font-mono text-[#8C9188] border-b border-[#F3ECE1] pb-2">
                         <div className="flex items-center gap-4">
                           <span className="w-7 text-right">200</span>
-                          <div className="flex-1 h-px bg-slate-100" />
+                          <div className="flex-1 h-px bg-[#F3ECE1]" />
                         </div>
                         <div className="flex items-center gap-4">
                           <span className="w-7 text-right">120</span>
-                          <div className="flex-1 h-px bg-slate-100" />
+                          <div className="flex-1 h-px bg-[#F3ECE1]" />
                         </div>
                         <div className="flex items-center gap-4">
                           <span className="w-7 text-right">60</span>
-                          <div className="flex-1 h-px bg-slate-100" />
+                          <div className="flex-1 h-px bg-[#F3ECE1]" />
                         </div>
                         <div className="flex items-center gap-4">
                           <span className="w-7 text-right">30</span>
-                          <div className="flex-1 h-px bg-slate-100" />
+                          <div className="flex-1 h-px bg-[#F3ECE1]" />
                         </div>
                       </div>
 
@@ -997,23 +1225,23 @@ export default function AdminPanel() {
                               {/* Production Code Bar */}
                               <div
                                 style={{ height: `${(item.h1 / 200) * 100}%` }}
-                                className="w-1.5 sm:w-2.5 bg-[#465FFF] rounded-t-sm transition-all hover:opacity-80"
+                                className="w-1.5 sm:w-2.5 bg-[#5156BE] rounded-t-sm transition-all hover:opacity-80"
                                 title={`Production Code: ${item.h1}`}
                               />
                               {/* AI & Systems Bar */}
                               <div
                                 style={{ height: `${(item.h2 / 200) * 100}%` }}
-                                className="w-1.5 sm:w-2.5 bg-[#A898F8] rounded-t-sm transition-all hover:opacity-80"
+                                className="w-1.5 sm:w-2.5 bg-[#2AB57D] rounded-t-sm transition-all hover:opacity-80"
                                 title={`AI & Architecture: ${item.h2}`}
                               />
                               {/* Releases Bar */}
                               <div
                                 style={{ height: `${(item.h3 / 200) * 100}%` }}
-                                className="w-1.5 sm:w-2.5 bg-[#52D1F7] rounded-t-sm transition-all hover:opacity-80"
+                                className="w-1.5 sm:w-2.5 bg-[#4BA6EF] rounded-t-sm transition-all hover:opacity-80"
                                 title={`Deliveries: ${item.h3}`}
                               />
                             </div>
-                            <span className="text-[11px] font-medium text-slate-500 mt-2 block">
+                            <span className="text-[11px] font-medium text-[#737870] mt-2 block">
                               {item.m}
                             </span>
                           </div>
@@ -1025,40 +1253,40 @@ export default function AdminPanel() {
                   {/* Bottom Sub-row: Production Systems & Core Architecture */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Live Systems Card */}
-                    <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs relative">
+                    <div className="bg-white border border-[#EAE3D6] rounded-2xl p-6 shadow-xs relative">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-slate-400 font-semibold">Production Systems</span>
-                        <span className="text-slate-400">⋮</span>
+                        <span className="text-xs text-[#737870] font-semibold">Production Systems</span>
+                        <span className="text-[#8C9188]">⋮</span>
                       </div>
-                      <h3 className="text-2xl font-black text-slate-900 tracking-tight">
+                      <h3 className="text-2xl font-black text-[#17201C] tracking-tight">
                         {data.projects?.length || 15}+ Scaled Apps
                       </h3>
-                      <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 text-xs">
+                      <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#F3ECE1] text-xs">
                         <div>
-                          <span className="text-slate-400 block text-[11px]">Database Synchronization</span>
-                          <span className="font-bold text-emerald-600 text-sm">100% Synced</span>
+                          <span className="text-[#737870] block text-[11px]">Database Synchronization</span>
+                          <span className="font-bold text-emerald-700 text-sm">100% Synced</span>
                         </div>
                         {/* Mini Sparkline Graphic */}
-                        <svg className="w-24 h-8 text-emerald-500 stroke-current fill-none stroke-2" viewBox="0 0 100 30">
+                        <svg className="w-24 h-8 text-emerald-600 stroke-current fill-none stroke-2" viewBox="0 0 100 30">
                           <path d="M0 25 Q 25 20, 40 22 T 70 8 T 100 2" />
                         </svg>
                       </div>
                     </div>
 
                     {/* Core Tech Stack Health */}
-                    <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs relative">
+                    <div className="bg-white border border-[#EAE3D6] rounded-2xl p-6 shadow-xs relative">
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <span className="text-xs text-slate-400 font-semibold block">Core Stack &amp; MAS</span>
-                          <span className="text-[11px] text-slate-400">Next.js • Python • PostgreSQL • MAS</span>
+                          <span className="text-xs text-[#737870] font-semibold block">Core Stack &amp; MAS</span>
+                          <span className="text-[11px] text-[#8C9188]">Next.js • Python • PostgreSQL • MAS</span>
                         </div>
-                        <span className="text-slate-400">⋮</span>
+                        <span className="text-[#8C9188]">⋮</span>
                       </div>
                       <div className="flex items-baseline gap-2 mt-2">
-                        <h3 className="text-2xl font-black text-slate-900 tracking-tight">4 Core</h3>
-                        <span className="text-xs font-bold text-emerald-600">Pillars Integrated</span>
+                        <h3 className="text-2xl font-black text-[#17201C] tracking-tight">4 Core</h3>
+                        <span className="text-xs font-bold text-emerald-700">Pillars Integrated</span>
                       </div>
-                      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600 font-semibold">
+                      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[#F3ECE1] text-xs text-[#575C55] font-semibold">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                         <span>All Systems Operational</span>
                       </div>
@@ -1068,35 +1296,36 @@ export default function AdminPanel() {
 
                 {/* Column 2 (1/3 width): Lead Profile & Quick Jump Links */}
                 <div className="space-y-6">
-                  <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-5">
+                  {/* Portfolio Identity Card */}
+                  <div className="bg-white border border-[#EAE3D6] rounded-2xl p-6 shadow-xs space-y-5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="text-base font-bold text-slate-900">Portfolio Identity</h3>
-                        <p className="text-xs text-slate-400 mt-0.5">Primary developer credentials</p>
+                        <h3 className="text-base font-bold text-[#17201C]">Portfolio Identity</h3>
+                        <p className="text-xs text-[#737870] mt-0.5">Primary developer credentials</p>
                       </div>
-                      <span className="text-slate-400">⋮</span>
+                      <span className="text-[#8C9188]">⋮</span>
                     </div>
 
                     {/* Profile Visual Badge */}
-                    <div className="w-full rounded-xl overflow-hidden border border-slate-200 p-4 bg-gradient-to-br from-slate-50 to-blue-50/30 flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-2xl overflow-hidden border border-slate-200 shrink-0 bg-white">
+                    <div className="w-full rounded-xl overflow-hidden border border-[#EAE3D6] p-4 bg-[#FCFAF7] flex items-center gap-4">
+                      <div className="w-14 h-14 rounded-2xl overflow-hidden border border-[#DFD7CB] shrink-0 bg-white">
                         <img src={data.profile?.avatar || "/assets/photo.png"} alt="Adjie" className="w-full h-full object-cover" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-slate-900 text-sm">{data.profile?.name || "Arditya Adjie Rosandi"}</h4>
-                        <p className="text-xs text-[#465FFF] font-semibold">Full-Stack &amp; IT PM</p>
-                        <p className="text-[11px] text-slate-400 font-mono mt-0.5">IPK 3.84 • Univ. Esa Unggul</p>
+                        <h4 className="font-bold text-[#17201C] text-sm">{data.profile?.name || "Arditya Adjie Rosandi"}</h4>
+                        <p className="text-xs text-[#5156BE] font-semibold">Full-Stack &amp; IT PM</p>
+                        <p className="text-[11px] text-[#737870] font-mono mt-0.5">IPK 3.84 • Univ. Esa Unggul</p>
                       </div>
                     </div>
 
                     {/* Status & Milestones */}
-                    <div className="pt-2 border-t border-slate-100 space-y-4">
+                    <div className="pt-2 border-t border-[#F3ECE1] space-y-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <span className="text-[11px] text-slate-400 uppercase font-semibold">Base Location</span>
-                          <p className="font-mono font-bold text-xs text-slate-800">{data.profile?.location || "Tangerang, Banten"}</p>
+                          <span className="text-[11px] text-[#8C9188] uppercase font-semibold">Base Location</span>
+                          <p className="font-mono font-bold text-xs text-[#17201C]">{data.profile?.location || "Tangerang, Banten"}</p>
                         </div>
-                        <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">
+                        <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                           Open to Work
                         </span>
                       </div>
@@ -1104,91 +1333,135 @@ export default function AdminPanel() {
                       {/* Milestones / Core Roles */}
                       <div className="space-y-3 pt-2 text-xs">
                         <div className="flex items-start gap-3">
-                          <div className="w-7 h-7 rounded-full bg-blue-50 text-[#465FFF] flex items-center justify-center shrink-0 border border-blue-100">
+                          <div className="w-7 h-7 rounded-full bg-[#5156BE]/10 text-[#5156BE] flex items-center justify-center shrink-0 border border-[#5156BE]/20">
                             <CheckCircle2 className="w-4 h-4" />
                           </div>
                           <div className="flex-1 flex justify-between">
                             <div>
-                              <p className="font-bold text-slate-800">Full-Stack Development</p>
-                              <p className="text-[11px] text-slate-400">Next.js 16, React, Tailwind, PostgreSQL</p>
+                              <p className="font-bold text-[#17201C]">Full-Stack Development</p>
+                              <p className="text-[11px] text-[#737870]">Next.js 16, React, Tailwind, PostgreSQL</p>
                             </div>
-                            <span className="text-emerald-600 font-mono text-[11px] font-bold">PROD</span>
+                            <span className="text-emerald-700 font-mono text-[11px] font-bold">PROD</span>
                           </div>
                         </div>
 
                         <div className="flex items-start gap-3">
-                          <div className="w-7 h-7 rounded-full bg-blue-50 text-[#465FFF] flex items-center justify-center shrink-0 border border-blue-100">
+                          <div className="w-7 h-7 rounded-full bg-[#2AB57D]/10 text-[#2AB57D] flex items-center justify-center shrink-0 border border-[#2AB57D]/20">
                             <Code className="w-4 h-4" />
                           </div>
                           <div className="flex-1 flex justify-between">
                             <div>
-                              <p className="font-bold text-slate-800">Multi-Agent AI &amp; NLP</p>
-                              <p className="text-[11px] text-slate-400">Python, IndoBERT, Workflow Automation</p>
+                              <p className="font-bold text-[#17201C]">Multi-Agent AI &amp; NLP</p>
+                              <p className="text-[11px] text-[#737870]">Python, IndoBERT, Workflow Automation</p>
                             </div>
-                            <span className="text-emerald-600 font-mono text-[11px] font-bold">MAS</span>
+                            <span className="text-emerald-700 font-mono text-[11px] font-bold">MAS</span>
                           </div>
                         </div>
 
                         <div className="flex items-start gap-3">
-                          <div className="w-7 h-7 rounded-full bg-blue-50 text-[#465FFF] flex items-center justify-center shrink-0 border border-blue-100">
+                          <div className="w-7 h-7 rounded-full bg-[#4BA6EF]/10 text-[#4BA6EF] flex items-center justify-center shrink-0 border border-[#4BA6EF]/20">
                             <Award className="w-4 h-4" />
                           </div>
                           <div className="flex-1 flex justify-between">
                             <div>
-                              <p className="font-bold text-slate-800">IT Project Management</p>
-                              <p className="text-[11px] text-slate-400">Roadmap planning &amp; clean delivery</p>
+                              <p className="font-bold text-[#17201C]">IT Project Management</p>
+                              <p className="text-[11px] text-[#737870]">Roadmap planning &amp; clean delivery</p>
                             </div>
-                            <span className="text-emerald-600 font-mono text-[11px] font-bold">LEAD</span>
+                            <span className="text-emerald-700 font-mono text-[11px] font-bold">LEAD</span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
+                  {/* Recent Contact Inquiries Feed Widget */}
+                  <div className="bg-white border border-[#EAE3D6] rounded-2xl p-5 shadow-xs space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <MessageSquare className="w-4 h-4 text-[#5156BE]" />
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-[#17201C]">
+                          Recent Inquiries ({messages?.length || 0})
+                        </h4>
+                      </div>
+                      <button
+                        onClick={() => setActiveTab("messages")}
+                        className="text-[11px] font-semibold text-[#5156BE] hover:underline cursor-pointer"
+                      >
+                        View All
+                      </button>
+                    </div>
+
+                    {messages && messages.length > 0 ? (
+                      <div className="space-y-2.5 pt-1">
+                        {messages.slice(0, 3).map((msg) => (
+                          <div
+                            key={msg.id}
+                            className="p-3 rounded-xl bg-[#FCFAF7] border border-[#EAE3D6] text-xs space-y-1 hover:border-[#5156BE]/40 transition-colors"
+                          >
+                            <div className="flex items-center justify-between font-bold text-[#17201C]">
+                              <span className="truncate max-w-[150px]">{msg.name}</span>
+                              <span className="text-[10px] font-mono text-[#8C9188] font-normal">
+                                {msg.created_at ? new Date(msg.created_at).toLocaleDateString() : "Baru"}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-[#575C55] line-clamp-2 leading-relaxed">
+                              {msg.message}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="py-6 text-center text-xs text-[#8C9188] bg-[#FCFAF7] rounded-xl border border-dashed border-[#DFD7CB]">
+                        <Mail className="w-5 h-5 mx-auto mb-1 text-[#8C9188]" />
+                        <span>Belum ada pesan masuk dari form kontak.</span>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Quick Jump Buttons to Portfolio Editors */}
-                  <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                  <div className="bg-white border border-[#EAE3D6] rounded-2xl p-5 shadow-xs space-y-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#8C9188] mb-3">
                       Manage Portfolio Data
                     </h4>
                     <button
                       onClick={() => setActiveTab("projects")}
-                      className="w-full flex items-center justify-between p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl border border-[#DFD7CB] hover:bg-[#F8F3EA] text-xs font-semibold text-[#17201C] transition-colors cursor-pointer"
                     >
                       <span className="flex items-center gap-2">
-                        <FolderOpen className="w-4 h-4 text-[#465FFF]" />
+                        <FolderOpen className="w-4 h-4 text-[#5156BE]" />
                         Edit Projects Showcase ({data.projects?.length || 0})
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                      <ChevronRight className="w-4 h-4 text-[#8C9188]" />
                     </button>
                     <button
                       onClick={() => setActiveTab("skills")}
-                      className="w-full flex items-center justify-between p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl border border-[#DFD7CB] hover:bg-[#F8F3EA] text-xs font-semibold text-[#17201C] transition-colors cursor-pointer"
                     >
                       <span className="flex items-center gap-2">
-                        <Code className="w-4 h-4 text-[#465FFF]" />
+                        <Code className="w-4 h-4 text-[#5156BE]" />
                         Manage Skills ({data.skills?.length || 0})
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                      <ChevronRight className="w-4 h-4 text-[#8C9188]" />
                     </button>
                     <button
                       onClick={() => setActiveTab("profile")}
-                      className="w-full flex items-center justify-between p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl border border-[#DFD7CB] hover:bg-[#F8F3EA] text-xs font-semibold text-[#17201C] transition-colors cursor-pointer"
                     >
                       <span className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-[#465FFF]" />
+                        <User className="w-4 h-4 text-[#5156BE]" />
                         Update Profile &amp; Bio
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                      <ChevronRight className="w-4 h-4 text-[#8C9188]" />
                     </button>
                     <button
                       onClick={() => setActiveTab("certificates")}
-                      className="w-full flex items-center justify-between p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl border border-[#DFD7CB] hover:bg-[#F8F3EA] text-xs font-semibold text-[#17201C] transition-colors cursor-pointer"
                     >
                       <span className="flex items-center gap-2">
-                        <Award className="w-4 h-4 text-[#465FFF]" />
+                        <Award className="w-4 h-4 text-[#5156BE]" />
                         Manage Certifications ({data.certificates?.length || 0})
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                      <ChevronRight className="w-4 h-4 text-[#8C9188]" />
                     </button>
                   </div>
                 </div>
@@ -2291,6 +2564,104 @@ export default function AdminPanel() {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* -----------------------------------------------------
+              TAB: INQUIRIES & INBOX (Themesbrand Minia Edition)
+          ----------------------------------------------------- */}
+          {activeTab === "messages" && (
+            <div className="bg-white border border-[#EAE3D6] rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#F3ECE1]">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base font-bold text-[#17201C] tracking-tight">Client &amp; Recruiter Inquiries</h2>
+                    <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#5156BE]/10 text-[#5156BE]">
+                      {messages?.length || 0} Total Messages
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#737870] mt-0.5">
+                    Pesan masuk yang dikirim pengunjung melalui formulir kontak portofolio.
+                  </p>
+                </div>
+                <button
+                  onClick={async () => {
+                    setIsLoadingMessages(true);
+                    try {
+                      const msgs = await getContactMessages();
+                      setMessages(msgs || []);
+                    } catch (e) {
+                      console.warn(e);
+                    } finally {
+                      setIsLoadingMessages(false);
+                    }
+                  }}
+                  disabled={isLoadingMessages}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#FCFAF7] hover:bg-[#F3ECE1] border border-[#DFD7CB] text-[#17201C] font-semibold text-xs transition-all cursor-pointer"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isLoadingMessages ? "animate-spin text-[#5156BE]" : "text-[#737870]"}`} />
+                  <span>Refresh Inbox</span>
+                </button>
+              </div>
+
+              {messages && messages.length > 0 ? (
+                <div className="space-y-4">
+                  {messages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className="p-5 rounded-xl bg-[#FCFAF7] border border-[#EAE3D6] space-y-3 relative group hover:border-[#5156BE]/40 transition-all"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-[#5156BE]/10 text-[#5156BE] flex items-center justify-center font-bold text-sm shrink-0 border border-[#5156BE]/20">
+                            {msg.name ? msg.name.charAt(0).toUpperCase() : "M"}
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-[#17201C] text-sm">{msg.name}</h3>
+                            <a
+                              href={`mailto:${msg.email}`}
+                              className="text-xs text-[#5156BE] hover:underline flex items-center gap-1 mt-0.5"
+                            >
+                              <Mail className="w-3.5 h-3.5" />
+                              <span>{msg.email}</span>
+                            </a>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <span className="text-[11px] font-mono text-[#8C9188]">
+                            {msg.created_at ? new Date(msg.created_at).toLocaleString() : "Waktu tidak tercatat"}
+                          </span>
+                          <button
+                            onClick={() => handleDeleteMessage(msg.id)}
+                            disabled={deletingMsgId === msg.id}
+                            className="p-2 rounded-lg bg-white hover:bg-rose-50 border border-[#EAE3D6] hover:border-rose-200 text-[#737870] hover:text-rose-600 transition-colors cursor-pointer"
+                            title="Hapus pesan"
+                          >
+                            {deletingMsgId === msg.id ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Trash2 className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="p-3.5 rounded-lg bg-white border border-[#EAE3D6] text-xs text-[#3A433E] leading-relaxed whitespace-pre-wrap">
+                        {msg.message}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-16 text-center text-xs text-[#8C9188] bg-[#FCFAF7] rounded-2xl border border-dashed border-[#DFD7CB] space-y-2">
+                  <div className="w-12 h-12 rounded-full bg-white border border-[#DFD7CB] flex items-center justify-center mx-auto text-[#8C9188]">
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <p className="font-semibold text-sm text-[#17201C]">Inbox Pesan Bersih</p>
+                  <p className="text-[#737870]">Belum ada pesan masuk baru dari formulir kontak portofolio.</p>
+                </div>
+              )}
             </div>
           )}
         </main>

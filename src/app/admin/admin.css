@@ -1,46 +1,58 @@
 /* ============================================================
-   TailAdmin Light Design System for Admin Console
-   Matches the official TailAdmin Light Dashboard specification
+   Minia Admin & Dashboard Design System
+   Inspired by Themesbrand Minia Template
+   Themed with Image 2 Palette: #FFF9F1 (Warm Alabaster / Ivory)
    ============================================================ */
 
 :root {
-  --tailadmin-bg: #F8FAFC;
-  --tailadmin-card: #FFFFFF;
-  --tailadmin-sidebar: #FFFFFF;
-  --tailadmin-border: #E2E8F0;
-  --tailadmin-primary: #465FFF;
-  --tailadmin-primary-hover: #384FE5;
-  --tailadmin-text: #1E293B;
-  --tailadmin-muted: #64748B;
-  --tailadmin-accent: #10B981;
+  --minia-bg: #FFF9F1;
+  --minia-card: #FFFFFF;
+  --minia-card-elevated: #FFFDF9;
+  --minia-sidebar: #FFFFFF;
+  --minia-border: #EAE3D6;
+  --minia-border-subtle: #F3ECE1;
+  --minia-primary: #5156BE;
+  --minia-primary-hover: #4348A8;
+  --minia-primary-subtle: rgba(81, 86, 190, 0.08);
+  --minia-text: #17201C;
+  --minia-text-secondary: #575C55;
+  --minia-muted: #737870;
+  --minia-emerald: #2AB57D;
+  --minia-coral: #FC9073;
+  --minia-amber: #FD625E;
+  --minia-info: #4BA6EF;
 }
 
-/* Custom Scrollbar for TailAdmin */
+/* Custom Scrollbar for Minia */
+.minia-scrollbar::-webkit-scrollbar,
 .tailadmin-scrollbar::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
+.minia-scrollbar::-webkit-scrollbar-track,
 .tailadmin-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 
+.minia-scrollbar::-webkit-scrollbar-thumb,
 .tailadmin-scrollbar::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #D8D2C5;
   border-radius: 9999px;
 }
 
+.minia-scrollbar::-webkit-scrollbar-thumb:hover,
 .tailadmin-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #B8B0A2;
 }
 
-/* TailAdmin Login Card Styles */
-.tailadmin-login-wrapper {
+/* Minia Login Wrapper & Card */
+.minia-login-wrapper {
   min-height: 100vh;
   min-height: 100dvh;
   width: 100%;
-  background: #F4F7FB;
-  color: #1E293B;
+  background-color: #FFF9F1;
+  color: #17201C;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,37 +63,47 @@
   box-sizing: border-box;
 }
 
-.tailadmin-login-ambient {
+.minia-login-ambient {
   position: absolute;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(70, 95, 255, 0.08) 0%, rgba(244, 247, 251, 0) 70%);
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(81, 86, 190, 0.06) 0%, rgba(252, 144, 115, 0.04) 40%, rgba(255, 249, 241, 0) 70%);
   border-radius: 50%;
   filter: blur(80px);
   pointer-events: none;
 }
 
-.tailadmin-login-card {
+.minia-login-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(23, 32, 28, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.minia-login-card {
   width: 100%;
   max-width: 440px;
   background: #FFFFFF;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #EAE3D6;
   border-radius: 20px;
   padding: 36px 32px;
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 20px 45px -15px rgba(23, 32, 28, 0.06), 0 2px 10px rgba(23, 32, 28, 0.02);
   position: relative;
   z-index: 10;
   box-sizing: border-box;
 }
 
-.tailadmin-input {
+/* Form Controls */
+.minia-input {
   width: 100%;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  color: #1E293B;
+  background: #FCFAF7;
+  border: 1px solid #DFD7CB;
+  color: #17201C;
   border-radius: 12px;
   padding: 12px 42px 12px 16px;
   font-size: 14px;
@@ -89,14 +111,14 @@
   transition: all 0.2s ease;
 }
 
-.tailadmin-input:focus {
+.minia-input:focus {
   background: #FFFFFF;
-  border-color: #465FFF;
-  box-shadow: 0 0 0 3px rgba(70, 95, 255, 0.15);
+  border-color: #5156BE;
+  box-shadow: 0 0 0 3px rgba(81, 86, 190, 0.12);
 }
 
-.tailadmin-btn-primary {
-  background: #465FFF;
+.minia-btn-primary {
+  background: #5156BE;
   color: #FFFFFF;
   font-weight: 600;
   border-radius: 12px;
@@ -108,35 +130,38 @@
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(70, 95, 255, 0.25);
+  box-shadow: 0 4px 14px rgba(81, 86, 190, 0.25);
 }
 
-.tailadmin-btn-primary:hover:not(:disabled) {
-  background: #384FE5;
+.minia-btn-primary:hover:not(:disabled) {
+  background: #4348A8;
   transform: translateY(-1px);
 }
 
-.tailadmin-btn-primary:disabled {
+.minia-btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
 
 /* ============================================================
-   ISOLATED ADMIN LAYOUT ENGINE (Fix for hijacked nav and layout)
+   MINIA WORKSPACE LAYOUT ENGINE (Themed to #FFF9F1)
    ============================================================ */
-.tailadmin-workspace {
+.tailadmin-workspace,
+.minia-workspace {
   display: flex !important;
   flex-direction: row !important;
   align-items: stretch !important;
   min-height: 100vh !important;
+  min-height: 100dvh !important;
   width: 100% !important;
-  background-color: #F8FAFC !important;
-  color: #1E293B !important;
+  background-color: #FFF9F1 !important;
+  color: #17201C !important;
   position: relative !important;
 }
 
-.tailadmin-sidebar {
+.tailadmin-sidebar,
+.minia-sidebar {
   width: 270px !important;
   min-width: 270px !important;
   max-width: 270px !important;
@@ -146,30 +171,28 @@
   top: 0 !important;
   left: 0 !important;
   background-color: #FFFFFF !important;
-  border-right: 1px solid #E2E8F0 !important;
+  border-right: 1px solid #EAE3D6 !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
   z-index: 40 !important;
 }
 
-.tailadmin-sidebar-nav {
+.tailadmin-sidebar-nav,
+.minia-sidebar-nav {
   display: flex !important;
   flex-direction: column !important;
   position: static !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
   width: 100% !important;
   height: auto !important;
-  z-index: auto !important;
   background: transparent !important;
-  padding: 12px !important;
+  padding: 14px 12px !important;
   gap: 4px !important;
   overflow-y: auto !important;
 }
 
-.tailadmin-sidebar-nav button {
+.tailadmin-sidebar-nav button,
+.minia-sidebar-nav button {
   width: 100% !important;
   display: flex !important;
   align-items: center !important;
@@ -181,114 +204,178 @@
   transition: all 0.15s ease !important;
 }
 
-.tailadmin-content-area {
+.tailadmin-content-area,
+.minia-content-area {
   flex: 1 1 0% !important;
   min-width: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   min-height: 100vh !important;
-  background-color: #F8FAFC !important;
+  min-height: 100dvh !important;
+  background-color: #FFF9F1 !important;
 }
 
-.tailadmin-header {
+.tailadmin-header,
+.minia-header {
   position: sticky !important;
   top: 0 !important;
   z-index: 30 !important;
-  background-color: rgba(255, 255, 255, 0.98) !important;
-  border-bottom: 1px solid #E2E8F0 !important;
+  background-color: rgba(255, 249, 241, 0.94) !important;
+  border-bottom: 1px solid #EAE3D6 !important;
   padding: 14px 24px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   gap: 16px !important;
   width: 100% !important;
-  backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(10px) !important;
 }
 
 /* ============================================================
-   TAILADMIN LIGHT WORKSPACE GLOBAL ADAPTATION
+   MINIA CARD & THEME OVERRIDES (Warmer, crisp, authentic)
    ============================================================ */
-.tailadmin-workspace .bg-slate-950 {
-  background-color: #F8FAFC !important;
-  color: #1E293B !important;
+.tailadmin-workspace .bg-slate-950,
+.minia-workspace .bg-slate-950 {
+  background-color: #FFF9F1 !important;
+  color: #17201C !important;
 }
 
-.tailadmin-workspace .bg-slate-900 {
+.tailadmin-workspace .bg-slate-900,
+.minia-workspace .bg-slate-900 {
   background-color: #FFFFFF !important;
-  color: #1E293B !important;
-  border-color: #E2E8F0 !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+  color: #17201C !important;
+  border-color: #EAE3D6 !important;
+  box-shadow: 0 2px 10px rgba(23, 32, 28, 0.03) !important;
 }
 
-.tailadmin-workspace .bg-slate-800 {
-  background-color: #F1F5F9 !important;
-  color: #334155 !important;
-  border-color: #E2E8F0 !important;
+.tailadmin-workspace .bg-slate-800,
+.minia-workspace .bg-slate-800 {
+  background-color: #FCFAF7 !important;
+  color: #384039 !important;
+  border-color: #EAE3D6 !important;
 }
 
 .tailadmin-workspace .bg-slate-800\/80,
 .tailadmin-workspace .bg-slate-800\/60,
-.tailadmin-workspace .bg-slate-900\/60 {
-  background-color: #F8FAFC !important;
-  border-color: #E2E8F0 !important;
+.tailadmin-workspace .bg-slate-900\/60,
+.minia-workspace .bg-slate-800\/80 {
+  background-color: #FFFDF9 !important;
+  border-color: #EAE3D6 !important;
 }
 
 .tailadmin-workspace .border-slate-800,
 .tailadmin-workspace .border-slate-700,
-.tailadmin-workspace .border-slate-700\/50 {
-  border-color: #E2E8F0 !important;
+.tailadmin-workspace .border-slate-700\/50,
+.tailadmin-workspace .border-slate-200,
+.tailadmin-workspace .border-slate-200\/90,
+.minia-workspace .border-slate-200 {
+  border-color: #EAE3D6 !important;
 }
 
-.tailadmin-workspace .text-white {
-  color: #0F172A !important;
+.tailadmin-workspace .border-slate-100,
+.minia-workspace .border-slate-100 {
+  border-color: #F3ECE1 !important;
 }
 
-.tailadmin-workspace .text-slate-100 {
-  color: #1E293B !important;
+.tailadmin-workspace .text-white,
+.minia-workspace .text-white {
+  color: #17201C;
 }
 
-.tailadmin-workspace .text-slate-200 {
-  color: #334155 !important;
+.tailadmin-workspace .text-slate-900,
+.minia-workspace .text-slate-900 {
+  color: #17201C !important;
 }
 
-.tailadmin-workspace .text-slate-300 {
-  color: #475569 !important;
+.tailadmin-workspace .text-slate-800,
+.minia-workspace .text-slate-800 {
+  color: #242D28 !important;
 }
 
-.tailadmin-workspace .text-slate-400 {
-  color: #64748B !important;
+.tailadmin-workspace .text-slate-700,
+.minia-workspace .text-slate-700 {
+  color: #3A433E !important;
 }
 
-.tailadmin-workspace .text-slate-500 {
-  color: #94A3B8 !important;
+.tailadmin-workspace .text-slate-600,
+.minia-workspace .text-slate-600 {
+  color: #575C55 !important;
 }
 
+.tailadmin-workspace .text-slate-500,
+.minia-workspace .text-slate-500 {
+  color: #6C726A !important;
+}
+
+.tailadmin-workspace .text-slate-400,
+.minia-workspace .text-slate-400 {
+  color: #8C9188 !important;
+}
+
+/* Background utilities in workspace */
+.tailadmin-workspace .bg-slate-50,
+.minia-workspace .bg-slate-50 {
+  background-color: #FCFAF7 !important;
+}
+
+.tailadmin-workspace .bg-slate-100,
+.minia-workspace .bg-slate-100 {
+  background-color: #F5EFE4 !important;
+}
+
+/* Inputs & Form Controls inside Workspace */
 .tailadmin-workspace input,
 .tailadmin-workspace textarea,
-.tailadmin-workspace select {
+.tailadmin-workspace select,
+.minia-workspace input,
+.minia-workspace textarea,
+.minia-workspace select {
   background-color: #FFFFFF !important;
-  color: #0F172A !important;
-  border-color: #CBD5E1 !important;
+  color: #17201C !important;
+  border-color: #DFD7CB !important;
 }
 
 .tailadmin-workspace input:focus,
 .tailadmin-workspace textarea:focus,
-.tailadmin-workspace select:focus {
-  border-color: #465FFF !important;
-  box-shadow: 0 0 0 3px rgba(70, 95, 255, 0.15) !important;
+.tailadmin-workspace select:focus,
+.minia-workspace input:focus,
+.minia-workspace textarea:focus,
+.minia-workspace select:focus {
+  border-color: #5156BE !important;
+  box-shadow: 0 0 0 3px rgba(81, 86, 190, 0.12) !important;
 }
 
 .tailadmin-workspace input::placeholder,
-.tailadmin-workspace textarea::placeholder {
-  color: #94A3B8 !important;
+.tailadmin-workspace textarea::placeholder,
+.minia-workspace input::placeholder,
+.minia-workspace textarea::placeholder {
+  color: #9C9F98 !important;
 }
 
 /* Primary actions keep their vibrant white text */
 .tailadmin-workspace button.bg-blue-600,
 .tailadmin-workspace button.bg-\[\#3C50E0\],
 .tailadmin-workspace button.bg-\[\#465FFF\],
+.tailadmin-workspace button.bg-\[\#5156BE\],
 .tailadmin-workspace a.bg-blue-600,
 .tailadmin-workspace .btn-primary,
-.tailadmin-workspace .badge-primary {
+.tailadmin-workspace .badge-primary,
+.minia-workspace .btn-primary {
   color: #FFFFFF !important;
+}
+
+/* Minia Card Hover micro-effects */
+.minia-metric-card {
+  background: #FFFFFF;
+  border: 1px solid #EAE3D6;
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 2px 10px rgba(23, 32, 28, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.minia-metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -8px rgba(23, 32, 28, 0.07), 0 2px 6px rgba(23, 32, 28, 0.02);
+  border-color: #DFD7CB;
 }
